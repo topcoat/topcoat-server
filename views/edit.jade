@@ -1,0 +1,37 @@
+extends layout
+
+block content
+	table
+		thead
+			th #
+			th
+				select(class='button large')
+					option OS
+					option Mac
+					option Windows
+					option iPhone
+					option Android
+			th
+				select(class='button large')
+					option Browser
+					option Chrome
+					option Firefox
+					option Safari
+			th: .button.large.disabled Version
+			th: .button.large.disabled Result
+		tbody
+		- results.forEach(function(r){
+			tr
+				td: input(type='checkbox', id=r._id)
+				td= r.os
+				td= r.browser
+				td= r.version
+				td= r.result
+		- })
+		tr.results-controls
+			td: button.button.cta.large.delete Remove selected
+			td
+			td
+			td
+			td
+	script(src='../javascripts/script.js')
