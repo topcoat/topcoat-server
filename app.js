@@ -30,13 +30,8 @@ app.configure('development', function(){
 });
 
 app.get('/', function(req, res){
-	var pathname = path.join('public', 'tests');
-	fs.readdir(pathname, function(err, files){
-		console.log(files);
-		res.render('index', {
-			title: 'Topcoat',
-			tests: files
-		});
+	res.render('index', {
+		title: 'Topcoat'
 	});
 });
 
@@ -101,6 +96,9 @@ app.delete('/remove/db', function(req, res) {
 
 app.get('/edit/db', function(req, res){
 	
+	res.end('Nothing to do here');
+	return;
+	
 	var schema = schemes.test_scheme;
 	var Test = db.model('Test', schema);
 
@@ -121,20 +119,22 @@ app.get('/view/results/:platform', function(req, res){
 	});
 });
 
-app.get('/json/:platform', function(req, res){
+app.get('/json/:what/:value', function(req, res){
 
 	var schema = schemes.test_scheme;
 	var Test = db.model('Test', schema);
-
-	Test.find({
-			'browser' : req.params.platform
-		})
+	var search = {};
+	search[req.params.what] = req.params.value;
+	Test.find(search)
 		.select('test result')
 		.exec(function(err, docs){
 			if(err)
 				console.log(err);
 			else
-				res.end(JSON.stringify(docs));
+				if (!docs.length)
+					res.end('Got nothin\'');
+				else
+					res.end(JSON.stringify(docs));
 	});
 
 });
