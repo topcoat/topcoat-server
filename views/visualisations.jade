@@ -1,0 +1,8 @@
+extends layout
+
+block content
+	h1= title
+	h3 Select a test
+	- tests.forEach(function(test){
+		p: a(href='./results/' + test) #{test}
+	- })

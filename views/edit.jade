@@ -17,6 +17,7 @@ block content
 					option Chrome
 					option Firefox
 					option Safari
+			th: .button.large.disabled Device
 			th: .button.large.disabled Version
 			th: .button.large.disabled Result
 		tbody
@@ -25,6 +26,7 @@ block content
 				td: input(type='checkbox', id=r._id)
 				td= r.os
 				td= r.browser
+				td= r.device
 				td= r.version
 				td= r.result
 		- })

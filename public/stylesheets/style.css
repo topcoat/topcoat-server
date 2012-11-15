@@ -5,23 +5,6 @@ body {
 a {
   color: #00b7ff;
 }
-table {
-  width: 100%;
-  text-align: center;
-  border-collapse: collapse;
-}
-table td,
-table th {
-  padding: 10px;
-  border-top: 1px solid #ddd;
-}
-table tr:last-child td {
-  border-bottom: 1px solid #ddd;
-}
-table thead th {
-  border: none;
-}
-table tr.results-controls td {
-  padding: 8px 0 0 0;
-  border-bottom: 0;
+svg {
+  top: 200px;
 }

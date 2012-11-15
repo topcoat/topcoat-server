@@ -6,7 +6,8 @@ var express = require('express')
   , mongoose = require('mongoose')
   , fs = require('fs')
   , schemes = require('./schemes')
-  , path = require('path');
+  , path = require('path')
+  , uaParser = require('ua-parser');
 
 var app = express();
 var db = mongoose.connect('mongodb://localhost:27017/topcoat');
@@ -40,16 +41,18 @@ app.get('/test/:file', fetch.file);
 app.post('/benchmark', function(req, res){
 	res.header("Access-Control-Allow-Origin", "*");
 	
-	var schema = schemes.test_scheme;
-	var Test = db.model('Test', schema);
-
+	var ua = uaParser.parse(req.body.ua)
+		, schema = schemes.test_scheme
+		, Test = db.model('Test', schema);
+	
 	var test = new Test({
 		result: req.body.benchmark_result,
-		os: req.body.os,
-		version: req.body.version,
-		browser: req.body.browser,
+		os: ua.os,
+		version: ua.major,
+		browser: ua.family,
 		device : req.body.device,
-		test: req.body.test
+		test: req.body.test,
+		ua: req.body.ua
 	});
 	test.save(function (err) {
 		if (err)
@@ -113,6 +116,23 @@ app.get('/edit/db', function(req, res){
 	});
 });
 
+app.get('/view/results', function(req, res){
+
+	var schema = schemes.test_scheme;
+	var Test = db.model('Test', schema);
+	
+	Test.find().distinct('test', function(err, docs){
+		if(err)
+			console.log(err)
+		else
+			res.render('visualisations', {
+				title: 'Visualisation menu',
+				tests: docs
+			})
+	})
+
+});
+
 app.get('/view/results/:platform', function(req, res){
 	res.render('graph',{
 		title: 'Visualisation of results for ' + req.params.platform
@@ -126,7 +146,7 @@ app.get('/json/:what/:value', function(req, res){
 	var search = {};
 	search[req.params.what] = req.params.value;
 	Test.find(search)
-		.select('test result')
+		.select('test result browser device os version ua')
 		.exec(function(err, docs){
 			if(err)
 				console.log(err);
