@@ -57,7 +57,7 @@ function getResults() {
 
 function render() {
 		r.dotchart(
-		10, -200, 1200, (platforms.length)*130,
+		10, -190, 1200, 900,
 		x, // x
 		y, // y
 		testCount, {

@@ -18,6 +18,7 @@ block content
 					option Safari
 			th: .button.large.disabled Version
 			th: .button.large.disabled Device
+			th: .button.large.disabled Test
 			th: .button.large.disabled Result
 		tbody
 		- results.forEach(function(r){
@@ -26,5 +27,6 @@ block content
 				td= r.browser
 				td= r.version
 				td= r.device
+				td= r.test
 				td= r.result
 		- })

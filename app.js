@@ -10,8 +10,8 @@ var express = require('express')
   , uaParser = require('ua-parser');
 
 var app = express();
-var db = mongoose.connect('mongodb://localhost:27017/topcoat');
-//var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
+//var db = mongoose.connect('mongodb://localhost:27017/topcoat');
+var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -76,6 +76,30 @@ app.get('/view/db', function(req, res) {
 				results: docs
 			});
 	});
+});
+
+app.get('/clear/db', function(req, res){
+
+	res.end('Nothing to do here');
+	return;
+
+	var schema = schemes.test_scheme;
+	var Test = db.model('Test', schema);
+
+	Test.find(function(err, docs){
+		if(err)
+			console.log(err)
+		else
+			docs.forEach(function(doc){
+				doc.remove(function(err, d){
+					if(err)
+						console.log(err);
+					else
+						console.log('doc removed');
+				})
+			});
+	});
+
 });
 
 app.delete('/remove/db', function(req, res) {
@@ -153,12 +177,14 @@ app.get('/json/:what/:value', function(req, res){
 			else
 				if (!docs.length)
 					res.end('Got nothin\'');
-				else
+				else {
+					console.log(docs);
 					res.end(JSON.stringify(docs));
+				}
 	});
 
 });
 
-http.createServer(app).listen(app.get('port'), function(){
-	console.log("Express server listening on port " + app.get('port'));
+http.createServer(app).listen(3000, function(){
+	console.log("Express server listening on port 3000");
 });
