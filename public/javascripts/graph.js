@@ -27,8 +27,10 @@ function getResults() {
 
 			var result = r.result.match(/x [0-9,]{0,10}/g).toString(); // get the number of ops/sec
 			result = parseInt(result.slice(2,result.length));
-			result -= result%10; // round up the numbers 92,123 becomes 90 etc
-								// (doesn't really matter we want visual indicators not precision)
+			
+			 // round up the numbers 92,123 becomes 90 etc
+			(result%10 > 5) ? result += 10-result%10 : result -= result%10;
+			// (doesn't really matter we want visual indicators not precision)
 			
 			if(platforms.indexOf(_platform) === -1) // platforms is an the Y axis array
 				platforms.push(_platform); // if it's a new test add it
@@ -64,7 +66,7 @@ function render() {
 			max: 15,
 			axisystep:platforms.length-1,
 			axisylabels: platforms,
-			axisxstep: 20,
+			axisxstep: 25,
 			heat: true,
 			axis: '0 0 1 1'
 		}
