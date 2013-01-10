@@ -25,8 +25,13 @@ function getResults() {
 			else
 				_platform = (r.device || 'Desktop/Laptop') + ' with ' + r.browser;
 
-			var result = r.result.match(/x [0-9,]{0,10}/g).toString(); // get the number of ops/sec
-			result = parseInt(result.slice(2,result.length));
+			var result;
+			if(isNaN(r.result)) {
+				var result = r.result.match(/x [0-9,]{0,10}/g).toString(); // get the number of ops/sec
+				result = parseInt(result.slice(2,result.length));
+			} else {
+				result = parseInt(r.result);
+			}
 			
 			 // round up the numbers 92,123 becomes 90 etc
 			(result%10 > 5) ? result += 10-result%10 : result -= result%10;
