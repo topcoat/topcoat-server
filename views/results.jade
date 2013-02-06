@@ -3,30 +3,37 @@ extends layout
 block content
 	table
 		thead
-			th
-				select(class='button large')
-					option OS
-					option Mac
-					option Windows
-					option iPhone
-					option Android
-			th
-				select(class='button large')
-					option Browser
-					option Chrome
-					option Firefox
-					option Safari
-			th: .button.large.disabled Version
-			th: .button.large.disabled Device
-			th: .button.large.disabled Test
-			th: .button.large.disabled Result
+			tr
+				th
+					select(class='button large')
+						option OS
+						option Mac
+						option Windows
+						option iPhone
+						option Android
+				th
+					select(class='button large select-browser')
+						option Browser
+						option Chrome
+						option Firefox
+						option Safari
+				th: .button.large.disabled Version
+				th: .button.large.disabled Device
+				th: .button.large.disabled Test
+				th: .button.large.disabled Result
+				th: .button.large.disabled TopcoatV
+				th: .button.large.disabled Time
 		tbody
 		- results.forEach(function(r){
-			tr
+			tr(class=r.browser)
 				td= r.os
 				td= r.browser
 				td= r.version
 				td= r.device
 				td= r.test
 				td= r.result
+				td= r.topcoat_v
+				td= r.time
 		- })
+
+	script(src='/javascripts/sort.js')

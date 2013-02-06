@@ -15,7 +15,6 @@ function getResults() {
 		var res = JSON.parse(this.responseText); // get the response
 		var count = res.length; // and the length of the response
 		document.querySelector('span').innerHTML = res.length + ' '; // print this on the page
-
 		res.forEach(function (r) {
 			if(!r.result.match(/x [0-9,]{0,10}/g)) { count--; return; } // filter out invalid / dummy tests
 			
@@ -27,7 +26,7 @@ function getResults() {
 
 			var result;
 			if(isNaN(r.result)) {
-				var result = r.result.match(/x [0-9,]{0,10}/g).toString(); // get the number of ops/sec
+				var result = r.result.match(/x [0-9,]{0,10}/g); // get the number of ops/sec
 				result = parseInt(result.slice(2,result.length));
 			} else {
 				result = parseInt(r.result);
