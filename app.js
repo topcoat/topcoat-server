@@ -10,7 +10,7 @@ var express = require('express')
   , uaParser = require('ua-parser');
 
 var app = express();
-//var db = mongoose.connect('mongodb://localhost:27017/topcoat');
+// var db = mongoose.connect('mongodb://localhost:27017/topcoat');
 var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 
 app.configure(function(){
@@ -41,18 +41,13 @@ app.post('/benchmark', function(req, res){
 	,	Selector = db.model('Selector', selector)
 	,	Test = db.model('Test', schema);
 
-	var browser = ['Chrome', 'Mobile Safari', 'Chrome Mobile iOS'];
-	var version = [21, 6, 24, 5, 25, 26];
-	var os = ['Mac OS X 10.8', 'iOS 5.1', 'Windows 7'];
-	
-
 	var test = new Test({
 		result: req.body.benchmark_result,
-		os: os[parseInt(Math.random()*10%os.length,10)],
+		os: ua.os.toString(),
 		commit : req.body.commit,
 		date : req.body.date,
-		version: version[parseInt(Math.random()*10%version.length,10)],
-		browser: browser[parseInt(Math.random()*10%browser.length,10)],
+		version: ua.toVersionString(),
+		browser: ua.family,
 		device : req.body.device,
 		test: req.body.test,
 		ua: req.body.ua
