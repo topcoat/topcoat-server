@@ -10,8 +10,8 @@ var express = require('express')
   , uaParser = require('ua-parser');
 
 var app = express();
-// var db = mongoose.connect('mongodb://localhost:27017/topcoat');
-var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
+var db = mongoose.connect('mongodb://localhost:27017/topcoat');
+// var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -53,6 +53,8 @@ app.post('/benchmark', function(req, res){
 		ua: req.body.ua
 	});
 
+	console.log(ua.toVersionString());
+
 	if(req.body.selector && req.body.selector.length)
 		req.body.selector.forEach(function (sel) {
 			var s = new Selector({
@@ -68,48 +70,6 @@ app.post('/benchmark', function(req, res){
 			res.end('Error')
 		else
 			res.end('Submitted')
-	});
-});
-
-app.post('/stressCSS', function (req, res) {
-
-	res.header('Access-Control-Allow-Origin', '*');
-
-	var schema = schemes.stressCSS
-	,	selector = schemes.selector
-	,	Selector = db.model('Selector', selector)
-	,	StressCSS = db.model('StressCSS', schema)
-	,	ua = uaParser.parse(req.body.ua)
-	;
-
-	var stressCSSResult = new StressCSS({
-		baselineTime: req.body.baselineTime,
-		commit : req.body.commit,
-		date : req.body.date,
-		os: ua.os,
-		version: ua.major,
-		browser: ua.family,
-		ua: req.body.ua,
-		device : req.body.device,
-		selector: []
-	});
-
-	req.body.selector.forEach(function (sel) {
-
-		var s = new Selector({
-			delta: sel.delta,
-			selector: sel.selector,
-			total: sel.total
-		});
-		stressCSSResult.selector.push(s);
-		
-	});
-
-	stressCSSResult.save(function(err){
-		if(err)
-			res.end('Error');
-		else
-			res.end('Submitted');
 	});
 });
 
