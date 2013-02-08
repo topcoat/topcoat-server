@@ -37,18 +37,36 @@ app.post('/benchmark', function(req, res){
 	
 	var ua = uaParser.parse(req.body.ua)
 	,	schema = schemes.test_scheme
+	,	selector = schemes.selector
+	,	Selector = db.model('Selector', selector)
 	,	Test = db.model('Test', schema);
+
+	var browser = ['Chrome', 'Mobile Safari', 'Chrome Mobile iOS'];
+	var version = [21, 6, 24, 5, 25, 26];
+	var os = ['Mac OS X 10.8', 'iOS 5.1', 'Windows 7'];
 	
+
 	var test = new Test({
 		result: req.body.benchmark_result,
-		os: ua.os,
-		version: ua.major,
-		browser: ua.family,
+		os: os[parseInt(Math.random()*10%os.length,10)],
+		commit : req.body.commit,
+		date : req.body.date,
+		version: version[parseInt(Math.random()*10%version.length,10)],
+		browser: browser[parseInt(Math.random()*10%browser.length,10)],
 		device : req.body.device,
 		test: req.body.test,
-		ua: req.body.ua,
-		topcoat_v: req.body.version
+		ua: req.body.ua
 	});
+
+	if(req.body.selector && req.body.selector.length)
+		req.body.selector.forEach(function (sel) {
+			var s = new Selector({
+				delta: sel.delta,
+				selector: sel.selector,
+				total: sel.total
+			});
+			test.selector.push(s);
+		});
 
 	test.save(function (err) {
 		if (err)
@@ -64,8 +82,8 @@ app.post('/stressCSS', function (req, res) {
 
 	var schema = schemes.stressCSS
 	,	selector = schemes.selector
-	,	StressCSS = db.model('StressCSS', schema)
 	,	Selector = db.model('Selector', selector)
+	,	StressCSS = db.model('StressCSS', schema)
 	,	ua = uaParser.parse(req.body.ua)
 	;
 
@@ -102,19 +120,18 @@ app.post('/stressCSS', function (req, res) {
 
 app.get('/view/stress', function (req, res) {
 
-	var schema = schemes.stressCSS
-	,	selector = schemes.selector
-	,	StressCSS = db.model('StressCSS', schema)
-	,	Selector = db.model('Selector', selector);
-
-	StressCSS.find(function (err, docs) {
+	var schema = schemes.test_scheme
+	var Test = db.model('Test', schema)
+	
+	Test.find({'test' : 'stressCSS'}, function (err, docs) {
 		if (err)
-			res.end('Error!');
-		else
+			console.log(err);
+		else {
 			res.render('stress', {
-				title: 'StressCSS',
+				title: 'Topcoat',
 				results: docs
 			});
+		}
 	});
 
 });
@@ -206,14 +223,81 @@ app.get('/view/results', function(req, res){
 	var schema = schemes.test_scheme
 	,	Test = db.model('Test', schema);
 	
-	Test.find().distinct('test', function(err, docs){
+	Test.find().distinct('commit', function(err, docs){
 		if(err)
 			console.log(err);
-		else
+		else {
+			console.log(docs);
 			res.render('visualisations', {
 				title: 'Visualisation menu',
 				tests: docs
 			});
+		}
+	});
+
+});
+
+app.get('/view/:commit', function (req, res) {
+
+	var schema = schemes.test_scheme
+	,	Test = db.model('Test', schema);
+
+	Test.find({'commit' : req.params.commit}, function (err, docs) {
+		if(err)
+			console.log(err);
+		else {
+			var result = {};
+			docs.forEach(function (d) {
+				if(result[d.test]) {
+					if(result[d.test][d.browser + ' ' + d.version + ' ' + d.os]) {
+						result[d.test][d.browser + ' ' + d.version + ' ' + d.os].result += parseInt(d.result,10);
+						result[d.test][d.browser + ' ' + d.version + ' ' + d.os].count++;
+					} else {
+						result[d.test][d.browser + ' ' + d.version + ' ' + d.os] = {
+							result : parseInt(d.result, 10),
+							count : 1
+						};
+					}
+				}
+				else {
+					result[d.test] = {};
+					result[d.test][d.browser + ' ' + d.version + ' ' + d.os] = {
+						result : parseInt(d.result, 10),
+						count : 1
+					};
+				}
+			});
+			console.log(result);
+			res.render('commit-view', {
+				title: 'Viewing details for commit ' + req.params.commit.substring(0,7),
+				commit: req.params.commit,
+				result: result,
+				results: docs
+			});
+		}
+			
+	});
+});
+
+app.get('/view/:test/:commit', function (req, res) {
+
+	var schema = schemes.test_scheme
+	,	Test = db.model('Test', schema);
+
+	Test.find({
+		'commit' : req.params.commit,
+		'test' : req.params.test
+	}, function (err, docs) {
+		if(err) {
+			console.log(err);
+			res.end('You broke it :(');
+		} else {
+			res.render('commit-view', {
+				title: 'All results for ' + req.params.commit.substring(0,7) + ' on test ' + req.params.test,
+				results: docs,
+				commit: req.params.commit
+			});
+		}
 	});
 
 });
@@ -232,7 +316,7 @@ app.get('/json/:what/:value', function(req, res){
 
 	search[req.params.what] = req.params.value;
 	Test.find(search)
-		.select('test result browser device os version ua')
+		.select('test result browser device os commit ua')
 		.exec(function(err, docs){
 			if(err)
 				console.log(err);

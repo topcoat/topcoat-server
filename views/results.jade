@@ -4,6 +4,10 @@ block content
 	table
 		thead
 			tr
+				th: .button.large.disabled Result
+				th: .button.large.disabled Version
+				th: .button.large.disabled Time
+				th: .button.large.disabled Test
 				th
 					select(class='button large')
 						option OS
@@ -19,21 +23,25 @@ block content
 						option Safari
 				th: .button.large.disabled Version
 				th: .button.large.disabled Device
-				th: .button.large.disabled Test
-				th: .button.large.disabled Result
-				th: .button.large.disabled TopcoatV
-				th: .button.large.disabled Time
 		tbody
 		- results.forEach(function(r){
 			tr(class=r.browser)
+				td= r.result
+				td
+					| @
+					a(class='commit', target='_blank', href='/view/' + r.commit)= r.commit
+					a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)
+						img(src='/img/github.png')
+				td(class='date')= r.date
+				td= r.test
 				td= r.os
 				td= r.browser
 				td= r.version
-				td= r.device
-				td= r.test
-				td= r.result
-				td= r.topcoat_v
-				td= r.time
+				- if(r.device)
+						td= r.device
+				- else
+					td (probably) laptop/desktop
 		- })
 
 	script(src='/javascripts/sort.js')
+	script(src='/javascripts/results-format.js')

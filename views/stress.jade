@@ -21,7 +21,7 @@ html
 			- results.forEach(function(r){
 				tr
 					td(class='expand') &darr;
-					td= r.baselineTime
+					td= r.result
 					td
 						| @
 						a(class='commit', target='_blank', href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit
@@ -47,4 +47,4 @@ html
 			- })
 
 		//script(src='/javascripts/sort.js')
-		script(src='/javascripts/stress-results.js')
+		script(src='/javascripts/results-format.js')

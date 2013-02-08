@@ -1,0 +1,24 @@
+extends layout
+
+block content
+	h1= title + ' ('
+		a(href='https://github.com/topcoat/topcoat/commit/' + commit) github
+		| )
+
+	table
+		thead
+			tr
+				th Test name
+				th Platform
+				th Value
+				th #Runs
+		tbody
+			each val, key in result
+				each val2, key2 in result[key]
+					tr
+						td= key
+						td= key2
+						td= (val2.result / val2.count)
+						td= val2.count
+
+			tr: td(colspan=5): a(href='/view/results') Go back

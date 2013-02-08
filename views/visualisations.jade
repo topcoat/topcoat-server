@@ -2,7 +2,7 @@ extends layout
 
 block content
 	h1= title
-	h3 Select a test
+	h3 All Topcoat versions
 	- tests.forEach(function(test){
-		p: a(href='./results/' + test) #{test}
+		p: a(href='./' + test) #{test}
 	- })

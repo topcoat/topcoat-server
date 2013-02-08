@@ -9,8 +9,9 @@ var test_schema = new Schema({
 	device: { type: String, default: 'device' },
 	test: { type: String, default: 'test name' },
 	ua: { type: String, default: 'user ua' },
-	topcoat_v : { type: Number, default: '0.0'},
-	time : {type: Date, default : Date.now() }
+	commit: { type: String, default: 'github hash'},
+	date: { type: Date },
+	selector: [Selector]
 });
 
 var Selector = new Schema({
@@ -20,13 +21,14 @@ var Selector = new Schema({
 });
 
 var stressCSS = new Schema({
-	baselineTime: { type: String, default: 'baseline time' },
-	commit: { type: String, default: 'github hash'},
-	date: { type: Date },
+	result: { type: String, default: 'baseline time' },
 	os: { type: String, default: 'OS' },
 	version: { type: String, default: 'unknown browser version'},
 	browser: { type: String, default: 'browser' },
 	device: { type: String, default: 'device' },
+	test: { type: String, default: 'test name' },
+	commit: { type: String, default: 'github hash'},
+	date: { type: Date },
 	ua: { type: String, default: 'user ua' },
 	selector: [Selector]
 });
