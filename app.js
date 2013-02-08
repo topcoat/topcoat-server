@@ -49,7 +49,8 @@ app.post('/benchmark', function(req, res){
 		commit : req.body.commit,
 		date : req.body.date,
 		os: ua.os.toString(),
-		version: ua.toVersionString(),
+		// version: ua.toVersionString(),
+		version: ua.major + '.' + ua.minor, // bug in ua-parser 0.3.1
 		browser: ua.family,
 		device : req.body.device,
 		test: req.body.test,
@@ -65,7 +66,7 @@ app.post('/benchmark', function(req, res){
 			});
 			test.selector.push(s);
 		});
-
+	console.log('saving result');
 	test.save(function (err) {
 		if (err)
 			res.end('Error')
