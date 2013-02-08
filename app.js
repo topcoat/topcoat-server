@@ -33,7 +33,7 @@ app.get('/', function(req, res){
 });
 
 app.post('/benchmark', function(req, res){
-	
+
 	res.header("Access-Control-Allow-Origin", "*");
 	
 	var ua = uaParser.parse(req.body.ua)
@@ -42,19 +42,19 @@ app.post('/benchmark', function(req, res){
 	,	Selector = db.model('Selector', selector)
 	,	Test = db.model('Test', schema);
 
+	console.log(ua);
+
 	var test = new Test({
 		result: req.body.benchmark_result,
-		os: ua.os.toString(),
 		commit : req.body.commit,
 		date : req.body.date,
+		os: ua.os.toString(),
 		version: ua.toVersionString(),
 		browser: ua.family,
 		device : req.body.device,
 		test: req.body.test,
 		ua: req.body.ua
 	});
-
-	console.log(ua.toVersionString());
 
 	if(req.body.selector && req.body.selector.length)
 		req.body.selector.forEach(function (sel) {

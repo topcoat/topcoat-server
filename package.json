@@ -15,6 +15,6 @@
     "jade": "*",
     "stylus": "*",
     "mongoose": "*",
-    "ua-parser": "*"
+    "ua-parser": "latest"
   }
 }
