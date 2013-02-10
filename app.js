@@ -46,7 +46,8 @@ app.post('/benchmark', function(req, res){
 		os: ua.os.toString(),
 		commit : req.body.commit,
 		date : req.body.date,
-		version: ua.toVersionString(),
+		//version: ua.toVersionString(), //not working due to a bug in the latest ua-parser
+		version: ua.major + "." + ua.minor + "." + ua.patch,
 		browser: ua.family,
 		device : req.body.device,
 		test: req.body.test,
