@@ -208,11 +208,11 @@ app.get('/view/:commit', function (req, res) {
 				console.log(d.test);
 				if(result[d.test]) {
 					if(result[d.test][d.browser + ' ' + d.version + ' ' + d.os]) {
-						result[d.test][d.browser + ' ' + d.version + ' ' + d.os].result += parseInt(d.result,10);
+						result[d.test][d.browser + ' ' + d.version + ' ' + d.os].result += parseFloat(d.result,10);
 						result[d.test][d.browser + ' ' + d.version + ' ' + d.os].count++;
 					} else {
 						result[d.test][d.browser + ' ' + d.version + ' ' + d.os] = {
-							result : parseInt(d.result, 10),
+							result : parseFloat(d.result, 10),
 							count  : 1,
 							id     : d._id
 						};
@@ -221,7 +221,7 @@ app.get('/view/:commit', function (req, res) {
 				else {
 					result[d.test] = {};
 					result[d.test][d.browser + ' ' + d.version + ' ' + d.os] = {
-						result  : parseInt(d.result, 10),
+						result  : parseFloat(d.result, 10),
 						count   : 1,
 						id		: d._id
 					};
