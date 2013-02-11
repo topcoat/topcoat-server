@@ -49,8 +49,8 @@ app.post('/benchmark', function(req, res){
 		commit : req.body.commit,
 		date : req.body.date,
 		os: ua.os.toString(),
-		// version: ua.toVersionString(),
-		version: ua.major + '.' + ua.minor, // bug in ua-parser 0.3.1
+		//version: ua.toVersionString(), //not working due to a bug in the latest ua-parser
+		version: ua.major + "." + ua.minor + "." + ua.patch,
 		browser: ua.family,
 		device : req.body.device,
 		test: req.body.test,
@@ -205,6 +205,7 @@ app.get('/view/:commit', function (req, res) {
 		else {
 			var result = {};
 			docs.forEach(function (d) {
+				console.log(d.test);
 				if(result[d.test]) {
 					if(result[d.test][d.browser + ' ' + d.version + ' ' + d.os]) {
 						result[d.test][d.browser + ' ' + d.version + ' ' + d.os].result += parseInt(d.result,10);
@@ -212,18 +213,21 @@ app.get('/view/:commit', function (req, res) {
 					} else {
 						result[d.test][d.browser + ' ' + d.version + ' ' + d.os] = {
 							result : parseInt(d.result, 10),
-							count : 1
+							count  : 1,
+							id     : d._id
 						};
 					}
 				}
 				else {
 					result[d.test] = {};
 					result[d.test][d.browser + ' ' + d.version + ' ' + d.os] = {
-						result : parseInt(d.result, 10),
-						count : 1
+						result  : parseInt(d.result, 10),
+						count   : 1,
+						id		: d._id
 					};
 				}
 			});
+			// console.log(docs);
 			console.log(result);
 			res.render('commit-view', {
 				title: 'Viewing details for commit ' + req.params.commit.substring(0,7),

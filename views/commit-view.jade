@@ -16,9 +16,19 @@ block content
 			each val, key in result
 				each val2, key2 in result[key]
 					tr
-						td= key
+						td: a(href="#", id=val2.id)= key
 						td= key2
 						td= (val2.result / val2.count)
 						td= val2.count
-
+			- results.forEach(function (el) {
+				if (el.test == 'stressCSS')
+					table(class='stress-selectors hide _' + el._id)
+						- el.selector.forEach(function(sel){
+								tr
+									td= sel.selector
+									td= sel.delta
+									td= sel.total
+						- })
+			- })
 			tr: td(colspan=5): a(href='/view/results') Go back
+	script(src='/javascripts/toggle-stress-css.js')
