@@ -23,6 +23,10 @@ block content
 			- results.forEach(function (el) {
 				if (el.test == 'stressCSS')
 					table(class='stress-selectors hide _' + el._id)
+						tr
+							th selector
+							th delta
+							th total
 						- el.selector.forEach(function(sel){
 								tr
 									td= sel.selector
