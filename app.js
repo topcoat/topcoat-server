@@ -32,6 +32,45 @@ app.get('/', function(req, res){
 	});
 });
 
+app.get('/create', function (req, res) {
+	
+	var schema = schemes.test_scheme
+	,	Test = db.model('Test', schema);
+	
+	Test.find().distinct('commit', function(err, docs){
+		if(err)
+			console.log(err);
+		else {
+			var l = docs.length;
+			docs.forEach(function (commit) {
+				Test.findOne({'commit' : commit}, function (err, doc) {
+					var commitSchema = schemes.commitSchema
+					,	Commit = db.model('Commit', commitSchema);
+
+					var commitEntry = new Commit({
+						commit  : commit,
+						date	: doc.date
+					});
+
+					commitEntry.save(function (err) {
+						if(err) {
+							console.log(err);
+							res.end('Error!');
+						} else {
+							console.log('saved');
+							if(--l === 0) {
+								res.end('Done');
+							}
+						}
+					});
+
+				});
+			});
+		}
+	});
+
+});
+
 app.post('/benchmark', function(req, res){
 
 	res.header("Access-Control-Allow-Origin", "*");
@@ -41,8 +80,6 @@ app.post('/benchmark', function(req, res){
 	,	selector = schemes.selector
 	,	Selector = db.model('Selector', selector)
 	,	Test = db.model('Test', schema);
-
-	console.log(ua);
 
 	var test = new Test({
 		result: req.body.benchmark_result,
@@ -66,125 +103,31 @@ app.post('/benchmark', function(req, res){
 			});
 			test.selector.push(s);
 		});
-	console.log('saving result');
+	
 	test.save(function (err) {
 		if (err)
-			res.end('Error')
+			res.end('Error');
 		else
-			res.end('Submitted')
-	});
-});
-
-app.get('/view/stress', function (req, res) {
-
-	var schema = schemes.test_scheme
-	var Test = db.model('Test', schema)
-	
-	Test.find({'test' : 'stressCSS'}, function (err, docs) {
-		if (err)
-			console.log(err);
-		else {
-			res.render('stress', {
-				title: 'Topcoat',
-				results: docs
-			});
-		}
-	});
-
-});
-
-app.get('/view/db', function(req, res) {
-
-	var schema = schemes.test_scheme
-	var Test = db.model('Test', schema)
-	
-	Test.find(function (err, docs) {
-		if (err)
-			console.log(err);
-		else {
-			res.render('results', {
-				title: 'Topcoat',
-				results: docs
-			});
-		}
-	});
-});
-
-app.get('/clear/db', function(req, res){
-
-	res.end('Nothing to do here');
-	return;
-
-	var schema = schemes.test_scheme
-	var Test = db.model('Test', schema)
-
-	Test.find(function(err, docs){
-		if(err)
-			console.log(err)
-		else
-			docs.forEach(function(doc){
-				doc.remove(function(err, d){
-					if(err)
-						console.log(err)
-					else
-						console.log('doc removed')
-				})
-			});
-	});
-
-});
-
-app.delete('/remove/db', function(req, res) {
-	
-	res.end('Nothing to do here');
-	return;
-
-	var ids = req.body.ids.split(',')
-	,	schema = schemes.test_scheme
-	,	Test = db.model('Test', schema);
-
-	ids.forEach(function(id){
-		Test.findById(id, function(err, doc){
-			if(err)
-				console.log(err);
-			else
-				doc.remove(function(err, product){
-					if(err) console.log(err);
-					else console.log('product removed');
-				});
-		});
-	});
-});
-
-app.get('/edit/db', function(req, res){
-	
-	res.end('Nothing to do here');
-	return;
-	
-	var schema = schemes.test_scheme
-	,	Test = db.model('Test', schema);
-
-	Test.find(function (err, docs) {
-		if (err)
-			console.log(err);
-		else
-			res.render('edit', {
-				title: 'Topcoat',
-				results: docs
-			});
+			res.end('Submitted');
 	});
 });
 
 app.get('/view/results', function(req, res){
 
-	var schema = schemes.test_scheme
-	,	Test = db.model('Test', schema);
+	var commitSchema = schemes.commitSchema
+	,	Commit = db.model('Commit', commitSchema);
 	
-	Test.find().distinct('commit', function(err, docs){
+	Commit.find().sort('-date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
-			console.log(docs);
+			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+			docs.forEach(function (doc, idx) {
+				var date = new Date(doc.date);
+				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+				docs[idx].miliseconds = date.getTime();
+			});
+
 			res.render('visualisations', {
 				title: 'Visualisation menu',
 				tests: docs
@@ -240,35 +183,6 @@ app.get('/view/:commit', function (req, res) {
 	});
 });
 
-app.get('/view/:test/:commit', function (req, res) {
-
-	var schema = schemes.test_scheme
-	,	Test = db.model('Test', schema);
-
-	Test.find({
-		'commit' : req.params.commit,
-		'test' : req.params.test
-	}, function (err, docs) {
-		if(err) {
-			console.log(err);
-			res.end('You broke it :(');
-		} else {
-			res.render('commit-view', {
-				title: 'All results for ' + req.params.commit.substring(0,7) + ' on test ' + req.params.test,
-				results: docs,
-				commit: req.params.commit
-			});
-		}
-	});
-
-});
-
-app.get('/view/results/:platform', function(req, res){
-	res.render('graph',{
-		title: 'Visualisation of results for ' + req.params.platform
-	});
-});
-
 app.get('/json/:what/:value', function(req, res){
 
 	var schema = schemes.test_scheme
@@ -286,7 +200,7 @@ app.get('/json/:what/:value', function(req, res){
 					res.end('Got nothin\'');
 				else {
 					console.log(docs);
-					res.end(JSON.stringify(docs));
+					res.json(docs);
 				}
 	});
 

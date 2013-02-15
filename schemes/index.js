@@ -14,6 +14,11 @@ var test_schema = new Schema({
 	selector: [Selector]
 });
 
+var commitSchema = new Schema({
+	commit: { type: String, default: 'github hash'},
+	date: { type: Date }
+});
+
 var Selector = new Schema({
 	delta: { type: String, default: 'delta time' },
 	selector: { type: String, default: 'selector' },
@@ -43,3 +48,4 @@ module.exports.test_scheme = test_schema;
 module.exports.view_schema = view_schema;
 module.exports.stressCSS = stressCSS;
 module.exports.selector = Selector;
+module.exports.commitSchema = commitSchema;

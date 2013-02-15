@@ -3,6 +3,14 @@ extends layout
 block content
 	h1= title
 	h3 All Topcoat versions
-	- tests.forEach(function(test){
-		p: a(href='./' + test) #{test}
-	- })
+	table
+		thead
+			tr
+				th commit
+				th date
+		tbody
+			- tests.forEach(function(test){
+				tr(data-time=test.miliseconds)
+					td: a(href='./' + test.commit) #{test.commit}
+					td= test.formatedDate
+			- })
