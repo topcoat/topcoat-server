@@ -114,7 +114,7 @@ app.post('/benchmark', function (req, res) {
 
 app.post('/telemetry', function (req, res) {
 
-	res.header('Access-Control-Allow-Origin', '*');
+	res.header("Access-Control-Allow-Origin", "*");
 
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
