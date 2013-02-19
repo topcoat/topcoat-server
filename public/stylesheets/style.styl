@@ -22,21 +22,20 @@ tr
 	-webkit-transition-duration .1s
 	&:hover
 		background #f4f4f4
-		
+
 .odd
-	background #f8f8f8
-
-.odd + .even
-	border-top 10px solid white
-
-.even + .odd
-	border-top 10px solid white
+	background #eee
+	&:hover
+		background #eee
 
 .even:hover
 	background none
 
 .hide
 	display none
+
+[class*=" group"]
+	border-top 15px solid #fff
 
 .commit + a img
 	width 16px
@@ -52,7 +51,5 @@ tr:hover img
 
 .progress
 	color #333
-	
 	padding .1em
 	font-size .8em
-	//font-weight bold

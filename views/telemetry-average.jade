@@ -11,6 +11,7 @@ block content
 				th Platform
 				th Commit
 				th Date
+				th #Count
 		tbody
 			form(action='/compare', method='POST')
 				- results.forEach(function (el, idx) {
@@ -21,6 +22,7 @@ block content
 						td= el.platform
 						td= el.commit
 						td= el.formatedDate
+						td= el.count
 				- })
 				tr
 					td: button(type='submit') Compare

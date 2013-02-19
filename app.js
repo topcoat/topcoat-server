@@ -161,7 +161,8 @@ app.post('/v2/benchmark', function (req, res) {
 					date 	 : req.body.date,
 					platform : ua.family + ' ' + ua.major + "." + ua.minor + "." + ua.patch + ' ' + ua.os.toString(),
 					test     : req.body.test,
-					device   : req.body.device
+					device   : req.body.device,
+					count	 : 1
 				});
 				telemetryAvg.save(function (err) {
 					if(err) console.log('err', err);
@@ -170,16 +171,15 @@ app.post('/v2/benchmark', function (req, res) {
 				var update = {};
 				req.body.resultName.forEach(function (name, idx) {
 					if (!isNaN(parseFloat(req.body.resultValue[idx]))) {
-						update[name] = (parseFloat(doc.result[name]) + parseFloat(req.body.resultValue[idx]))/2;
+						update[name] = (parseFloat(doc.result[name]) * doc.count + parseFloat(req.body.resultValue[idx]))/(doc.count+1);
 					} else {
 						update[name] = req.body.resultValue[idx];
 					}
 				});
-				TelemetryAvg.findOne({_id : doc._id}, function(err, doc) {
-					console.log(update);
-					doc.result = update;
-					doc.save();
-				});
+				
+				doc.result = update;
+				doc.count += 1;
+				doc.save();
 			}
 		}
 	});

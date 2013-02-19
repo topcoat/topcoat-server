@@ -5,7 +5,7 @@ block content
 	- var tests = []
 	each val, key in results[0].result
 		- tests.push(key)
-	- var colors = ['#2FE1E5', '#D3EBC7', '#AABFAA', '#BF9692', '#FC0284']
+	- var colors = ['#8AC8C3', '#D3EBC7', '#AABFAA', '#BF9692', '#FC0284']
 	- results.forEach(function (r, i) {
 		.progress(style="width:500px;background:"+colors[i])= r.commit.substring(0, 6) + ' on ' + r.platform + ' on a ' + r.device
 	- })
@@ -15,11 +15,12 @@ block content
 				- tests.forEach(function (test, i) {
 					- var className = (i%2) ? 'odd' : 'even';
 					- results.forEach(function(r, idx) {
-						tr(class=className)
 							- if (idx == 0)
-								td(rowspan=results.length, width='200px')= test
-								td: .progress(style="width: " + r.result[test]*10 + "%; background:" + colors[idx])= r.result[test]
+								tr(class=className + ' group' + i)
+									td(rowspan=results.length, width='200px')= test
+									td: .progress(style="width: " + r.result[test]*8 + "%; background:" + colors[idx])= r.result[test]
 							- else
-								td: .progress(style="width: " + r.result[test]*10 + "%; background:" + colors[idx])= r.result[test]
+								tr(class=className)
+									td: .progress(style="width: " + r.result[test]*8 + "%; background:" + colors[idx])= r.result[test]
 					- })
 				- })

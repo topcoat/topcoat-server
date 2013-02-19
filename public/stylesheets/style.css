@@ -27,19 +27,19 @@ tr:hover {
   background: #f4f4f4;
 }
 .odd {
-  background: #f8f8f8;
+  background: #eee;
 }
-.odd + .even {
-  border-top: 10px solid #fff;
-}
-.even + .odd {
-  border-top: 10px solid #fff;
+.odd:hover {
+  background: #eee;
 }
 .even:hover {
   background: none;
 }
 .hide {
   display: none;
+}
+[class*=" group"] {
+  border-top: 15px solid #fff;
 }
 .commit + a img {
   width: 16px;
