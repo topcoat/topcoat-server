@@ -14,7 +14,7 @@ table {
 }
 td {
   margin: 0;
-  padding: 0.5em;
+  padding: 0.2em;
   text-align: center;
 }
 thead tr:hover {
@@ -28,6 +28,12 @@ tr:hover {
 }
 .odd {
   background: #f8f8f8;
+}
+.odd + .even {
+  border-top: 10px solid #fff;
+}
+.even + .odd {
+  border-top: 10px solid #fff;
 }
 .even:hover {
   background: none;
@@ -48,8 +54,7 @@ tr:hover img {
   border-top: 1px solid #ddd;
 }
 .progress {
-  color: #fff;
-  text-shadow: 0 1px 0 #222;
-  font-weight: bold;
-  padding: 0.5em;
+  color: #333;
+  padding: 0.1em;
+  font-size: 0.8em;
 }

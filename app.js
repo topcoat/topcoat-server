@@ -10,8 +10,8 @@ var express = require('express')
   , uaParser = require('ua-parser');
 
 var app = express();
-// var db = mongoose.connect('mongodb://localhost:27017/topcoat');
-var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
+var db = mongoose.connect('mongodb://localhost:27017/topcoat');
+// var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -112,7 +112,7 @@ app.post('/benchmark', function (req, res) {
 	});
 });
 
-app.post('/telemetry', function (req, res) {
+app.post('/v2/benchmark', function (req, res) {
 
 	res.header("Access-Control-Allow-Origin", "*");
 
@@ -186,7 +186,7 @@ app.post('/telemetry', function (req, res) {
 
 });
 
-app.get('/view/results/2', function (req, res) {
+app.get('/v2/view/results', function (req, res) {
 
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)

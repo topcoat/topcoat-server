@@ -5,11 +5,9 @@ block content
 	- var tests = []
 	each val, key in results[0].result
 		- tests.push(key)
-	- var colors = []
-	- results.forEach(function (r) {
-		- var color = "#" + Math.random().toString(16).slice(2, 8)
-		- colors.push(color)
-		.progress(style="width:500px;background:"+color)= r.commit.substring(0, 6) + ' on ' + r.platform + ' on a ' + r.device
+	- var colors = ['#2FE1E5', '#D3EBC7', '#AABFAA', '#BF9692', '#FC0284']
+	- results.forEach(function (r, i) {
+		.progress(style="width:500px;background:"+colors[i])= r.commit.substring(0, 6) + ' on ' + r.platform + ' on a ' + r.device
 	- })
  
 	table

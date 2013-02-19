@@ -8,6 +8,7 @@ block content
 				th 
 				th Test
 				th Device
+				th Platform
 				th Commit
 				th Date
 		tbody
@@ -17,6 +18,7 @@ block content
 						td: input(type='checkbox', name='average' + idx, value=el._id)
 						td= el.test
 						td= el.device
+						td= el.platform
 						td= el.commit
 						td= el.formatedDate
 				- })
