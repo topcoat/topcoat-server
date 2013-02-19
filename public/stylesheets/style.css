@@ -13,7 +13,6 @@ table {
   width: 100%;
 }
 td {
-  border: none;
   margin: 0;
   padding: 0.5em;
   text-align: center;
@@ -26,6 +25,12 @@ tr {
 }
 tr:hover {
   background: #f4f4f4;
+}
+.odd {
+  background: #f8f8f8;
+}
+.even:hover {
+  background: none;
 }
 .hide {
   display: none;
@@ -41,4 +46,10 @@ tr:hover img {
 }
 .stress-selectors {
   border-top: 1px solid #ddd;
+}
+.progress {
+  color: #fff;
+  text-shadow: 0 1px 0 #222;
+  font-weight: bold;
+  padding: 0.5em;
 }

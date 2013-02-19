@@ -10,8 +10,8 @@ var express = require('express')
   , uaParser = require('ua-parser');
 
 var app = express();
-// var db = mongoose.connect('mongodb://localhost:27017/topcoat');
-var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
+var db = mongoose.connect('mongodb://localhost:27017/topcoat');
+// var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -71,7 +71,7 @@ app.get('/create', function (req, res) {
 
 });
 
-app.post('/benchmark', function(req, res){
+app.post('/benchmark', function (req, res) {
 
 	res.header("Access-Control-Allow-Origin", "*");
 	
@@ -112,7 +112,135 @@ app.post('/benchmark', function(req, res){
 	});
 });
 
-app.get('/view/results', function(req, res){
+app.post('/telemetry', function (req, res) {
+
+	res.header('Access-Control-Allow-Origin', '*');
+
+	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
+	,	ua = uaParser.parse(req.body.ua)
+	;
+
+	var telemetryTest = new TelemetryTest({
+			ua     : req.body.ua
+		,	device : req.body.device
+		,	os 	   : ua.os.toString()
+		,	browser: ua.family
+		,	version: ua.major + "." + ua.minor + "." + ua.patch
+		,	commit : req.body.commit
+		,	date   : req.body.date
+		,	result : {}
+		,	test   : req.body.test
+	});
+
+	req.body.resultName.forEach(function (name, idx) {
+		telemetryTest.result[name] = req.body.resultValue[idx];
+	});
+
+	telemetryTest.save(function (err) {
+		if(err) {
+			console.log('Error saving result');
+		} else {
+			res.write('Result saved');
+		}
+	});
+
+	TelemetryAvg.findOne({
+		commit   : req.body.commit,
+		platform : ua.family + ' ' + ua.major + "." + ua.minor + "." + ua.patch + ' ' + ua.os.toString(),
+		test     : req.body.test,
+		device   : req.body.device
+	}, function (err, doc) {
+		if (err) {
+			console.log('Error : ', err);
+		} else {
+			if (!doc) {
+				var telemetryAvg = new TelemetryAvg({
+					result   : telemetryTest.result,
+					commit   : req.body.commit,
+					date 	 : req.body.date,
+					platform : ua.family + ' ' + ua.major + "." + ua.minor + "." + ua.patch + ' ' + ua.os.toString(),
+					test     : req.body.test,
+					device   : req.body.device
+				});
+				telemetryAvg.save(function (err) {
+					if(err) console.log('err', err);
+				});
+			} else {
+				var update = {};
+				req.body.resultName.forEach(function (name, idx) {
+					if (!isNaN(parseFloat(req.body.resultValue[idx]))) {
+						update[name] = (parseFloat(doc.result[name]) + parseFloat(req.body.resultValue[idx]))/2;
+					} else {
+						update[name] = req.body.resultValue[idx];
+					}
+				});
+				TelemetryAvg.findOne({_id : doc._id}, function(err, doc) {
+					console.log(update);
+					doc.result = update;
+					doc.save();
+				});
+			}
+		}
+	});
+
+});
+
+app.get('/view/results/2', function (req, res) {
+
+	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
+	,	ua = uaParser.parse(req.body.ua)
+	;
+
+	TelemetryAvg.find().sort('-date').execFind(function (err, docs) {
+		if(err)
+			console.log(err);
+		else {
+			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+			docs.forEach(function (doc, idx) {
+				var date = new Date(doc.date);
+				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+				docs[idx].miliseconds = date.getTime();
+			});
+
+			res.render('telemetry-average', {
+				title : 'telemetry average',
+				results: docs
+			});
+		}
+	});
+
+});
+
+app.post('/compare', function (req, res) {
+
+	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
+	,	ua = uaParser.parse(req.body.ua)
+	;
+
+	var ids = [];
+	for(var i in req.body)
+		ids.push(req.body[i]);
+	TelemetryAvg.find({_id : { $in: ids }}, function (err, docs) {
+		if(err) {
+			console.log(err);
+			res.end('Error');
+		} else {
+
+			res.render('telemetry-compare', {
+				title : 'telemetry average',
+				results: docs
+			});
+
+		}
+
+	});
+
+});
+
+app.get('/view/results', function (req, res) {
 
 	var commitSchema = schemes.commitSchema
 	,	Commit = db.model('Commit', commitSchema);

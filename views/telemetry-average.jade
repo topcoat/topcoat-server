@@ -1,0 +1,24 @@
+extends layout
+
+block content
+	h1 Average telemetry results
+	table
+		thead
+			tr
+				th 
+				th Test
+				th Device
+				th Commit
+				th Date
+		tbody
+			form(action='/compare', method='POST')
+				- results.forEach(function (el, idx) {
+					tr
+						td: input(type='checkbox', name='average' + idx, value=el._id)
+						td= el.test
+						td= el.device
+						td= el.commit
+						td= el.formatedDate
+				- })
+				tr
+					td: button(type='submit') Compare

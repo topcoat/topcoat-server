@@ -14,6 +14,30 @@ var test_schema = new Schema({
 	selector: [Selector]
 });
 
+var telemetry_test = new Schema({
+	
+		result   : { type : Object }
+	,	ua     : { type : String, default : 'user agent' }
+	,	device : { type : String, default : 'device' }
+	,	os 	 : { type : String, default : 'OS' }
+	,	browser: { type : String, default : 'browser' }
+	,	version: { type: String, default: 'unknown browser version'}
+	,	commit : { type : String, default : 'github hash'}
+	,	date   : { type : Date }
+	,	test: { type: String, default: 'test name' }
+});
+
+var telemetry_avg = new Schema({
+
+		result   : { type : Object }
+	,	commit   : { type : String, default : 'github hash'}
+	,	date     : { type : Date }
+	,	platform : { type : String, default : 'platform tested'}
+	,	test  	 : { type : String, default : 'test name' }
+	, 	device	 : { type : String, default : 'device' }
+
+});
+
 var commitSchema = new Schema({
 	commit: { type: String, default: 'github hash'},
 	date: { type: Date }
@@ -49,3 +73,5 @@ module.exports.view_schema = view_schema;
 module.exports.stressCSS = stressCSS;
 module.exports.selector = Selector;
 module.exports.commitSchema = commitSchema;
+module.exports.telemetry_test = telemetry_test;
+module.exports.telemetry_avg = telemetry_avg;
