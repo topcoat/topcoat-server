@@ -186,6 +186,12 @@ app.post('/v2/benchmark', function (req, res) {
 
 });
 
+app.post('/v2/grunt', function (req, res) {
+
+	res.end('Data received! Commit ' + req.body.commit + ' ' + req.body.date);
+
+});
+
 app.get('/v2/view/results', function (req, res) {
 
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
