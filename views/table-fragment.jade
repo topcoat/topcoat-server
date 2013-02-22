@@ -1,17 +1,16 @@
-form(action='/compare', method='POST')
-	- results.forEach(function (el, idx) {
-		tr
-			td: input(type='checkbox', name='average' + idx, value=el._id)
-			td= el.test 
-				a(title='Add as a filter', href='#', class='add-filter', data-value=el.test, data-filter='test') + 
-			td= el.device
-				a(title='Add as a filter', href='#', class='add-filter', data-value=el.device, data-filter='device') + 
-			td= el.platform
-				a(title='Add as a filter', href='#', class='add-filter', data-value=el.platform, data-filter='platform') + 
-			td= el.commit
-				a(title='Add as a filter', href='#', class='add-filter', data-value=el.commit, data-filter='commit') + 
-			td= el.formatedDate
-			td= el.count
-	- })
+- results.forEach(function (el, idx) {
 	tr
-		td: button(type='submit') Compare
+		td: input(type='checkbox', name='average' + idx, value=el._id)
+		td= el.test 
+			a(title='Add as a filter', href='#', class='add-filter', data-value=el.test, data-filter='test') + 
+		td= el.device
+			a(title='Add as a filter', href='#', class='add-filter', data-value=el.device, data-filter='device') + 
+		td= el.platform
+			a(title='Add as a filter', href='#', class='add-filter', data-value=el.platform, data-filter='platform') + 
+		td= el.commit
+			a(title='Add as a filter', href='#', class='add-filter', data-value=el.commit, data-filter='commit') + 
+		td= el.formatedDate
+		td= el.count
+- })
+tr
+	td: button(type='submit') Compare

@@ -20,8 +20,12 @@ var removeFilter = function (e) {
 	this.parentNode.removeChild(this);
 
 	var formData = new FormData();
+	var filters = document.querySelectorAll('#filters li');
 
-	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
+	if(!filters.length)
+		window.location.href = window.location.pathname;
+
+	[].forEach.call(filters, function (li, idx) {
 		var content = li.textContent || li.innerText;
 		var arr = content.split(' ');
 		var filter = arr[0];
@@ -65,6 +69,7 @@ var addFilter = function () {
 	document.querySelector('#filters').appendChild(li);
 
 	submit(formData, function (data) {
+		console.log(data);
 		document.querySelector('tbody').innerHTML = data;
 		addEventListeners();
 	});
