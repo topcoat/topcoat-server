@@ -2,6 +2,9 @@ extends layout
 
 block content
 	h1 Average telemetry results
+	h4 Filters (<small>click on them to remove</small>)
+	ul(id='filters')
+
 	table
 		thead
 			tr
@@ -10,19 +13,28 @@ block content
 				th Device
 				th Platform
 				th Commit
-				th Date
+				th
+					select
+						option Last 7 days
+						option(data-value='14') Last 14 days
+						option(data-value='30') Last Month
 				th #Count
 		tbody
 			form(action='/compare', method='POST')
 				- results.forEach(function (el, idx) {
 					tr
 						td: input(type='checkbox', name='average' + idx, value=el._id)
-						td= el.test
+						td= el.test 
+							a(title='Add as a filter', href='#', class='add-filter', data-value=el.test, data-filter='test') + 
 						td= el.device
+							a(title='Add as a filter', href='#', class='add-filter', data-value=el.device, data-filter='device') + 
 						td= el.platform
+							a(title='Add as a filter', href='#', class='add-filter', data-value=el.platform, data-filter='platform') + 
 						td= el.commit
+							a(title='Add as a filter', href='#', class='add-filter', data-value=el.commit, data-filter='commit') + 
 						td= el.formatedDate
 						td= el.count
 				- })
 				tr
 					td: button(type='submit') Compare
+	script(src='/javascripts/telemetry-sort.js')

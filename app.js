@@ -10,8 +10,8 @@ var express = require('express')
   , uaParser = require('ua-parser');
 
 var app = express();
-// var db = mongoose.connect('mongodb://localhost:27017/topcoat');
-var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
+var db = mongoose.connect('mongodb://localhost:27017/topcoat');
+// var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -198,8 +198,16 @@ app.get('/v2/view/results', function (req, res) {
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
 	,	ua = uaParser.parse(req.body.ua)
 	;
+	
+	var date = {
+		date : {
+			$gte: new Date(new Date().getTime() - 14*86400*1000).toISOString()
+		}
+	};
 
-	TelemetryAvg.find().sort('-date').execFind(function (err, docs) {
+	console.log(date);
+
+	TelemetryAvg.find(date).sort('-date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
@@ -214,6 +222,43 @@ app.get('/v2/view/results', function (req, res) {
 				title : 'telemetry average',
 				results: docs
 			});
+		}
+	});
+
+});
+
+app.post('/v2/view/results/filtered', function (req, res) {
+
+	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
+	,	ua = uaParser.parse(req.body.ua)
+	;
+
+	var past = parseInt(req.body.date, 10) || 8;
+	var start = new Date(new Date().getTime() - past*86400*1000);
+
+	req.body.date = {
+		$gte: start
+	};
+
+	console.log(req.body);
+
+	TelemetryAvg.find(req.body).sort('-date').execFind(function (err, docs) {
+		if(err)
+			console.log(err);
+		else {
+			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+			docs.forEach(function (doc, idx) {
+				var date = new Date(doc.date);
+				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+				docs[idx].miliseconds = date.getTime();
+			});
+
+			res.render('table-fragment', {
+				layout  : false,
+				results : docs
+			});
+
 		}
 	});
 

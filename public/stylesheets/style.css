@@ -17,6 +17,9 @@ td {
   padding: 0.2em;
   text-align: center;
 }
+td:hover .add-filter {
+  visibility: visible;
+}
 thead tr:hover {
   background: none;
 }
@@ -57,4 +60,8 @@ tr:hover img {
   color: #333;
   padding: 0.1em;
   font-size: 0.8em;
+}
+.add-filter {
+  margin: 0 0.1em;
+  visibility: hidden;
 }
