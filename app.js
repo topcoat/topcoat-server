@@ -1,4 +1,4 @@
-/* Topcoat benchmark server */
+ /* Topcoat benchmark server */
 
 var express = require('express')
   , fetch = require('./routes/fetch')
@@ -188,7 +188,7 @@ app.post('/v2/benchmark', function (req, res) {
 
 app.post('/v2/grunt', function (req, res) {
 
-	res.end('Data received! Commit ' + req.body.commit + ' ' + req.body.date);
+	res.end('Data received! Commit ' + req.body);
 
 });
 
@@ -234,7 +234,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	,	ua = uaParser.parse(req.body.ua)
 	;
 
-	var past = parseInt(req.body.date, 10) || 8;
+	var past = parseInt(req.body.date, 10) || 10;
 	var start = new Date(new Date().getTime() - past*86400*1000);
 
 	req.body.date = {
