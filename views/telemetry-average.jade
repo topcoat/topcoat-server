@@ -2,7 +2,7 @@ extends layout
 
 block content
 	h1 Average telemetry results
-	h4 Filters (<small>click on them to remove</small>)
+	h4 Filters (<small>click on them to remove</small>) (<a> + </a> adds a filter)
 	ul(id='filters')
 
 	form(action='/compare', method='POST')
@@ -37,4 +37,5 @@ block content
 					- })
 					tr
 						td: button(type='submit') Compare
+						td(colspan=6)
 	script(src='/javascripts/telemetry-sort.js')

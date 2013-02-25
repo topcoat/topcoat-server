@@ -10,8 +10,8 @@ var express = require('express')
   , uaParser = require('ua-parser');
 
 var app = express();
-var db = mongoose.connect('mongodb://localhost:27017/topcoat');
-// var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
+// var db = mongoose.connect('mongodb://localhost:27017/topcoat');
+var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -115,14 +115,17 @@ app.post('/benchmark', function (req, res) {
 app.post('/v2/benchmark', function (req, res) {
 
 	res.header("Access-Control-Allow-Origin", "*");
+	req.body = JSON.parse(req.body.data);
+
+	console.log(req.body);
 
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
-	,	ua = uaParser.parse(req.body.ua)
+	,	ua = uaParser.parse(req.body.ua || req.body.resultName['UserAgent ()'])
 	;
 
 	var telemetryTest = new TelemetryTest({
-			ua     : req.body.ua
+			ua     : req.body.resultName['UserAgent ()']
 		,	device : req.body.device
 		,	os 	   : ua.os.toString()
 		,	browser: ua.family
@@ -133,15 +136,13 @@ app.post('/v2/benchmark', function (req, res) {
 		,	test   : req.body.test
 	});
 
-	req.body.resultName.forEach(function (name, idx) {
-		telemetryTest.result[name] = req.body.resultValue[idx];
-	});
+	for(var i in req.body.resultName) {
+		telemetryTest.result[i] = req.body.resultName[i];
+	}
 
 	telemetryTest.save(function (err) {
 		if(err) {
 			console.log('Error saving result');
-		} else {
-			res.write('Result saved');
 		}
 	});
 
@@ -162,33 +163,30 @@ app.post('/v2/benchmark', function (req, res) {
 					platform : ua.family + ' ' + ua.major + "." + ua.minor + "." + ua.patch + ' ' + ua.os.toString(),
 					test     : req.body.test,
 					device   : req.body.device,
-					count	 : 1
+					count	 : 1,
+					ua       : telemetryTest.ua
 				});
 				telemetryAvg.save(function (err) {
 					if(err) console.log('err', err);
 				});
+				res.end('Result saved. New result');
 			} else {
 				var update = {};
-				req.body.resultName.forEach(function (name, idx) {
-					if (!isNaN(parseFloat(req.body.resultValue[idx]))) {
-						update[name] = (parseFloat(doc.result[name]) * doc.count + parseFloat(req.body.resultValue[idx]))/(doc.count+1);
+				for(var i in req.body.resultName) {
+					if (!isNaN(parseFloat(req.body.resultName[i]))) {
+						update[i] = (parseFloat(doc.result[i]) * doc.count + parseFloat(req.body.resultName[i])) / (doc.count+1);
 					} else {
-						update[name] = req.body.resultValue[idx];
+						update[i] = req.body.resultName[i];
 					}
-				});
+				}
 				
 				doc.result = update;
 				doc.count += 1;
 				doc.save();
+				res.end('Result saved. Average updated');
 			}
 		}
 	});
-
-});
-
-app.post('/v2/grunt', function (req, res) {
-
-	res.end('Data received! Commit ' + req.body);
 
 });
 
@@ -201,11 +199,9 @@ app.get('/v2/view/results', function (req, res) {
 	
 	var date = {
 		date : {
-			$gte: new Date(new Date().getTime() - 14*86400*1000).toISOString()
+			$gte: new Date(new Date().getTime() - 7*86400*1000).toISOString()
 		}
 	};
-
-	console.log(date);
 
 	TelemetryAvg.find(date).sort('-date').execFind(function (err, docs) {
 		if(err)
@@ -217,7 +213,7 @@ app.get('/v2/view/results', function (req, res) {
 				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
 				docs[idx].miliseconds = date.getTime();
 			});
-
+			console.log(docs);
 			res.render('telemetry-average', {
 				title : 'telemetry average',
 				results: docs
@@ -234,7 +230,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	,	ua = uaParser.parse(req.body.ua)
 	;
 
-	var past = parseInt(req.body.date, 10) || 10;
+	var past = parseInt(req.body.date, 10) || 7;
 	var start = new Date(new Date().getTime() - past*86400*1000);
 
 	req.body.date = {

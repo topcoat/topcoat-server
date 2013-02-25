@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding: 25px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 a {
@@ -9,19 +9,27 @@ svg {
   top: 200px;
 }
 table {
-  border-collapse: collapse;
   width: 100%;
 }
 td {
-  margin: 0;
-  padding: 0.2em;
   text-align: center;
+  padding: 1em;
+  background: linear-gradient(#fafafa, #f4f4f4);
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #e0e0e0;
 }
 td:hover .add-filter {
   visibility: visible;
 }
+thead tr {
+  background: linear-gradient(#f4f4f4, #e0e0e0);
+}
 thead tr:hover {
-  background: none;
+  background: linear-gradient(#f4f4f4, #e0e0e0);
+}
+thead tr th {
+  padding: 1em;
+  text-shadow: 0 1px 0 #fff;
 }
 tr {
   -webkit-transition-duration: 0.1s;
@@ -38,11 +46,15 @@ tr:hover {
 .even:hover {
   background: none;
 }
+.odd td,
+.even td {
+  padding: 1.5em;
+}
 .hide {
   display: none;
 }
 [class*=" group"] {
-  border-top: 15px solid #fff;
+  border-top: 2px solid #999;
 }
 .commit + a img {
   width: 16px;
@@ -61,7 +73,16 @@ tr:hover img {
   padding: 0.1em;
   font-size: 0.8em;
 }
-.add-filter {
+.add-filter,
+.close {
   margin: 0 0.1em;
   visibility: hidden;
+  background: linear-gradient(#f0f0f0, #fff);
+  padding: 0.1em 0.4em 0.2em;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+}
+.close {
+  visibility: visible;
+  cursor: pointer;
 }

@@ -9,18 +9,32 @@ block content
 	- results.forEach(function (r, i) {
 		.progress(style="width:500px;background:"+colors[i])= r.commit.substring(0, 6) + ' on ' + r.platform + ' on a ' + r.device
 	- })
- 
+	- if (tests.length > 25)
+		h1 You might be comparing two diferent types of tests
+		h3 So the columns don't match up ;(
 	table
 		tbody
 				- tests.forEach(function (test, i) {
 					- var className = (i%2) ? 'odd' : 'even';
 					- results.forEach(function(r, idx) {
-							- if (idx == 0)
-								tr(class=className + ' group' + i)
-									td(rowspan=results.length, width='200px')= test
-									td: .progress(style="width: " + r.result[test]*8 + "%; background:" + colors[idx])= r.result[test]
-							- else
-								tr(class=className)
-									td: .progress(style="width: " + r.result[test]*8 + "%; background:" + colors[idx])= r.result[test]
+							- if (!isNaN(r.result[test]))
+								- var bar_length = 0
+								- if (r.result[test] > 1000)
+									bar_length = r.result[test] / 100000
+								- else
+									- if (r.result[test] > 100)
+										bar_length = r.result[test] / 10
+									- else
+										- if (r.result[test] < 5)
+											bar_length = 5 * r.result[test]
+										- else
+											bar_length = r.result[test]
+								- if (idx == 0)
+									tr(class=className + ' group' + i)
+										td(rowspan=results.length, width='200px')= test
+										td: .progress(style="width: " + bar_length + "%; background:" + colors[idx])= r.result[test]
+								- else
+									tr(class=className)
+										td: .progress(style="width: " + bar_length + "%; background:" + colors[idx])= r.result[test]
 					- })
 				- })

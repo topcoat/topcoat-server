@@ -34,9 +34,9 @@ var telemetry_avg = new Schema({
 	,	date     : { type : Date }
 	,	platform : { type : String, default : 'platform tested'}
 	,	test  	 : { type : String, default : 'test name' }
-	, 	device	 : { type : String, default : 'device' }
+	, 	device	 : { type : String, default : 'device?' }
 	,	count	 : { type : Number, default : 1}
-
+	,	ua		 : { type : String, default : 'ua string' }
 });
 
 var commitSchema = new Schema({
