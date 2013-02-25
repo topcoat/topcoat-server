@@ -1,7 +1,7 @@
 extends layout
 //- "#" + Math.random().toString(16).slice(2, 8)
 block content
-	h1 Telemetry compare results
+	h1 Telemetry compare results <a href="http://topcoat.herokuapp.com/v2/view/results">Go back</a>
 	- var tests = []
 	each val, key in results[0].result
 		- tests.push(key)
@@ -9,7 +9,7 @@ block content
 	- results.forEach(function (r, i) {
 		.progress(style="width:500px;background:"+colors[i])= r.commit.substring(0, 6) + ' on ' + r.platform + ' on a ' + r.device
 	- })
-	- if (tests.length > 25)
+	- if (tests.length > 31)
 		h1 You might be comparing two diferent types of tests
 		h3 So the columns don't match up ;(
 	table
