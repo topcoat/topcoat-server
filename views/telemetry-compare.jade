@@ -16,25 +16,24 @@ block content
 		tbody
 				- tests.forEach(function (test, i) {
 					- var className = (i%2) ? 'odd' : 'even';
+					- var max = 0;
+					- var ratio;
+					- results.forEach(function(r, idx) {
+						- if(!isNaN(r.result[test]))
+							- if (parseInt(r.result[test],10) > max)
+								- max = r.result[test]
+					- })
+					- ratio = 100/max;
+					- if (ratio > 1)
+						- ratio = 1
 					- results.forEach(function(r, idx) {
 							- if (!isNaN(r.result[test]))
-								- var bar_length = 0
-								- if (r.result[test] > 1000)
-									bar_length = r.result[test] / 100000
-								- else
-									- if (r.result[test] > 100)
-										bar_length = r.result[test] / 10
-									- else
-										- if (r.result[test] < 5)
-											bar_length = 5 * r.result[test]
-										- else
-											bar_length = r.result[test]
 								- if (idx == 0)
 									tr(class=className + ' group' + i)
 										td(rowspan=results.length, width='200px')= test
-										td: .progress(style="width: " + bar_length + "%; background:" + colors[idx])= r.result[test]
+										td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
 								- else
 									tr(class=className)
-										td: .progress(style="width: " + bar_length + "%; background:" + colors[idx])= r.result[test]
+										td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
 					- })
 				- })
