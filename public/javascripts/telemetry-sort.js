@@ -35,6 +35,14 @@ var removeFilter = function (e) {
 
 };
 
+document.querySelector('#selectall').addEventListener('change', function () {
+
+	[].forEach.call(document.querySelectorAll('input[name*=average]'), function (input) {
+		(input.checked) ? input.checked = false : input.checked = true;
+	});
+
+}, false);
+
 // add a new filter to the view
 // the function also handles previous filters
 var addFilter = function () {

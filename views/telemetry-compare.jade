@@ -3,15 +3,17 @@ extends layout
 block content
 	h1 Telemetry compare results <a href="http://topcoat.herokuapp.com/v2/view/results">Go back</a>
 	- var tests = []
-	each val, key in results[0].result
+	//- each val, key in results[0].result
 		- tests.push(key)
+	- results.forEach(function (r) {
+		- each val, key in r.result
+			- if (tests.indexOf(key) == -1)
+				- tests.push(key)
+	- })
 	- var colors = ['#8AC8C3', '#D3EBC7', '#AABFAA', '#BF9692', '#FC0284']
 	- results.forEach(function (r, i) {
 		.progress(style="width:500px;background:"+colors[i])= r.commit.substring(0, 6) + ' on ' + r.platform + ' on a ' + r.device
 	- })
-	- if (tests.length > 31)
-		h1 You might be comparing two diferent types of tests
-		h3 So the columns don't match up ;(
 	table
 		tbody
 				- tests.forEach(function (test, i) {
@@ -23,11 +25,11 @@ block content
 							- if (parseInt(r.result[test],10) > max)
 								- max = r.result[test]
 					- })
-					- ratio = 100/max;
+					- ratio = 100/max
 					- if (ratio > 1)
 						- ratio = 1
 					- results.forEach(function(r, idx) {
-							- if (!isNaN(r.result[test]))
+							if (!isNaN(r.result[test]) && results.length < 35)
 								- if (idx == 0)
 									tr(class=className + ' group' + i)
 										td(rowspan=results.length, width='200px')= test
@@ -35,5 +37,13 @@ block content
 								- else
 									tr(class=className)
 										td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+							else
+								- if (idx == 0)
+										tr(class=className + ' group' + i)
+											td(rowspan=results.length, width='200px')= test
+											td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+									- else
+										tr(class=className)
+											td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
 					- })
 				- })
