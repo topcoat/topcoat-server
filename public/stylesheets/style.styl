@@ -12,6 +12,8 @@ table
 td
 	text-align center
 	padding 1em
+	background -moz-linear-gradient(#fafafa, #f4f4f4)
+	background -webkit-linear-gradient(#fafafa, #f4f4f4)
 	background linear-gradient(#fafafa, #f4f4f4)
 	border-top 1px solid #fff
 	border-bottom 1px solid #e0e0e0
@@ -19,8 +21,12 @@ td
 		visibility visible
 
 thead tr
+	background -moz-linear-gradient(#f4f4f4, #e0e0e0)
+	background -webkit-linear-gradient(#f4f4f4, #e0e0e0)
 	background linear-gradient(#f4f4f4, #e0e0e0)
 	&:hover
+		background -moz-linear-gradient(#f4f4f4, #e0e0e0)
+		background -webkit-linear-gradient(#f4f4f4, #e0e0e0)
 		background linear-gradient(#f4f4f4, #e0e0e0)
 	th
 		padding 1em
@@ -64,10 +70,16 @@ tr:hover img
 	color #333
 	padding .1em
 	font-size .8em
+	margin: .5em 0;
+	padding: .5em;
+	border-radius: 2px;
+	border: 1px solid rgba(0,0,0,.2);
 
 .add-filter, .close
 	margin 0 .1em
 	visibility hidden
+	background -moz-linear-gradient(#f0f0f0, #fff)
+	background -webkit-linear-gradient(#f0f0f0, #fff)
 	background linear-gradient(#f0f0f0, #fff)
 	padding .1em .4em .2em
 	border 1px solid #ddd

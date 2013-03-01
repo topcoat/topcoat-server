@@ -12,7 +12,11 @@ block content
 	- })
 	- var colors = ['#8AC8C3', '#D3EBC7', '#AABFAA', '#BF9692', '#FC0284']
 	- results.forEach(function (r, i) {
-		.progress(style="width:500px;background:"+colors[i])= r.commit.substring(0, 6) + ' on ' + r.platform + ' on a ' + r.device
+		.progress(style="width:500px;background:"+colors[i])
+			p= 'Commit version '
+				a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit.substring(0,6)
+			p= r.platform + ' on ' + r.device
+			p= 'Test name ' + r.test
 	- })
 	table
 		tbody
