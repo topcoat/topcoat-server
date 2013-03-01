@@ -3,8 +3,6 @@ extends layout
 block content
 	h1 Telemetry compare results <a href="http://topcoat.herokuapp.com/v2/view/results">Go back</a>
 	- var tests = []
-	//- each val, key in results[0].result
-		- tests.push(key)
 	- results.forEach(function (r) {
 		- each val, key in r.result
 			- if (tests.indexOf(key) == -1)

@@ -31,7 +31,92 @@ var removeFilter = function (e) {
 		addEventListeners();
 	});
 
+	createFilterURL();
 	return false;
+
+};
+
+var createFilterURL = function () {
+	var stringURL = 'http://localhost:3000/v2/view/results?';
+	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
+		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
+	});
+	var select = document.querySelector('select');
+	stringURL += 'date=' + select.options[select.selectedIndex].dataset.value + '&';
+
+	history.pushState('', '', stringURL);
+	console.log('updated URL', window.location.href);
+
+};
+
+window.addEventListener('popstate', function () {
+
+	var filters = location.href.split('?');
+	if(filters.length > 1)
+		refreshFilters(filters[1].replace('#', ''));
+
+}, false);
+
+var refreshFilters = function (filters) {
+
+
+	if(filters) {
+		
+		filters = filters.trim().replace('#', '').replace(/%20/g, " ");;
+		var docFrag = document.createDocumentFragment()
+		,	formData = new FormData()
+		;
+
+		var select = document.querySelector('select');
+
+		filters.split('&').forEach(function (filter) {
+
+			if (filter.length) {
+
+				var li       = document.createElement('li')
+				,	a        = document.createElement('a')
+				,	close    = document.createElement('a')
+				;
+
+				var f = filter.split('=');
+				if(f[0] != 'date') {
+					a.innerHTML = f[0]+' '+f[1];
+					close.classList.add('close');
+					close.innerHTML = '×';
+
+					li.appendChild(a);
+					li.appendChild(close);
+
+					li.dataset.filter = f[0];
+					li.dataset.value  = f[1];
+					formData.append(f[0], f[1]);
+
+					close.addEventListener('click', removeFilter, false);
+					docFrag.appendChild(li);
+				} else {
+					var d = parseInt(f[1]);
+					var i = 1;
+					(d == 7) ? i = 0 : (d == 14) ? i = 1 : i = 2;
+					select.selectedIndex = i;
+					formData.append('date', select.options[select.selectedIndex].dataset.value);
+				}
+
+		}
+
+		});
+
+		document.querySelector('#filters').innerHTML = '';
+		document.querySelector('#filters').appendChild(docFrag);
+		submit(formData, function (data) {
+			document.querySelector('tbody').innerHTML = data;
+			addEventListeners();
+		});
+
+	} else {
+
+		document.querySelector('#filters').innerHTML = '';
+
+	}
 
 };
 
@@ -78,6 +163,8 @@ var addFilter = function () {
 		addEventListeners();
 	});
 
+	createFilterURL();
+
 };
 
 document.querySelector('select').addEventListener('change', function (e) {
@@ -86,10 +173,21 @@ document.querySelector('select').addEventListener('change', function (e) {
 
 	formData.append('date', this.options[this.selectedIndex].dataset.value);
 
+	console.log('date changed to ', this.selectedIndex);
+
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
 		addEventListeners();
 	});
+
+	var stringURL = 'http://localhost:3000/v2/view/results?';
+	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
+		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
+	});
+	stringURL += 'date=' + this.options[this.selectedIndex].dataset.value;
+	history.pushState('', '', stringURL);
+	console.log('updated URL', window.location.href);
+
 
 });
 
