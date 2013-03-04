@@ -37,7 +37,7 @@ var removeFilter = function (e) {
 };
 
 var createFilterURL = function () {
-	var stringURL = 'http://localhost:3000/v2/view/results?';
+	var stringURL = 'http://topcoat.herokuapp.com/v2/view/?';
 	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
 		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
 	});
