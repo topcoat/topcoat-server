@@ -1,5 +1,3 @@
-var stringURL = 'http://topcoat.herokuapp.com/v2/view/?';
-
 var submit = function (formData, cb) {
 
 	var xhr = new XMLHttpRequest();
@@ -28,6 +26,7 @@ var removeFilter = function (e) {
 		formData.append(li.dataset.filter, li.dataset.value);
 	});
 
+	console.log('remove filter submit');
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
 		addEventListeners();
@@ -39,7 +38,7 @@ var removeFilter = function (e) {
 };
 
 var createFilterURL = function () {
-	
+	var stringURL = 'results?';
 	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
 		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
 	});
@@ -47,7 +46,6 @@ var createFilterURL = function () {
 	stringURL += 'date=' + select.options[select.selectedIndex].dataset.value + '&';
 
 	history.pushState('', '', stringURL);
-	console.log('updated URL', window.location.href);
 
 };
 
@@ -61,7 +59,6 @@ window.addEventListener('popstate', function () {
 
 var refreshFilters = function (filters) {
 
-
 	if(filters) {
 		
 		filters = filters.trim().replace('#', '').replace(/%20/g, " ");;
@@ -74,7 +71,7 @@ var refreshFilters = function (filters) {
 		filters.split('&').forEach(function (filter) {
 
 			if (filter.length) {
-
+				console.log('handling filter ' + filter);
 				var li       = document.createElement('li')
 				,	a        = document.createElement('a')
 				,	close    = document.createElement('a')
@@ -96,10 +93,12 @@ var refreshFilters = function (filters) {
 					close.addEventListener('click', removeFilter, false);
 					docFrag.appendChild(li);
 				} else {
+					console.log('filter date found ' + f[0] + ' ' + f[1]);
 					var d = parseInt(f[1]);
 					var i = 1;
 					(d == 7) ? i = 0 : (d == 14) ? i = 1 : i = 2;
 					select.selectedIndex = i;
+					console.log('appending date with value ' + select.options[select.selectedIndex].dataset.value);
 					formData.append('date', select.options[select.selectedIndex].dataset.value);
 				}
 
@@ -109,6 +108,7 @@ var refreshFilters = function (filters) {
 
 		document.querySelector('#filters').innerHTML = '';
 		document.querySelector('#filters').appendChild(docFrag);
+		console.log('refresh filter submit');
 		submit(formData, function (data) {
 			document.querySelector('tbody').innerHTML = data;
 			addEventListeners();
@@ -160,6 +160,7 @@ var addFilter = function () {
 
 	document.querySelector('#filters').appendChild(li);
 
+	console.log('add filter submit');
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
 		addEventListeners();
@@ -170,13 +171,12 @@ var addFilter = function () {
 };
 
 document.querySelector('select').addEventListener('change', function (e) {
-
+	var stringURL = 'results?';
 	var formData = new FormData();
 
 	formData.append('date', this.options[this.selectedIndex].dataset.value);
 
-	console.log('date changed to ', this.selectedIndex);
-
+	console.log('select change submit');
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
 		addEventListeners();
@@ -185,10 +185,8 @@ document.querySelector('select').addEventListener('change', function (e) {
 	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
 		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
 	});
-	stringURL += 'date=' + this.options[this.selectedIndex].dataset.value;
+	stringURL += 'date=' + this.options[this.selectedIndex].dataset.value + '&';
 	history.pushState('', '', stringURL);
-	console.log('updated URL', window.location.href);
-
 
 });
 

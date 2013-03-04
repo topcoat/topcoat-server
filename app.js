@@ -229,10 +229,10 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
 	,	ua = uaParser.parse(req.body.ua)
 	;
-
+	console.log('///////////////');
 	var past = parseInt(req.body.date, 10) || 7;
 	var start = new Date(new Date().getTime() - past*86400*1000);
-
+	console.log('past='+past);
 	req.body.date = {
 		$gte: start
 	};
