@@ -1,3 +1,5 @@
+var stringURL = 'http://topcoat.herokuapp.com/v2/view/?';
+
 var submit = function (formData, cb) {
 
 	var xhr = new XMLHttpRequest();
@@ -37,7 +39,7 @@ var removeFilter = function (e) {
 };
 
 var createFilterURL = function () {
-	var stringURL = 'http://topcoat.herokuapp.com/v2/view/?';
+	
 	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
 		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
 	});
@@ -180,7 +182,6 @@ document.querySelector('select').addEventListener('change', function (e) {
 		addEventListeners();
 	});
 
-	var stringURL = 'http://localhost:3000/v2/view/results?';
 	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
 		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
 	});
