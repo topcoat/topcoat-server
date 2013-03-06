@@ -15,6 +15,7 @@ block content
 				a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit.substring(0,6)
 			p= r.platform + ' on ' + r.device
 			p= 'Test name ' + r.test
+			p= 'Numer of tests ' + r.count
 	- })
 	table
 		tbody

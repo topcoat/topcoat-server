@@ -275,6 +275,7 @@ app.post('/compare', function (req, res) {
 			console.log(err);
 			res.end('Error');
 		} else {
+			console.log(docs);
 			res.render('telemetry-compare', {
 				title : 'telemetry average',
 				results: docs
