@@ -22,6 +22,7 @@ block content
 							option(data-value='14') Last 14 days
 							option(data-value='30') Last Month
 					th #Count
+					th Dashboard
 			tbody
 					- results.forEach(function (el, idx) {
 						tr
@@ -36,6 +37,7 @@ block content
 								a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') + 
 							td= el.formatedDate
 							td= el.count
+							td: a(href='../../dashboard?test='+ el.test +'&device=' + el.device) view
 					- })
 					tr
 						td: button(type='submit') Compare

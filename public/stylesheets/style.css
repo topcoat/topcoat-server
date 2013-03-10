@@ -1,19 +1,19 @@
 body {
-  padding: 25px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 a {
   color: #00b7ff;
 }
 svg {
-  top: 200px;
+  height: 1000px;
+  width: 1000px;
 }
 table {
   width: 100%;
 }
 td {
   text-align: center;
-  padding: 1em;
+  padding: 1em 0.5em;
   background: -moz-linear-gradient(#fafafa, #f4f4f4);
   background: -webkit-linear-gradient(#fafafa, #f4f4f4);
   background: linear-gradient(#fafafa, #f4f4f4);
@@ -42,6 +42,10 @@ tr {
 }
 tr:hover {
   background: #f4f4f4;
+}
+#holder {
+  width: 800px;
+  height: 600px;
 }
 .odd {
   background: #eee;

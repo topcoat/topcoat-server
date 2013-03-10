@@ -11,6 +11,7 @@
 			a(title='Add as a filter', href='#', class='add-filter', data-value=el.commit, data-filter='commit') + 
 		td= el.formatedDate
 		td= el.count
+		td: a(href='../../dashboard?test='+ el.test +'&device=' + el.device) view
 - })
 tr
 	td: button(type='submit') Compare

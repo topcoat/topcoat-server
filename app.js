@@ -10,10 +10,10 @@ var express = require('express')
   , uaParser = require('ua-parser');
 
 var app = express();
-// var db = mongoose.connect('mongodb://localhost:27017/topcoat');
-var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
+var db = mongoose.connect('mongodb://localhost:27017/topcoat');
+// var db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 
-app.configure(function(){
+app.configure(function () {
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
@@ -30,45 +30,6 @@ app.get('/', function(req, res){
 	res.render('index', {
 		title: 'Topcoat'
 	});
-});
-
-app.get('/create', function (req, res) {
-	
-	var schema = schemes.test_scheme
-	,	Test = db.model('Test', schema);
-	
-	Test.find().distinct('commit', function(err, docs){
-		if(err)
-			console.log(err);
-		else {
-			var l = docs.length;
-			docs.forEach(function (commit) {
-				Test.findOne({'commit' : commit}, function (err, doc) {
-					var commitSchema = schemes.commitSchema
-					,	Commit = db.model('Commit', commitSchema);
-
-					var commitEntry = new Commit({
-						commit  : commit,
-						date	: doc.date
-					});
-
-					commitEntry.save(function (err) {
-						if(err) {
-							console.log(err);
-							res.end('Error!');
-						} else {
-							console.log('saved');
-							if(--l === 0) {
-								res.end('Done');
-							}
-						}
-					});
-
-				});
-			});
-		}
-	});
-
 });
 
 app.post('/benchmark', function (req, res) {
@@ -103,7 +64,7 @@ app.post('/benchmark', function (req, res) {
 			});
 			test.selector.push(s);
 		});
-	
+
 	test.save(function (err) {
 		if (err)
 			res.end('Error');
@@ -189,6 +150,41 @@ app.post('/v2/benchmark', function (req, res) {
 	});
 
 });
+
+app.get('/dashboard', function (req, res) {
+
+	res.render('dashboard', {
+		'title' : 'Topcoat Dashboard'
+	});
+
+});
+
+	app.post('/dashboard/get', function (req, res) {
+
+		var search = {
+			test : {
+				$in : req.body.test.split(',')
+			},
+			date : {
+				$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
+			}
+		};
+
+		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
+
+		TelemetryAvg.find(search, function (err, docs) {
+			console.log(req.body.test);
+			if (err) {
+				console.log(err);
+				res.json(err);
+			} else {
+				res.json(docs);
+			}
+
+		});
+
+	});
+
 
 app.get('/v2/view/results', function (req, res) {
 
