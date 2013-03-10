@@ -121,3 +121,12 @@ tr:hover img {
 .test-info h2 {
   text-align: center;
 }
+button {
+  padding: 0.5em;
+  border: 1px solid #eee;
+  border-bottom: 1px solid #bbb;
+  border-right: 1px solid #bbb;
+  background: -webkit-linear-gradient(#fafafa, #e5e5e5);
+  background: linear-gradient(#fafafa, #e5e5e5);
+  border-radius: 5px;
+}

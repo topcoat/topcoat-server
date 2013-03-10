@@ -24,6 +24,9 @@ block content
 					th #Count
 					th Dashboard
 			tbody
+				tr
+						td: button(type='submit') Compare
+						td(colspan=7)
 					- results.forEach(function (el, idx) {
 						tr
 							td: input(type='checkbox', name='average_' + el._id, value=el._id)
@@ -37,9 +40,9 @@ block content
 								a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') + 
 							td= el.formatedDate
 							td= el.count
-							td: a(href='../../dashboard?test='+ el.test +'&device=' + el.device) view
+							td: a(href='../../dashboard?test='+ el.test) view
 					- })
 					tr
 						td: button(type='submit') Compare
-						td(colspan=6)
+						td(colspan=7)
 	script(src='/javascripts/telemetry-sort.js')
