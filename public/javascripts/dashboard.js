@@ -32,7 +32,7 @@ var plot = function (data) {
 	});
 
 	for (var i = 0; i < Math.max(res[0].length, res[1].length); ++i) {
-		xaxis.push(10*i);	
+		xaxis.push(10*i);
 	}
 
 	var r = Raphael("holder");
