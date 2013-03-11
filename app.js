@@ -120,10 +120,25 @@ app.get('/dashboard', function (req, res) {
 		});
 	res.render('dashboard', {
 			'title'  : 'Topcoat Dashboard',
-			'test'   : params[0].substring(16, params[0].length).split(',')
+			'test'   : params[0].substring(16, params[0].length).split(','),
+			'device' : 'none'
 		});
 
 });
+
+	app.get('/devices', function (req, res) {
+
+		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
+
+		TelemetryAvg.find({}, ['device']).sort('-date').execFind(function (err, docs){
+			if(err) {
+				console.log(err);
+			} else {
+				console.log(docs);
+			}
+		})
+
+	})
 
 	app.post('/dashboard/get', function (req, res) {
 
