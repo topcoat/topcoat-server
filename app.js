@@ -112,11 +112,16 @@ app.get('/dashboard', function (req, res) {
 
 	var params = req.url.split('&');
 
+	if(params[1])
+		res.render('dashboard', {
+			'title'  : 'Topcoat Dashboard',
+			'test'   : params[0].substring(16, params[0].length).split(','),
+			'device' : params[1].substring(7, params[1].length)
+		});
 	res.render('dashboard', {
-		'title'  : 'Topcoat Dashboard',
-		'test'   : params[0].substring(16, params[0].length).split(','),
-		'device' : params[1].substring(7, params[1].length)
-	});
+			'title'  : 'Topcoat Dashboard',
+			'test'   : params[0].substring(16, params[0].length).split(',')
+		});
 
 });
 
