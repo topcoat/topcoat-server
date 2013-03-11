@@ -136,7 +136,12 @@ app.get('/dashboard', function (req, res) {
 			if(err) {
 				console.log(err);
 			} else {
-				res.json(docs);
+				docs.forEach(function (d, idx) {
+					var dev = d.device.replace("\"", "");
+					dev = dev.replace("\"", "");
+					docs[idx].device = dev;
+					docs[idx].save();
+				});
 			}
 		});
 
