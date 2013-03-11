@@ -1,10 +1,26 @@
-extends layout
+extends landing-layout
 
 block content
-	h1= title
-	p benchmarking server
-	p
-		ul
-			li Read more about running the tests
-			li Results
-			li Dashboard
+	.container
+		header
+			h1.title= title
+		p.copy Results and benchmarks for TopCoat
+		//- aside coming to github Spring 2013, more info <a target=_blank href="http://topcoat.io">here</a>
+		p.copy: a(href='/view/results') Aggregated results
+		p.copy: a(href='/dashboard?test=loading_benchmark_topcoat_buttons,smoothness_benchmark_topcoat_buttons&device=wp-mac01_mac_mini') Dashboard
+		//- ul.devices
+		//- 	li
+		//- 		a(href="http://topcoat.github.com/topcoat/src/desktop.html", title="Desktop"): span(class="desktop-icon")
+		//- 	li
+		//- 		a(href="http://topcoat.github.com/topcoat/src/mobile.html", title="Mobile"): span(class="mobile-icon")
+		//- footer.footer
+		//- ul.links
+		//- 	li: a(href="https://twitter.com/topcoatui", title="twitter")
+		//- 		span(class="twitter-icon") 
+		//- 		| @TopCoatUI
+		//- 	li
+		//- 		a(href="http://www.github.com/topcoat/", title="github"): span(class="github-icon")
+		//- 		| github.com/topcoat
+		//- 	li
+		//- 		a(href="http://html.adobe.com/", title="adobe"): span(class="adobe-icon")
+		//- 		| by Adobe

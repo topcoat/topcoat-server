@@ -3,12 +3,21 @@ extends layout
 block content
 	h1= title
 	#holder
+	ul.legend
+		h3 Tests
+			li= test[0]
+			li= test[1]
+		h3 Device
+			li= device
+		h3
+			.progress(style="background:#2f6abd;width:90%") mean_frame_time (ms)
+			.progress(style="background:#bd572f;width:90%") load_time (ms)
+			.progress(style="background:#a0bd2f;width:90%") Layout_max (ms)
 	ul.test-info
 
 
 	script(src='/javascripts/raphael-min.js')
 	script(src='/javascripts/g.raphael-min.js')
 	script(src='/javascripts/g.line-min.js')
-	script(src='/javascripts/g.dot-min.js')
 	script(src='/javascripts/dashboard.js')
 	script(src='/javascripts/analytics.js')

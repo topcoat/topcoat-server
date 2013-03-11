@@ -24,9 +24,12 @@ app.configure(function () {
 });
 
 app.get('/', function(req, res){
+
 	res.render('index', {
-		title: 'Topcoat'
+		layout : 'landing-layout.jade',
+		title : 'TopCoat Server'
 	});
+
 });
 
 app.post('/v2/benchmark', function (req, res) {
@@ -107,8 +110,12 @@ app.post('/v2/benchmark', function (req, res) {
 
 app.get('/dashboard', function (req, res) {
 
+	var params = req.url.split('&');
+
 	res.render('dashboard', {
-		'title' : 'Topcoat Dashboard'
+		'title'  : 'Topcoat Dashboard',
+		'test'   : params[0].substring(16, params[0].length).split(','),
+		'device' : params[1].substring(7, params[1].length)
 	});
 
 });
@@ -121,17 +128,26 @@ app.get('/dashboard', function (req, res) {
 			},
 			date : {
 				$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
-			}
+			},
+			device : req.body.device
 		};
+
+		console.log(search);
 
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 
-		TelemetryAvg.find(search, function (err, docs) {
-			console.log(req.body.test);
+		TelemetryAvg.find(search).sort('-date').execFind(function (err, docs) {
+			// console.log(docs);
 			if (err) {
 				console.log(err);
 				res.json(err);
 			} else {
+				var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+				docs.forEach(function (doc, idx) {
+					var date = new Date(doc.date);
+					docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+					docs[idx].miliseconds = date.getTime();
+				});
 				res.json(docs);
 			}
 

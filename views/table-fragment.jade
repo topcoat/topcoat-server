@@ -1,6 +1,6 @@
 tr
 	td: button(type='submit') Compare
-	td(colspan=7)
+	td(colspan=6)
 - results.forEach(function (el, idx) {
 	tr
 		td: input(type='checkbox', name='average' + idx, value=el._id)
@@ -14,8 +14,7 @@ tr
 			a(title='Add as a filter', href='#', class='add-filter', data-value=el.commit, data-filter='commit') + 
 		td= el.formatedDate
 		td= el.count
-		td: a(href='../../dashboard?test='+ el.test) view
 - })
 tr
 	td: button(type='submit') Compare
-	td(colspan=7)
+	td(colspan=6)

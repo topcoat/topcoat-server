@@ -102,24 +102,32 @@ tr:hover img {
   visibility: visible;
   cursor: pointer;
 }
-.test-info {
+.test-info,
+.legend {
   background: #f8f8f8;
   width: 300px;
-  min-height: 300px;
   position: absolute;
-  right: 100px;
-  top: 50px;
   border-radius: 5px;
   border: 1px solid rgba(0,0,0,0.2);
   padding: 0;
 }
-.test-info li {
+.test-info li,
+.legend li {
   list-style: none;
   border-bottom: 1px solid rgba(0,0,0,0.2);
   padding: 0.5em;
 }
-.test-info h2 {
+.test-info h2,
+.legend h2 {
   text-align: center;
+}
+.test-info {
+  right: 100px;
+  top: 380px;
+}
+.legend {
+  top: 50px;
+  right: 100px;
 }
 button {
   padding: 0.5em;

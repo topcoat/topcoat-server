@@ -1,8 +1,24 @@
 var params   = window.location.search.replace( "?", "" ).split('&')
 ,	formdata = new FormData()
+,	json // json from server
+,	commits = [] // commit hash
+,	testInfo = document.querySelector('.test-info')
+,	res = {} // y coords
 ,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout_max (ms)']
-,	json
 ;
+
+// 3 arrays for 3 different tests
+// x axis is always the same
+res[0] = []; 
+res[1] = [];
+res[2] = [];
+
+resx = {};
+resx[0] = []; 
+resx[1] = [];
+resx[2] = [];
+
+axisx = {};
 
 var submit = function (formData, cb) {
 
@@ -16,54 +32,106 @@ var submit = function (formData, cb) {
 	xhr.send(formData);
 };
 
-var res = {};
-res[0] = [];
-res[1] = [];
-res[2] = [];
-var xaxis = [];
-var commits = [];
-var commitPos = [];
-var testInfo = document.querySelector('.test-info');
 
-var updateInfo = function (idx) {
+var updateInfo = function (tests) {
 
-	var h2 = document.createElement('h2');
-	var p = document.createElement('li');
-	var p2 = document.createElement('li');
-
-	h2.innerHTML = 'Commit #' + commits[idx];
-	p.innerHTML = 'Date : ' + Date(json[idx].date);
-	p2.innerHTML = 'Platform ' + json[idx].platform;
-
+	var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 	testInfo.innerHTML = '';
-	testInfo.appendChild(h2);
-	testInfo.appendChild(p);
-	testInfo.appendChild(p2);
+	var docFrag = document.createDocumentFragment();
+
+	tests.forEach(function (test) {
+
+		var date = new Date(test.date)
+		,	h2 = document.createElement('h2')
+		,	a = document.createElement('a')
+		,	a2 = document.createElement('a')
+		,	li = document.createElement('li')
+		,	li2 = document.createElement('li')
+		,	li3 = document.createElement('li')
+		,	li4 = document.createElement('li')
+		;
+
+		a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
+		a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
+		a.target = '_blank';
+
+		h2.appendChild(a);
+
+		a2.href = '/v2/view/results?commit='+test.commit+'&date=30';
+		a2.target = '_blank';
+		a2.innerHTML = 'View test results for commit';
+		li4.appendChild(a2);
+
+		li.innerHTML = 'Date : ' + months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+		li2.innerHTML = 'Test name : ' + test.test;
+		li3.innerHTML = 'Count : ' + test.count;
+
+		docFrag.appendChild(h2);
+		docFrag.appendChild(li);
+		docFrag.appendChild(li2);
+		docFrag.appendChild(li3);
+		docFrag.appendChild(li4);
+
+	});
+
+	testInfo.appendChild(docFrag);
+
 
 };
 
+var count = [0,0,0];
+
+var generateXaxis = function () {
+
+	filter.forEach(function(f, idx){
+		json.forEach(function (t) {
+			if (t.result[f]) {
+				resx[idx].push(allcommits.indexOf(t.commit) * 10);
+			}
+		});
+
+	});
+
+};
+
+var allcommits = [];
+
 var plot = function (data) {
+
+	var r = Raphael("holder")
+	,	xaxis = []
+	,	commitPos = []
+	;
+
 	json = JSON.parse(data);
+
+	for(var i = 0 ; i < json.length; ++i) {
+		if (allcommits.indexOf(json[i].commit) == -1) allcommits.push(json[i].commit);
+	}
+
+	generateXaxis();
+
+	if(!json.length) return;
 
 	json.forEach(function (doc) {
 
-		commits.push(doc.commit.substring(0, 7));
+		commits.push(doc.commit);
 
 		filter.forEach(function (field) {
 			if (doc.result[field]) {
 				res[filter.indexOf(field)].push(parseInt(doc.result[field], 10));
+				count[filter.indexOf(field)]++;
 			}
 		});
 	});
 
+	// simulate distance between commits
 	for (var i = 0; i < Math.max(res[0].length, res[1].length); ++i) {
 		xaxis.push(10*i);
 	}
 
-	var r = Raphael("holder");
-
-	var lines = r.linechart(50, 10, 800, 700, xaxis, [res[0], res[1], res[2]], {
-		axis: "0 0 1 1", axisxstep : xaxis.length-1, axisystep : 10,symbol: "circle", axisxlabels : [1]
+	var lines = r.linechart(50, 10, 800, 700, [resx[0], resx[1], resx[2]], [res[0], res[1], res[2]], {
+		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle"
 	}).hoverColumn(function () {
 		this.tags = r.set();
 
@@ -75,31 +143,57 @@ var plot = function (data) {
 			});
 		});
 
-		updateInfo(commitPos.indexOf(this.x));
+		console.log(this.axis + ' => ' + allcommits[this.axis/10]);
 
 		for (var i = 0, ii = this.y.length; i < ii; i++) {
 			if(this.y[i]) {
-				this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 180, 8).insertBefore(this));
+				this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
 				this.tags.push(r.tag(900, markers[i], ' ' + filter[i] + ' ', 0, 0).insertBefore(this));
+				this.tags.animate({opacity:0}, 0);
+				this.tags.animate({opacity:1}, 400);
 			}
 		}
 	}, function () {
-		this.tags && this.tags.remove();
+
+		this.tags.animate({opacity:0}, 150, function () {
+			this.remove();
+		});
+		// this.tags && this.tags.remove();
+	}).clickColumn(function () {
+
+		var comm = allcommits[this.axis/10];
+		var tests = [];
+		json.forEach(function (t) {
+			if (t.commit == comm) {
+				tests.push({
+					commit : comm,
+					test   : t.test,
+					count  : t.count,
+					date   : t.date
+				});
+			}
+		});
+
+		updateInfo(tests);
+
 	});
-	
+
+	// change x axis labels to commit hash
 	lines.axis[0].text.items.forEach(function (xPoint, idx) {
 		commitPos.push(xPoint.attrs.x);
-		xPoint.attr("text", commits[idx]);
+		axisx[xPoint.attr('text')] = allcommits[idx];
+		xPoint.attr("text", allcommits[idx].substring(0, 7));
 	});
 
 };
 
+// fetch url params and get data
 var l = params.length;
 params.forEach(function (p) {
 	p = p.split('=');
+
 	formdata.append(p[0],p[1]);
 	if(--l === 0) {
 		submit(formdata, plot);
 	}
 });
-
