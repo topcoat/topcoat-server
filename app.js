@@ -130,15 +130,17 @@ app.get('/dashboard', function (req, res) {
 
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 
-		TelemetryAvg.find({}, ['device']).sort('-date').execFind(function (err, docs){
+		console.log(req.url.split('&'));
+
+		TelemetryAvg.find().select('device').sort('-date').execFind(function (err, docs) {
 			if(err) {
 				console.log(err);
 			} else {
-				console.log(docs);
+				res.json(docs);
 			}
-		})
+		});
 
-	})
+	});
 
 	app.post('/dashboard/get', function (req, res) {
 
