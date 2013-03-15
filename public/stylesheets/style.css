@@ -87,6 +87,12 @@ tr:hover img {
   border-radius: 2px;
   border: 1px solid rgba(0,0,0,0.2);
 }
+.progress p {
+  display: none;
+}
+.progress:hover p {
+  display: block;
+}
 .add-filter,
 .close {
   margin: 0 0.1em;
@@ -102,32 +108,26 @@ tr:hover img {
   visibility: visible;
   cursor: pointer;
 }
-.test-info,
 .legend {
+  position: absolute;
+  top: 50px;
+  right: 100px;
+}
+.test-info {
   background: #f8f8f8;
   width: 300px;
-  position: absolute;
   border-radius: 5px;
   border: 1px solid rgba(0,0,0,0.2);
-  padding: 0;
+  padding-left: 0.5em;
 }
-.test-info li,
-.legend li {
+.test-info li {
   list-style: none;
   border-bottom: 1px solid rgba(0,0,0,0.2);
   padding: 0.5em;
+  margin-left: -0.5em;
 }
-.test-info h2,
-.legend h2 {
+.test-info h2 {
   text-align: center;
-}
-.test-info {
-  right: 100px;
-  top: 380px;
-}
-.legend {
-  top: 50px;
-  right: 100px;
 }
 button {
   padding: 0.5em;

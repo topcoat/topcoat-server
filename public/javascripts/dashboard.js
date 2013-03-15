@@ -2,7 +2,7 @@ var params   = window.location.search.replace( "?", "" ).split('&')
 ,	formdata = new FormData()
 ,	json // json from server
 ,	commits = [] // commit hash
-,	testInfo = document.querySelector('.test-info')
+,	testInfo = document.querySelector('#commit-info')
 ,	res = {} // y coords
 ,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)']
 ;
