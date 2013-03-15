@@ -18,6 +18,10 @@ block content
 					//- p Overall load time, measured in milliseconds (ms)
 				.progress(style="background:#a0bd2f;width:90%") Layout (ms)
 
+		form(action='../v2/view/results', method='GET').test-info
+			p: h3 Compare commits
+			p#compare-commits Click on 2 commits to compare
+			p: button(type='submit') Compare
 		ul.test-info#commit-info
 
 

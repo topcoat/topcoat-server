@@ -5,6 +5,7 @@ var params   = window.location.search.replace( "?", "" ).split('&')
 ,	testInfo = document.querySelector('#commit-info')
 ,	res = {} // y coords
 ,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)']
+,	commitCompare = document.querySelector('#compare-commits');
 ;
 
 // 3 arrays for 3 different tests
@@ -49,6 +50,7 @@ var updateInfo = function (tests) {
 		,	li2 = document.createElement('li')
 		,	li3 = document.createElement('li')
 		,	li4 = document.createElement('li')
+		,	device = location.href.match(/device=.{1,}/)[0]
 		;
 
 		a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
@@ -57,7 +59,7 @@ var updateInfo = function (tests) {
 
 		h2.appendChild(a);
 
-		a2.href = '/v2/view/results?commit='+test.commit+'&date=30';
+		a2.href = '/v2/view/results?commit='+test.commit+'&date=30' + device;
 		a2.target = '_blank';
 		a2.innerHTML = 'View test results for commit';
 		li4.appendChild(a2);
@@ -163,6 +165,36 @@ var plot = function (data) {
 
 		var comm = allcommits[this.axis/10];
 		var tests = [];
+		var input = document.createElement('input');
+		var inputDate;
+
+		if(!commitCompare.querySelectorAll('input[name=date]').length) {
+			inputDate = document.createElement('input');
+			inputDate.type = 'hidden';
+			inputDate.name = 'date';
+			inputDate.value = '30';
+			commitCompare.appendChild(inputDate);
+		} else {
+			inputDate = commitCompare.querySelector('input[name=date]');
+		}
+
+		input.type = 'text';
+		input.value = comm;
+		input.name = 'commit';
+
+		var selectedCommits = commitCompare.querySelectorAll('input[type=text]').length;
+
+		if (selectedCommits < 2) {
+			commitCompare.insertBefore(input, inputDate);
+		} else {
+			var replacement = commitCompare.querySelector(':first-child');
+			replacement.parentNode.removeChild(replacement);
+
+			// commitCompare.innerHTML = '';
+			commitCompare.insertBefore(input, inputDate);
+		}
+
+
 		json.forEach(function (t) {
 			if (t.commit == comm) {
 				tests.push({

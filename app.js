@@ -217,6 +217,8 @@ app.get('/v2/view/results', function (req, res) {
 });
 
 app.post('/v2/view/results/filtered', function (req, res) {
+	
+	console.log('/v2/view/results/filtered');
 
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
@@ -226,9 +228,16 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	var past = parseInt(req.body.date, 10) || 7;
 	var start = new Date(new Date().getTime() - past*86400*1000);
 
+
+	if (typeof req.body.commit === 'object') {
+		var commits = req.body.commit;
+		req.body = {commit:{$in:[commits[0],commits[1]]}};
+	}
+
 	req.body.date = {
 		$gte: start
 	};
+
 
 	console.log(req.body);
 

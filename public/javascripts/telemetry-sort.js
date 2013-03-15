@@ -59,7 +59,8 @@ var createFilterURL = function () {
 };
 
 window.addEventListener('popstate', function () {
-
+	// x.match(/commit\=([0-9]|[a-f]){40}/g)
+	console.log('triggered');
 	var filters = location.href.split('?');
 	if(filters.length > 1)
 		refreshFilters(filters[1].replace('#', ''));
