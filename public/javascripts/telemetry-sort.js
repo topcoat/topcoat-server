@@ -1,3 +1,5 @@
+var tbody = document.querySelector('tbody');
+
 var submit = function (formData, cb) {
 
 	var xhr = new XMLHttpRequest();
@@ -16,8 +18,15 @@ var removeFilter = function (e) {
 
 	this.parentNode.parentNode.removeChild(this.parentNode);
 
-	var formData = new FormData();
-	var filters = document.querySelectorAll('#filters li');
+	var formData = new FormData()
+	,	filters = document.querySelectorAll('#filters li')
+	,	date = location.href.match(/date\=[0-9]*/i)
+	;
+
+
+	date = (date) ? date[0].split('=')[1] : 0;
+
+	if (date) formData.append('date', date);
 
 	if (!filters.length)
 		window.location.href = window.location.pathname;
@@ -61,7 +70,7 @@ var refreshFilters = function (filters) {
 
 	if(filters) {
 		
-		filters = filters.trim().replace('#', '').replace(/%20/g, " ");;
+		filters = filters.trim().replace('#', '').replace(/%20/g, " ");
 		var docFrag = document.createDocumentFragment()
 		,	formData = new FormData()
 		;
@@ -93,12 +102,10 @@ var refreshFilters = function (filters) {
 					close.addEventListener('click', removeFilter, false);
 					docFrag.appendChild(li);
 				} else {
-					console.log('filter date found ' + f[0] + ' ' + f[1]);
 					var d = parseInt(f[1]);
 					var i = 1;
 					(d == 7) ? i = 0 : (d == 14) ? i = 1 : i = 2;
 					select.selectedIndex = i;
-					console.log('appending date with value ' + select.options[select.selectedIndex].dataset.value);
 					formData.append('date', select.options[select.selectedIndex].dataset.value);
 				}
 
@@ -110,8 +117,9 @@ var refreshFilters = function (filters) {
 		document.querySelector('#filters').appendChild(docFrag);
 		console.log('refresh filter submit');
 		submit(formData, function (data) {
-			document.querySelector('tbody').innerHTML = data;
-			addEventListeners();
+			// console.log(data);
+			tbody.innerHTML = data;
+
 		});
 
 	} else {
@@ -132,7 +140,9 @@ document.querySelector('#selectall').addEventListener('change', function () {
 
 // add a new filter to the view
 // the function also handles previous filters
-var addFilter = function () {
+var addFilter = function (e) {
+
+	e.preventDefault();
 
 	var li       = document.createElement('li')
 	,	a        = document.createElement('a')
@@ -140,11 +150,17 @@ var addFilter = function () {
 	,	formData = new FormData()
 	;
 
+	var date = location.href.match(/date\=[0-9]*/i)
+	date = (date) ? date[0].split('=')[1] : 0;
+
 	formData.append(this.dataset.filter, this.dataset.value);
 
 	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
 		formData.append(li.dataset.filter, li.dataset.value);
 	});
+
+	if (date)
+		formData.append('date', date);
 
 	a.innerHTML = this.dataset.filter+' '+this.dataset.value;
 	close.classList.add('close');
@@ -162,6 +178,7 @@ var addFilter = function () {
 
 	console.log('add filter submit');
 	submit(formData, function (data) {
+		console.log(data);
 		document.querySelector('tbody').innerHTML = data;
 		addEventListeners();
 	});

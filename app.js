@@ -230,6 +230,8 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		$gte: start
 	};
 
+	console.log(req.body);
+
 	TelemetryAvg.find(req.body).sort('-date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
@@ -240,7 +242,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
 				docs[idx].miliseconds = date.getTime();
 			});
-
+			// console.log(docs);
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs
