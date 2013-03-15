@@ -9,6 +9,7 @@ block content
 				- tests.push(key)
 	- })
 	- var colors = ['#8AC8C3', '#D3EBC7', '#AABFAA', '#BF9692', '#FC0284']
+	
 	- results.forEach(function (r, i) {
 		.progress(style="width:500px;background:"+colors[i])
 			p= 'Commit version '
@@ -32,21 +33,30 @@ block content
 					- if (ratio > 1)
 						- ratio = 1
 					- results.forEach(function(r, idx) {
-							if (!isNaN(r.result[test]) && results.length < 35)
-								- if (idx == 0)
-									tr(class=className + ' group' + i)
-										td(rowspan=results.length, width='200px')= test
-										td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
-								- else
-									tr(class=className)
-										td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
-							else
-								- if (idx == 0)
+								if (!isNaN(r.result[test]) && results.length < 35)
+									- if (idx == 0)
 										tr(class=className + ' group' + i)
 											td(rowspan=results.length, width='200px')= test
 											td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
 									- else
 										tr(class=className)
 											td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+								else
+									- if (isNaN(r.result[test]))
+										- if (idx === 0)
+											tr(class=className + ' group' + i)
+												td(rowspan=results.length, width='200px')= test
+												td//: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+										- else
+											tr(class=className)
+												td//: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+									- else
+										- if (idx == 0)
+												tr(class=className + ' group' + i)
+													td(rowspan=results.length, width='200px')= test
+													td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+											- else
+												tr(class=className)
+													td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
 					- })
 				- })

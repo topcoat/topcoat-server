@@ -87,10 +87,10 @@ tr:hover img {
   border-radius: 2px;
   border: 1px solid rgba(0,0,0,0.2);
 }
-.progress p {
+.progress .hidden {
   display: none;
 }
-.progress:hover p {
+.progress:hover .hidden {
   display: block;
 }
 .add-filter,
