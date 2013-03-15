@@ -4,7 +4,7 @@ var params   = window.location.search.replace( "?", "" ).split('&')
 ,	commits = [] // commit hash
 ,	testInfo = document.querySelector('.test-info')
 ,	res = {} // y coords
-,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout_max (ms)']
+,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)']
 ;
 
 // 3 arrays for 3 different tests
