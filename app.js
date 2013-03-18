@@ -10,7 +10,7 @@ var app = express();
 var db;
 
 
-if(process.env.PORT)
+if(process.env.PORT) // Heroku port
 	db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
 else
 	db = mongoose.connect('mongodb://localhost:27017/topcoat');
