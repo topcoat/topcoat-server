@@ -5,12 +5,22 @@ var liButtonNoTheme = document.querySelector('li.button_no_theme');
 
 liButton.addEventListener('mouseover', function () {
 
+	var activeCategory = document.querySelector('li.active');
+	if(activeCategory)
+		activeCategory.classList.remove('active');
+	this.classList.add('active');
+	
 	document.querySelector('ul.button_no_theme').classList.remove('active');
 	document.querySelector('ul.button').classList.add('active');
 
 }, false);
 
 liButtonNoTheme.addEventListener('mouseover', function () {
+
+	var activeCategory = document.querySelector('li.active');
+	if(activeCategory)
+		activeCategory.classList.remove('active');
+	this.classList.add('active');
 
 	document.querySelector('ul.button').classList.remove('active');
 	document.querySelector('ul.button_no_theme').classList.add('active');

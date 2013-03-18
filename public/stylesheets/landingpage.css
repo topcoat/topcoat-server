@@ -199,7 +199,7 @@ aside {
         margin:0;
     }
 
-        .test-navigation li:hover {
+        .test-navigation li:not(.category):hover, li.active {
             background: #fff;
             color:#333;
             position:relative;
@@ -209,7 +209,7 @@ aside {
             background:#333;
         }
 
-        /*.test-navigation ul:first-child li:hover:after {
+        .test-navigation ul:first-child li:hover:after, li.active:after {
             content:'';
             width:20px;
             height:20px;
@@ -219,7 +219,7 @@ aside {
             margin-top:-10px;
             background:#fff;
             -webkit-transform:rotate(45deg);
-        }*/
+        }
 
     .test-navigation ul {
         width: 23%;
