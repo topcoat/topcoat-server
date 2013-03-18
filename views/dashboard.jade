@@ -21,6 +21,7 @@ block content
 		form(action='../v2/view/results', method='GET').test-info
 			p: h3 Compare commits
 			p#compare-commits Click on 2 commits to compare
+			input(type='hidden', name='device', value=device)
 			p: button(type='submit') Compare
 		ul.test-info#commit-info
 

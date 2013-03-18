@@ -59,7 +59,7 @@ var updateInfo = function (tests) {
 
 		h2.appendChild(a);
 
-		a2.href = '/v2/view/results?commit='+test.commit+'&date=30' + device;
+		a2.href = '/v2/view/results?commit='+test.commit+'&date=30&' + device;
 		a2.target = '_blank';
 		a2.innerHTML = 'View test results for commit';
 		li4.appendChild(a2);
@@ -167,13 +167,14 @@ var plot = function (data) {
 		var tests = [];
 		var input = document.createElement('input');
 		var inputDate;
+		var deviceNode = document.querySelector('input[type=submit]');
 
 		if(!commitCompare.querySelectorAll('input[name=date]').length) {
 			inputDate = document.createElement('input');
 			inputDate.type = 'hidden';
 			inputDate.name = 'date';
 			inputDate.value = '30';
-			commitCompare.appendChild(inputDate);
+			commitCompare.insertBefore(inputDate, deviceNode);
 		} else {
 			inputDate = commitCompare.querySelector('input[name=date]');
 		}
