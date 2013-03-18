@@ -1,4 +1,4 @@
-var params   = window.location.search.replace( "?", "" ).split('&')
+var params   = window.location.href.match(/\?.{0,}/g)[0].slice(1)
 ,	formdata = new FormData()
 ,	json // json from server
 ,	commits = [] // commit hash
@@ -98,12 +98,15 @@ var generateXaxis = function () {
 
 var allcommits = [];
 
-var plot = function (data) {
+var plot = function (data, w,h) {
 
 	var r = Raphael("holder")
 	,	xaxis = []
 	,	commitPos = []
 	;
+
+	w = w || 1000;
+	h = h || 900;
 
 	json = JSON.parse(data);
 
@@ -132,7 +135,7 @@ var plot = function (data) {
 		xaxis.push(10*i);
 	}
 
-	var lines = r.linechart(50, 10, 800, 700, [resx[0], resx[1], resx[2]], [res[0], res[1], res[2]], {
+	var lines = r.linechart(50, 10, w, h, [resx[0], resx[1], resx[2]], [res[0], res[1], res[2]], {
 		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle"
 	}).hoverColumn(function () {
 		this.tags = r.set();
@@ -221,12 +224,12 @@ var plot = function (data) {
 };
 
 // fetch url params and get data
-var l = params.length;
-params.forEach(function (p) {
-	p = p.split('=');
+// var l = params.length;
+// params.forEach(function (p) {
+// 	p = p.split('=');
 
-	formdata.append(p[0],p[1]);
-	if(--l === 0) {
-		submit(formdata, plot);
-	}
-});
+// 	formdata.append(p[0],p[1]);
+// 	if(--l === 0) {
+// 		submit(formdata, plot);
+// 	}
+// });
