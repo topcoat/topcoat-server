@@ -7,6 +7,11 @@ About
 * you can get more info about the topcoat project at http://adobe.github.com/topcoat
 * server is online at http://topcoat.herokuapps.com
 
+What you should know
+---------------------
+* the app looks for a `process.env.PORT` or defaults to port 3000
+* also using the same process var it detects if it's deployed on local or on heroku to use different databases
+
 Copyright and license
 ---------------------
 
