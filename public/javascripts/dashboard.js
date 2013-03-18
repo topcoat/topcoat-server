@@ -8,7 +8,7 @@ var params   = window.location.href.match(/\?.{0,}/g)
 ,	commitCompare = document.querySelector('#compare-commits');
 ;
 
-params = (params) ? params[0].slice(1) : null;
+params = (params) ? params[0].slice(1).split('&') : null;
 
 // 3 arrays for 3 different tests
 // x axis is always the same
@@ -102,13 +102,15 @@ var allcommits = [];
 
 var plot = function (data, w,h) {
 
+	console.log(data);
+
 	var r = Raphael("holder")
 	,	xaxis = []
 	,	commitPos = []
 	;
 
-	w = w || 1000;
-	h = h || 900;
+	w = w || 800;
+	h = h || 800;
 
 	json = JSON.parse(data);
 
@@ -225,13 +227,16 @@ var plot = function (data, w,h) {
 
 };
 
-// fetch url params and get data
-// var l = params.length;
-// params.forEach(function (p) {
-// 	p = p.split('=');
+//fetch url params and get data
+function getParamsAndPlot () {
 
-// 	formdata.append(p[0],p[1]);
-// 	if(--l === 0) {
-// 		submit(formdata, plot);
-// 	}
-// });
+	var l = params.length;
+	params.forEach(function (p) {
+		p = p.split('=');
+
+		formdata.append(p[0],p[1]);
+		if(--l === 0) {
+			submit(formdata, plot);
+		}
+	});
+}
