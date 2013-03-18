@@ -51,6 +51,8 @@ liButtonNoTheme.addEventListener('mouseover', function () {
 		resx[1] = [];
 		resx[2] = [];
 
+		allcommits = [];
+
 		params.forEach(function (p) {
 			p = p.split('=');
 

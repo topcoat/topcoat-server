@@ -110,7 +110,7 @@ var plot = function (data, w,h) {
 	;
 
 	w = w || 800;
-	h = h || 800;
+	h = h || 700;
 
 	json = JSON.parse(data);
 
@@ -151,8 +151,6 @@ var plot = function (data, w,h) {
 					markers[idx] = y;
 			});
 		});
-
-		console.log(this.axis + ' => ' + allcommits[this.axis/10]);
 
 		for (var i = 0, ii = this.y.length; i < ii; i++) {
 			if(this.y[i]) {
