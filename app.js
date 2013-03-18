@@ -168,7 +168,7 @@ app.get('/dashboard', function (req, res) {
 
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 
-		TelemetryAvg.find(search).sort('-date').execFind(function (err, docs) {
+		TelemetryAvg.find(search).sort('+date').execFind(function (err, docs) {
 			// console.log(docs);
 			if (err) {
 				console.log(err);
