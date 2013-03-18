@@ -2,6 +2,7 @@ var dashboard = document.querySelector('#dashboard-link');
 var testNav = document.querySelector('.test-navigation');
 var liButton = document.querySelector('li.button');
 var liButtonNoTheme = document.querySelector('li.button_no_theme');
+var spinner = document.querySelector('.spinner');
 
 liButton.addEventListener('mouseover', function () {
 
@@ -27,11 +28,15 @@ liButtonNoTheme.addEventListener('mouseover', function () {
 
 }, false);
 
-[].forEach.call(document.querySelectorAll('li a'), function (el) {
+[].forEach.call(document.querySelectorAll('li a:first-child'), function (el) {
 
 	el.addEventListener('click', function (e) {
 
-		document.querySelector('#holder').innerHTML = '';
+		var svg = document.querySelector('svg');
+		if (svg)
+			svg.parentNode.removeChild(svg);
+
+		spinner.style.display = 'block';
 
 		e.preventDefault();
 		var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
@@ -52,6 +57,7 @@ liButtonNoTheme.addEventListener('mouseover', function () {
 			formdata.append(p[0],p[1]);
 			if(--l === 0) {
 				submit(formdata, function (data) {
+					spinner.style.display = 'none';
 					plot(data, 550, 300);
 				});
 			}
