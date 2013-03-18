@@ -160,8 +160,8 @@ aside {
 .test-navigation {
     background : #444;
     width : 100%;
-    height:1000px;
-    /*opacity:0;*/
+    height:0;
+    opacity:0;
     box-shadow:
         inset 0 -5px 10px #111;
     border:1px solid #333;
@@ -173,7 +173,7 @@ aside {
 
     .test-navigation.active {
         height: auto;
-        min-height: 1200px;
+        min-height: 300px;
         opacity: 1;
         -webkit-transition:opacity 0, height 1s;
         transition:opacity 0, height .4s;
@@ -203,6 +203,10 @@ aside {
             background: #fff;
             color:#333;
             position:relative;
+        }
+
+        .category {
+            background:#333;
         }
 
         /*.test-navigation ul:first-child li:hover:after {

@@ -1,4 +1,4 @@
-var params   = window.location.href.match(/\?.{0,}/g)[0].slice(1)
+var params   = window.location.href.match(/\?.{0,}/g)
 ,	formdata = new FormData()
 ,	json // json from server
 ,	commits = [] // commit hash
@@ -7,6 +7,8 @@ var params   = window.location.href.match(/\?.{0,}/g)[0].slice(1)
 ,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)']
 ,	commitCompare = document.querySelector('#compare-commits');
 ;
+
+params = (params) ? params[0].slice(1) : null;
 
 // 3 arrays for 3 different tests
 // x axis is always the same
