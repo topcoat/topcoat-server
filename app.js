@@ -244,7 +244,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 
 	console.log(req.body);
 
-	TelemetryAvg.find(req.body).sort('-date').execFind(function (err, docs) {
+	TelemetryAvg.find(req.body).sort('+date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {

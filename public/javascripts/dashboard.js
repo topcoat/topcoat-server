@@ -219,6 +219,7 @@ var plot = function (data, w,h) {
 	// change x axis labels to commit hash
 	lines.axis[0].text.items.forEach(function (xPoint, idx) {
 		commitPos.push(xPoint.attrs.x);
+		console.log(allcommits[idx], idx);
 		axisx[xPoint.attr('text')] = allcommits[idx];
 		xPoint.attr("text", allcommits[idx].substring(0, 7));
 	});
