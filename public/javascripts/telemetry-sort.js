@@ -28,8 +28,8 @@ var removeFilter = function (e) {
 
 	if (date) formData.append('date', date);
 
-	if (!filters.length)
-		window.location.href = window.location.pathname;
+	// if (!filters.length)
+	// 	window.location.href = window.location.pathname;
 
 	[].forEach.call(filters, function (li, idx) {
 		formData.append(li.dataset.filter, li.dataset.value);
@@ -120,7 +120,7 @@ var refreshFilters = function (filters) {
 		submit(formData, function (data) {
 			// console.log(data);
 			tbody.innerHTML = data;
-
+			formatDate();
 		});
 
 	} else {
@@ -218,6 +218,7 @@ var addEventListeners = function () {
 function formatDate () {
 	console.log('format');
 	[].forEach.call(document.querySelectorAll('.date'), function (el) {
+		console.log(el);
 		el.innerHTML = moment(el.innerHTML).format("MMMM Do YYYY, h:mm");
 	});
 }

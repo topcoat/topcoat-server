@@ -206,7 +206,7 @@ app.get('/v2/view/results', function (req, res) {
 		}
 	};
 
-	TelemetryAvg.find(date).sort('-date -test').execFind(function (err, docs) {
+	TelemetryAvg.find(date).sort('-test -date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
@@ -250,7 +250,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 
 	console.log(req.body);
 
-	TelemetryAvg.find(req.body).sort('-date -test').execFind(function (err, docs) {
+	TelemetryAvg.find(req.body).sort('-test -date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
