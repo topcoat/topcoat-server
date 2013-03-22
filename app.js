@@ -10,10 +10,13 @@ var app = express();
 var db;
 
 
-if(process.env.PORT) // Heroku port
-	db = mongoose.connect('mongodb://nodejitsu:9fc443c21383ecb58fbf5c05ae3d89b3@alex.mongohq.com:10059/nodejitsudb170514779432');
-else
+if(process.env.PORT) { // switch between local and production env
+	db = mongoose.connect('mongodb://ec2-54-245-99-50.us-west-2.compute.amazonaws.com/topcoat');
+	console.log('Connected to amazondb');
+} else {
 	db = mongoose.connect('mongodb://localhost:27017/topcoat');
+	console.log('Fallback to localdb');
+}
 
 app.configure(function () {
   app.set('port', process.env.PORT || 3000);
@@ -45,22 +48,23 @@ app.post('/v2/benchmark', function (req, res) {
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
 	,	ua = uaParser.parse(req.body.ua || req.body.resultName['UserAgent ()'])
+	,	sanitize = require('validator').sanitize
 	;
 
 	var telemetryTest = new TelemetryTest({
 			ua     : req.body.resultName['UserAgent ()']
-		,	device : req.body.device
+		,	device : sanitize(req.body.device).xss()
 		,	os 	   : ua.os.toString()
 		,	browser: ua.family
 		,	version: ua.major + "." + ua.minor + "." + ua.patch
-		,	commit : req.body.commit
+		,	commit : sanitize(req.body.commit).xss()
 		,	date   : req.body.date
 		,	result : {}
-		,	test   : req.body.test
+		,	test   : sanitize(req.body.test).xss()
 	});
 
 	for(var i in req.body.resultName) {
-		telemetryTest.result[i] = req.body.resultName[i];
+		telemetryTest.result[i] = sanitize(req.body.resultName[i]).xss();
 	}
 
 	telemetryTest.save(function (err) {
@@ -244,7 +248,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 
 	console.log(req.body);
 
-	TelemetryAvg.find(req.body).sort('+date').execFind(function (err, docs) {
+	TelemetryAvg.find(req.body).sort('+date -test').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {

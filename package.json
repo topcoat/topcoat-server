@@ -5,7 +5,7 @@
   "subdomain": "topcoat",
   "engines": {
     "node": "0.8.x",
-    "npm" : "1.1.x"
+    "npm": "1.1.x"
   },
   "private": true,
   "scripts": {
@@ -16,6 +16,7 @@
     "jade": "*",
     "stylus": "*",
     "mongoose": "*",
-    "ua-parser": "latest"
+    "ua-parser": "latest",
+    "validator": "~0.4.28"
   }
 }
