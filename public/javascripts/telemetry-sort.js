@@ -179,7 +179,6 @@ var addFilter = function (e) {
 
 	console.log('add filter submit');
 	submit(formData, function (data) {
-		console.log(data);
 		document.querySelector('tbody').innerHTML = data;
 		addEventListeners();
 	});
@@ -213,6 +212,15 @@ var addEventListeners = function () {
 	[].forEach.call(filterButton, function (button) {
 		button.addEventListener('click', addFilter, false);
 	});
+	formatDate();
 };
+
+function formatDate () {
+	console.log('format');
+	[].forEach.call(document.querySelectorAll('.date'), function (el) {
+		el.innerHTML = moment(el.innerHTML).format("MMMM Do YYYY, h:mm");
+	});
+}
+
 
 addEventListeners();

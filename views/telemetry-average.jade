@@ -37,10 +37,11 @@ block content
 								a(title='Add as a filter', class='add-filter', data-value=el.platform, data-filter='platform') + 
 							td= el.commit
 								a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') + 
-							td= el.formatedDate
+							td(class='date')= el.formatedDate
 							td= el.count
 					- })
 					tr
 						td: button(type='submit') Compare
 						td(colspan=6)
+	script(src='/javascripts/moment.min.js')
 	script(src='/javascripts/telemetry-sort.js')

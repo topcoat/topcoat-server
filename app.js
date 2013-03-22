@@ -182,6 +182,7 @@ app.get('/dashboard', function (req, res) {
 				docs.forEach(function (doc, idx) {
 					var date = new Date(doc.date);
 					docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+					docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
 					docs[idx].miliseconds = date.getTime();
 				});
 				res.json(docs);
@@ -205,7 +206,7 @@ app.get('/v2/view/results', function (req, res) {
 		}
 	};
 
-	TelemetryAvg.find(date).sort('-date').execFind(function (err, docs) {
+	TelemetryAvg.find(date).sort('-date -test').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
@@ -213,6 +214,7 @@ app.get('/v2/view/results', function (req, res) {
 			docs.forEach(function (doc, idx) {
 				var date = new Date(doc.date);
 				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+				docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
 				docs[idx].miliseconds = date.getTime();
 			});
 			console.log(docs);
@@ -248,7 +250,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 
 	console.log(req.body);
 
-	TelemetryAvg.find(req.body).sort('+date -test').execFind(function (err, docs) {
+	TelemetryAvg.find(req.body).sort('-date -test').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
