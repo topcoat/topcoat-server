@@ -8,15 +8,21 @@
 @font-face {
     font-family: "source-sb";
     src: url("../font/SourceSansPro/SourceSansPro-Semibold.otf");
-    font-weight: normal;
+    font-weight: 700;
     font-style: normal;
 }
 
 html,
 body {
     background: #fff;
+    font-family: source-l, sans-serif;
+    font-weight: normal;
     margin: 0;
     padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
 }
 
 body {
@@ -50,6 +56,7 @@ h2, h3 {
 h3 {
     font-family: source-sb;
     border-bottom: 1px solid #bbbdbd;
+    m
     padding: 0 0 0.7em;
 }
 
@@ -58,16 +65,15 @@ h3 {
     height: auto !important;
     font-family: "source-l";
     text-align: center;
-    margin: 1% auto 0 auto;
+    margin: 0 auto 0 auto;
 }
 
 header {
-    padding: 1em 0 2em;
+    padding: 2em 0 2.5em;
 }
 
 .title {
     font-family: "source-sb";
-    font-size: 1em;
     font-weight: normal;
     margin: 0;
     letter-spacing: -0.09em !important;
@@ -160,7 +166,7 @@ header {
     }
 
     .title {
-        font-size: 5em;
+        font-size: 3em;
     }
 
 }
@@ -176,7 +182,6 @@ header {
     padding: 0.3em 0;
     position:relative;
     color: #454545;
-    min-height: 600px;
 }
 
     .test-navigation:after {
@@ -190,11 +195,13 @@ header {
     .test-navigation .container {
         text-align:left;
         width:90%;
-        margin-top:5%;
+        margin-top: 2em;
+        margin-bottom: 2em;
     }
 
     .test-navigation li {
         display: block;
+        overflow: hidden;
         padding: 1em;
         margin:0;
     }
@@ -211,23 +218,12 @@ header {
         .test-navigation li:not(.category):hover, li.active {
             background: #edf1f1;
             color:#333;
+            overflow: hidden;
             position: relative;
         }
 
         .category {
             background: #d3d7d7;
-        }
-
-        .test-navigation ul:first-child li:hover:after, li.active:after {
-            content:'';
-            width:15px;
-            height:15px;
-            position: absolute;
-            right:-7px;
-            top:50%;
-            margin-top:-10px;
-            background: #edf1f1;
-            -webkit-transform:rotate(45deg);
         }
 
     .test-navigation ul {
@@ -265,8 +261,9 @@ header {
 
 #holder {
     float:left;
-    height:350px;
-    width:50%;
+    height: 350px;
+    padding: 16px;
+    width: 45%;
 }
 
 .spinner {
