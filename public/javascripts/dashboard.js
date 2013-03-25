@@ -55,11 +55,15 @@ var updateInfo = function (tests) {
 		,	device = location.href.match(/device=.{1,}/)[0]
 		;
 
-		a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
-		a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
-		a.target = '_blank';
+		if (test.commit.substring(0,6) == 'nightly') {
+			a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
+			a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
+			a.target = '_blank';
 
-		h2.appendChild(a);
+			h2.appendChild(a);
+		} else {
+			h2.innerHTML = 'Nightly';
+		}
 
 		a2.href = '/v2/view/results?commit='+test.commit+'&date=30&' + device;
 		a2.target = '_blank';
@@ -219,7 +223,7 @@ var plot = function (data, w,h) {
 	// change x axis labels to commit hash
 	lines.axis[0].text.items.forEach(function (xPoint, idx) {
 		commitPos.push(xPoint.attrs.x);
-		console.log(allcommits[idx], idx);
+
 		axisx[xPoint.attr('text')] = allcommits[idx];
 		xPoint.attr("text", allcommits[idx].substring(0, 7));
 	});

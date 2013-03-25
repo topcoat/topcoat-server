@@ -4,19 +4,19 @@ var liButton = document.querySelector('li.button');
 var liButtonNoTheme = document.querySelector('li.button_no_theme');
 var spinner = document.querySelector('.spinner');
 
-liButton.addEventListener('mouseover', function () {
+liButton.addEventListener('click', function () {
 
 	var activeCategory = document.querySelector('li.active');
 	if(activeCategory)
 		activeCategory.classList.remove('active');
 	this.classList.add('active');
-	
+
 	document.querySelector('ul.button_no_theme').classList.remove('active');
 	document.querySelector('ul.button').classList.add('active');
 
 }, false);
 
-liButtonNoTheme.addEventListener('mouseover', function () {
+liButtonNoTheme.addEventListener('click', function () {
 
 	var activeCategory = document.querySelector('li.active');
 	if(activeCategory)
@@ -31,6 +31,8 @@ liButtonNoTheme.addEventListener('mouseover', function () {
 [].forEach.call(document.querySelectorAll('li a:first-child'), function (el) {
 
 	el.addEventListener('click', function (e) {
+
+		document.querySelector('.plot li').innerHTML = document.querySelector('li.active').innerHTML + ' plot';
 
 		var svg = document.querySelector('svg');
 		if (svg)
@@ -68,9 +70,3 @@ liButtonNoTheme.addEventListener('mouseover', function () {
 	});
 
 });
-
-dashboard.addEventListener('mouseover', function () {
-
-	testNav.classList.add('active');
-
-}, false);

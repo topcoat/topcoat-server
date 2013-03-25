@@ -56,7 +56,6 @@ h2, h3 {
 h3 {
     font-family: source-sb;
     border-bottom: 1px solid #bbbdbd;
-    m
     padding: 0 0 0.7em;
 }
 
@@ -67,6 +66,10 @@ h3 {
     text-align: center;
     margin: 0 auto 0 auto;
 }
+
+    .container ul.plot {
+        width:50%;
+    }
 
 header {
     padding: 2em 0 2.5em;
@@ -204,6 +207,9 @@ header {
         overflow: hidden;
         padding: 1em;
         margin:0;
+        -webkit-transition-duration:.5s;
+        -moz-transition-duration:.5s;
+        transition-duration:.5s;
     }
 
         li small {
@@ -215,11 +221,15 @@ header {
         }
 
 
-        .test-navigation li:not(.category):hover, li.active {
+        li.active {
             background: #edf1f1;
             color:#333;
             overflow: hidden;
             position: relative;
+            padding-left: 50px;
+            -webkit-transition-duration:.5s;
+            -moz-transition-duration:.5s;
+            transition-duration:.5s;
         }
 
         .category {
@@ -249,9 +259,6 @@ header {
             display:block;
         }
 
-        ul {
-        }
-
 #holder:after, #holder:before {
     content:'';
     display:block;
@@ -263,7 +270,7 @@ header {
     float:left;
     height: 350px;
     padding: 16px;
-    width: 45%;
+    width: 100%;
 }
 
 .spinner {
