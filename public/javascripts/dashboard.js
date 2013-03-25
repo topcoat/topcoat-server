@@ -55,15 +55,11 @@ var updateInfo = function (tests) {
 		,	device = location.href.match(/device=.{1,}/)[0]
 		;
 
-		if (test.commit.substring(0,6) == 'nightly') {
-			a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
-			a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
-			a.target = '_blank';
+		a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
+		a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
+		a.target = '_blank';
 
-			h2.appendChild(a);
-		} else {
-			h2.innerHTML = 'Nightly';
-		}
+		h2.appendChild(a);
 
 		a2.href = '/v2/view/results?commit='+test.commit+'&date=30&' + device;
 		a2.target = '_blank';
