@@ -227,6 +227,59 @@ app.get('/v2/view/results', function (req, res) {
 
 });
 
+app.get('/remove', function (req, res) {
+
+	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
+	,	ua = uaParser.parse(req.body.ua)
+	;
+
+	var date = {
+		date : {
+			$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
+		}
+	};
+
+	TelemetryAvg.find(date).sort('-test -date').execFind(function (err, docs) {
+		if(err)
+			console.log(err);
+		else {
+			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+			docs.forEach(function (doc, idx) {
+				var date = new Date(doc.date);
+				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
+				docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
+				docs[idx].miliseconds = date.getTime();
+			});
+			console.log(docs);
+			res.render('telemetry-remove', {
+				title : 'telemetry average',
+				results: docs
+			});
+		}
+	});
+
+});
+
+	app.post('/remove', function (req, res) {
+
+		var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+		,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
+		,	ua = uaParser.parse(req.body.ua)
+		;
+
+		var findAndRemove = [];
+
+		for (var i in req.body)
+			findAndRemove.push(req.body[i]);
+
+		TelemetryAvg.find({'_id' : { $in : findAndRemove }}).remove(function(){
+			res.end('Removed!');
+		});
+
+	});
+
+
 app.post('/v2/view/results/filtered', function (req, res) {
 
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
