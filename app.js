@@ -164,7 +164,7 @@ app.get('/dashboard', function (req, res) {
 				$in : req.body.test.split(',')
 			},
 			date : {
-				$gte: new Date(new Date().getTime() - 7*86400*1000).toISOString()
+				$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
 			},
 			device : req.body.device
 		};
