@@ -1,8 +1,22 @@
+@font-face {
+  font-family: "source-l";
+  src: url("../font/SourceSansPro/SourceSansPro-Light.otf");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: "source-sb";
+  src: url("../font/SourceSansPro/SourceSansPro-Semibold.otf");
+  font-weight: 700;
+  font-style: normal;
+}
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px source-l, sans-serif;
+  color: #454545;
+  margin: 40px;
 }
 a {
-  color: #00b7ff;
+  color: #0083e8;
 }
 svg {
   height: 1000px;
@@ -12,29 +26,25 @@ table {
   width: 100%;
 }
 td {
-  text-align: center;
-  padding: 1em 0.5em;
-  background: -moz-linear-gradient(#fafafa, #f4f4f4);
-  background: -webkit-linear-gradient(#fafafa, #f4f4f4);
-  background: linear-gradient(#fafafa, #f4f4f4);
-  border-top: 1px solid #fff;
-  border-bottom: 1px solid #e0e0e0;
+  font-size: 12px;
+  text-align: left;
+  padding: 1em 0.5em 1em 1em;
+  background: #edf1f1;
+  border-top: 1px solid #dddfdf;
+  border-bottom: 1px solid #dddfdf;
 }
 td:hover .add-filter {
   visibility: visible;
 }
 thead tr {
-  background: -moz-linear-gradient(#f4f4f4, #e0e0e0);
-  background: -webkit-linear-gradient(#f4f4f4, #e0e0e0);
-  background: linear-gradient(#f4f4f4, #e0e0e0);
+  background: #dfe2e2;
 }
 thead tr:hover {
-  background: -moz-linear-gradient(#f4f4f4, #e0e0e0);
-  background: -webkit-linear-gradient(#f4f4f4, #e0e0e0);
-  background: linear-gradient(#f4f4f4, #e0e0e0);
+  background: #dfe2e2;
 }
 thead tr th {
-  padding: 1em;
+  padding: 0.5em 0.5em 0.5em 1em;
+  text-align: left !important;
   text-shadow: 0 1px 0 #fff;
 }
 tr {
@@ -95,14 +105,16 @@ tr:hover img {
 }
 .add-filter,
 .close {
-  margin: 0 0.1em;
+  margin: 0 0 0 0.5em;
   visibility: hidden;
-  background: -moz-linear-gradient(#f0f0f0, #fff);
-  background: -webkit-linear-gradient(#f0f0f0, #fff);
-  background: linear-gradient(#f0f0f0, #fff);
-  padding: 0.1em 0.4em 0.2em;
-  border: 1px solid #ddd;
-  border-radius: 50%;
+  padding: 0 0.4em;
+  text-decoration: none;
+  border: 1px solid #9c9e9e;
+  background: #e5e9e9;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 0 #fff;
+  box-shadow: inset 0 1px 0 #fff;
+  color: #454545;
 }
 .close {
   visibility: visible;
@@ -136,11 +148,15 @@ tr:hover img {
   margin: 0.5em 0;
 }
 button {
-  padding: 0.5em;
-  border: 1px solid #eee;
-  border-bottom: 1px solid #bbb;
-  border-right: 1px solid #bbb;
-  background: -webkit-linear-gradient(#fafafa, #e5e5e5);
-  background: linear-gradient(#fafafa, #e5e5e5);
-  border-radius: 5px;
+  font-size: 12px;
+  font-family: source-l, sans-serif;
+  padding: 4px 10px;
+  border: 1px solid #9c9e9e;
+  background: #e5e9e9;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 0 #fff;
+  box-shadow: inset 0 1px 0 #fff;
+}
+input[type="checkbox"] {
+  margin-right: 0.5em;
 }
