@@ -139,7 +139,7 @@ var plot = function (data, w,h) {
 		xaxis.push(10*i);
 	}
 
-	var lines = r.linechart(50, 10, w, h, [resx[0], resx[1], resx[2]], [res[0], res[1], res[2]], {
+	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2]], [res[0], res[1], res[2]], {
 		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle"
 	}).hoverColumn(function () {
 		this.tags = r.set();
