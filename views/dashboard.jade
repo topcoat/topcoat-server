@@ -10,12 +10,12 @@ block content
 			h3 Device
 				li= device
 			h3
-				.progress(style="background:#2f6abd;width:90%") Mean Frame time (ms) <em>(more info)</em>
+				.progress.bar-a Mean Frame time (ms) <em>(more info)</em>
 					p.hidden Frame time represents the time it takes to render a frame and it's a more accurate measure of performance
 					p.hidden A frame time is calculated by dividing 1000 (ms in a second) to the number of frames per second
-				.progress(style="background:#bd572f;width:90%") Layout (ms)
+				.progress.bar-b Layout (ms)
 					//- p Overall load time, measured in milliseconds (ms)
-				.progress(style="background:#a0bd2f;width:90%") Load Time (ms)
+				.progress.bar-c Load Time (ms)
 
 		form(action='../v2/view/results', method='GET').test-info
 			p: h3 Compare commits
