@@ -170,3 +170,6 @@ input[type="checkbox"] {
 .bar-c {
   background: #a0bd2f;
 }
+nav {
+  margin: -40px -40px 40px -40px;
+}

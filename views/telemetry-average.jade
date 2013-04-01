@@ -1,6 +1,7 @@
 extends layout
 
 block content
+	include includes/navigation
 	h1 Average telemetry results
 	h4 Filters (<a> + </a> adds a filter) (<a> x </a> removes it)
 	ul(id='filters')
@@ -22,10 +23,11 @@ block content
 							option(data-value='14') Last 14 days
 							option(data-value='30') Last Month
 					th #Count
+					th Details
 			tbody
 				tr
 						td: button(type='submit') Compare
-						td(colspan=6)
+						td(colspan=7)
 					- results.forEach(function (el, idx) {
 						tr
 							td: input(type='checkbox', name='average_' + el._id, value=el._id)
@@ -39,9 +41,10 @@ block content
 								a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') + 
 							td(class='date')= el.formatedDate
 							td= el.count
+							td: a(href='/view/test/' + el._id) details
 					- })
 					tr
 						td: button(type='submit') Compare
-						td(colspan=6)
+						td(colspan=7)
 	script(src='/javascripts/moment.min.js')
 	script(src='/javascripts/telemetry-sort.js')

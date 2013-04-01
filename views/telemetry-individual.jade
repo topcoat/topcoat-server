@@ -1,0 +1,33 @@
+extends layout
+
+block content
+	include includes/navigation
+	h1 Individual results
+
+	form(action='/compare', method='POST')
+		table
+			thead
+				tr
+					th
+					th Test
+					th Info
+					th Mean frame time
+					th Layout
+					th Load time
+			tbody
+				tr
+					td: button(type='submit') Delete
+					td(colspan=7)
+					- results.forEach(function (el, idx) {
+						tr
+							td: input(type='checkbox', name='average_' + el._id, value=el._id)
+							td= el.test 
+							td= 'on ' + el.device + ' #' + el.commit.substring(0,7) + ' ' + el.date.toString().substring(3,15)
+							td= el.result['mean_frame_time (ms)'] || 'N/A'
+							td= el.result['load_time (ms)']
+							td= el.result['Layout (ms)']
+					- })
+					tr
+						td: button(type='submit') Delete
+						td(colspan=7)
+	script(src='/javascripts/moment.min.js')

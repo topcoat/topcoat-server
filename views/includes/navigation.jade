@@ -1,0 +1,6 @@
+nav.bg-lightgray
+	ul.breadcrumbs
+		li: a(href='/') Home
+		- navigation.forEach (function (link) {
+			li: a(href=link.href)= link.title
+		- })

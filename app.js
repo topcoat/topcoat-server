@@ -125,13 +125,15 @@ app.get('/dashboard', function (req, res) {
 		res.render('dashboard', {
 			'title'  : 'Topcoat Dashboard',
 			'test'   : params[0].substring(16, params[0].length).split(','), //fix me
-			'device' : params[1].substring(7, params[1].length)
+			'device' : params[1].substring(7, params[1].length),
+			navigation : [{title: 'Benchmark', href: '#'}]
 		});
 
 	res.render('dashboard', {
 			'title'  : 'Topcoat Dashboard',
 			'test'   : params[0].substring(16, params[0].length).split(','),
-			'device' : 'none'
+			'device' : 'none',
+			navigation : [{title: 'Benchmark', href: '#'}]
 		});
 
 });
@@ -218,11 +220,44 @@ app.get('/v2/view/results', function (req, res) {
 			});
 			console.log(docs);
 			res.render('telemetry-average', {
+				navigation : [{title: 'View averages', href: '#'}],
 				title : 'telemetry average',
 				results: docs
 			});
 		}
 	});
+
+});
+
+app.get('/view/test/:id', function (req, res) {
+
+	var id = req.params.id;
+	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
+
+	TelemetryAvg.findOne({'_id' : id}, function (err, doc) {
+
+		var find = {
+			test   : doc.test,
+			commit : doc.commit,
+			device : doc.device
+		};
+
+		console.log(find);
+		TelemetryTest.find(find, function (err, docs) {
+
+			res.render('telemetry-individual', {
+				navigation : [{title: 'View individual results', href: '#'}],
+				title : 'telemetry average',
+				results: docs
+			});
+
+		});
+
+	});
+
+
+
 
 });
 
