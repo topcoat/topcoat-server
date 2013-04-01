@@ -28,9 +28,6 @@ var removeFilter = function (e) {
 
 	if (date) formData.append('date', date);
 
-	// if (!filters.length)
-	// 	window.location.href = window.location.pathname;
-
 	[].forEach.call(filters, function (li, idx) {
 		formData.append(li.dataset.filter, li.dataset.value);
 	});

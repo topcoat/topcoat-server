@@ -172,7 +172,7 @@ app.get('/dashboard', function (req, res) {
 		};
 
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-
+		console.log(search);
 		TelemetryAvg.find(search).sort('+date').execFind(function (err, docs) {
 			// console.log(docs);
 			if (err) {
@@ -200,7 +200,15 @@ app.get('/v2/view/results', function (req, res) {
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
 	,	ua = uaParser.parse(req.body.ua)
 	;
-	
+
+	var referer = req.header('Referer');
+	var navigation = [];
+
+	if (referer.split('?').length)
+		navigation.push({title:'Dashboard', href:req.header('Referer')});
+
+	navigation.push({title: 'View averages', href: '#'});
+
 	var date = {
 		date : {
 			$gte: new Date(new Date().getTime() - 7*86400*1000).toISOString()
@@ -218,9 +226,9 @@ app.get('/v2/view/results', function (req, res) {
 				docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
 				docs[idx].miliseconds = date.getTime();
 			});
-			console.log(docs);
+
 			res.render('telemetry-average', {
-				navigation : [{title: 'View averages', href: '#'}],
+				navigation : navigation,
 				title : 'telemetry average',
 				results: docs
 			});
@@ -249,7 +257,8 @@ app.get('/view/test/:id', function (req, res) {
 			res.render('telemetry-individual', {
 				navigation : [{title: 'View individual results', href: '#'}],
 				title : 'telemetry average',
-				results: docs
+				results: docs,
+				average_id :id
 			});
 
 		});
@@ -309,6 +318,94 @@ app.get('/remove', function (req, res) {
 
 		TelemetryAvg.find({'_id' : { $in : findAndRemove }}).remove(function(){
 			res.end('Removed!');
+		});
+
+	});
+
+		app.post('/remove/test', function (req, res) {
+
+			var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+			,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
+			,	ua = uaParser.parse(req.body.ua)
+			;
+
+			var findAndRemove = []; // i'll add the docs that need removing here
+			var docsRemaining = []; // these will make up the average later
+			var average_id = req.body.average_id;
+			delete req.body.average_id;
+
+			for (var i in req.body) {
+				if (docsRemaining.indexOf(req.body[i]) > -1) {
+					findAndRemove.push(req.body[i]);
+				}
+				docsRemaining.push(req.body[i]);
+
+			}
+
+			console.log('going to remove', findAndRemove);
+			console.log('going to average', docsRemaining);
+
+			TelemetryTest.remove({_id : { $in: findAndRemove }}, function () {
+				// after i removed them i need to make up the average
+				TelemetryTest.find({_id : { $in : docsRemaining }}, function (err, docs) {
+
+					if (err) res.end(err);
+					var update = {};
+
+					// sum up all the results
+					docs.forEach(function (doc) {
+						for(var i in doc.result) {
+							if (!update[i]) {
+								if(!isNaN(parseFloat(doc.result[i])))
+									update[i] = parseFloat(doc.result[i]);
+								else
+									update[i] = doc.result[i];
+							} else
+								if(!isNaN(parseFloat(doc.result[i]))) {
+									update[i] += parseFloat(doc.result[i]);
+								}
+						}
+					});
+
+					// divide by the number of results;
+					var count = docs.length;
+					for (var i in update)
+						if(!isNaN(parseFloat(update[i])))
+							update[i] /= count;
+					if (count) // if there is something left updating
+						TelemetryAvg.findOne({_id : average_id}, function (err, doc) {
+							if (err) res.json(err);
+							else {
+								doc.result = update;
+								doc.count = count;
+								doc.save(function () {
+									res.end('average saved');
+								});
+							}
+						});
+					else
+						TelemetryAvg.remove({_id: average_id}, function () {
+							res.end('Average removed');
+						});
+
+				});
+
+
+			});
+
+
+
+		});
+
+ 	app.get('/view/one', function (req, res){
+
+ 		var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
+		,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
+		;
+
+		TelemetryAvg.find({}, function (err, docs) {
+			if (err) console.log(err);
+			else res.json(docs);
 		});
 
 	});

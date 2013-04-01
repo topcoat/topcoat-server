@@ -4,7 +4,7 @@ block content
 	include includes/navigation
 	h1 Individual results
 
-	form(action='/compare', method='POST')
+	form(action='/remove/test', method='POST')
 		table
 			thead
 				tr
@@ -20,14 +20,17 @@ block content
 					td(colspan=7)
 					- results.forEach(function (el, idx) {
 						tr
-							td: input(type='checkbox', name='average_' + el._id, value=el._id)
+							td
+								input(type='checkbox', name='average_' + el._id, value=el._id)
+								input(type='hidden', name='test_' + el.id, value=el.id)
 							td= el.test 
 							td= 'on ' + el.device + ' #' + el.commit.substring(0,7) + ' ' + el.date.toString().substring(3,15)
 							td= el.result['mean_frame_time (ms)'] || 'N/A'
-							td= el.result['load_time (ms)']
 							td= el.result['Layout (ms)']
+							td= el.result['load_time (ms)']
 					- })
 					tr
 						td: button(type='submit') Delete
-						td(colspan=7)
+						input(type='hidden', name='average_id', value=average_id)
+						td(colspan=6)
 	script(src='/javascripts/moment.min.js')

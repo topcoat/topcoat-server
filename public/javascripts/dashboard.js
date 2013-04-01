@@ -89,6 +89,7 @@ var generateXaxis = function () {
 
 	filter.forEach(function(f, idx){
 		json.forEach(function (t) {
+			if (!t.result) return;
 			if (t.result[f]) {
 				resx[idx].push(allcommits.indexOf(t.commit) * 10);
 			}
@@ -127,6 +128,7 @@ var plot = function (data, w,h) {
 		commits.push(doc.commit);
 
 		filter.forEach(function (field) {
+			if (!doc.result) return;
 			if (doc.result[field]) {
 				res[filter.indexOf(field)].push(parseInt(doc.result[field], 10));
 				count[filter.indexOf(field)]++;
