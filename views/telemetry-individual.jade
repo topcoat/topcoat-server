@@ -26,11 +26,12 @@ block content
 							td= el.test 
 							td= 'on ' + el.device + ' #' + el.commit.substring(0,7) + ' ' + el.date.toString().substring(3,15)
 							td= el.result['mean_frame_time (ms)'] || 'N/A'
-							td= el.result['Layout (ms)']
-							td= el.result['load_time (ms)']
+							td= el.result['Layout (ms)'] || 'N/A'
+							td= el.result['load_time (ms)'] || 'N/A'
 					- })
 					tr
 						td: button(type='submit') Delete
 						input(type='hidden', name='average_id', value=average_id)
 						td(colspan=6)
 	script(src='/javascripts/moment.min.js')
+	script(src='/javascripts/telemetry-individual.js')

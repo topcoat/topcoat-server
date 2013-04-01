@@ -125,15 +125,13 @@ app.get('/dashboard', function (req, res) {
 		res.render('dashboard', {
 			'title'  : 'Topcoat Dashboard',
 			'test'   : params[0].substring(16, params[0].length).split(','), //fix me
-			'device' : params[1].substring(7, params[1].length),
-			navigation : [{title: 'Benchmark', href: '#'}]
+			'device' : params[1].substring(7, params[1].length)
 		});
 
 	res.render('dashboard', {
 			'title'  : 'Topcoat Dashboard',
 			'test'   : params[0].substring(16, params[0].length).split(','),
-			'device' : 'none',
-			navigation : [{title: 'Benchmark', href: '#'}]
+			'device' : 'none'
 		});
 
 });
@@ -201,14 +199,6 @@ app.get('/v2/view/results', function (req, res) {
 	,	ua = uaParser.parse(req.body.ua)
 	;
 
-	var referer = req.header('Referer');
-	var navigation = [];
-
-	if (referer.split('?').length)
-		navigation.push({title:'Dashboard', href:req.header('Referer')});
-
-	navigation.push({title: 'View averages', href: '#'});
-
 	var date = {
 		date : {
 			$gte: new Date(new Date().getTime() - 7*86400*1000).toISOString()
@@ -228,8 +218,7 @@ app.get('/v2/view/results', function (req, res) {
 			});
 
 			res.render('telemetry-average', {
-				navigation : navigation,
-				title : 'telemetry average',
+				title : 'Average telemetry results',
 				results: docs
 			});
 		}
@@ -251,12 +240,10 @@ app.get('/view/test/:id', function (req, res) {
 			device : doc.device
 		};
 
-		console.log(find);
 		TelemetryTest.find(find, function (err, docs) {
 
 			res.render('telemetry-individual', {
-				navigation : [{title: 'View individual results', href: '#'}],
-				title : 'telemetry average',
+				title : 'Telemetry individual results',
 				results: docs,
 				average_id :id
 			});
@@ -396,20 +383,6 @@ app.get('/remove', function (req, res) {
 
 
 		});
-
- 	app.get('/view/one', function (req, res){
-
- 		var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
-		,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
-		;
-
-		TelemetryAvg.find({}, function (err, docs) {
-			if (err) console.log(err);
-			else res.json(docs);
-		});
-
-	});
-
 
 app.post('/v2/view/results/filtered', function (req, res) {
 

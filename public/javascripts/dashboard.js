@@ -5,7 +5,8 @@ var params   = window.location.href.match(/\?.{0,}/g)
 ,	testInfo = document.querySelector('#commit-info')
 ,	res = {} // y coords
 ,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)']
-,	commitCompare = document.querySelector('#compare-commits');
+,	commitCompare = document.querySelector('#compare-commits')
+,	strokes = 0;
 ;
 
 params = (params) ? params[0].slice(1).split('&') : null;
@@ -169,6 +170,21 @@ var plot = function (data, w,h) {
 		});
 		// this.tags && this.tags.remove();
 	}).clickColumn(function () {
+
+		var coordx = this.x;
+		if (strokes==2) strokes = 0;
+
+		for(var i = 0; i < lines.symbols.length; ++i) {
+			for (var j = 0 ; j < lines.symbols[i].length; ++j) {
+				if (strokes === 0) {
+					lines.symbols[i][j].attr({'stroke-width':0});
+				}
+				if ( lines.symbols[i][j].attrs.cx == coordx ) {
+					lines.symbols[i][j].attr({'stroke-width':3, 'stroke':'#ff0000'});
+				}
+			}
+		}
+		strokes++;
 
 		var comm = allcommits[this.axis/10];
 		var tests = [];

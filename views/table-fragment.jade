@@ -14,7 +14,7 @@ tr
 			a(title='Add as a filter', href='#', class='add-filter', data-value=el.commit, data-filter='commit') + 
 		td(class='date')= el.formatedDate
 		td= el.count
-		td: a(href='/view/test/' + el._id) details
+		td: a(href='/view/test/' + el._id, class='average-details') details
 - })
 tr
 	td: button(type='submit') Compare

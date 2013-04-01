@@ -313,3 +313,50 @@ header {
     -moz-transform: rotate(360deg);
   }
 }
+
+a.button {
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 12px;
+  height: 21px;
+  line-height: 21px;
+  min-width: 15px;
+  margin: 0 5px 5px 0;
+  max-width: 150px;
+  overflow: hidden;
+  padding: 0 8px;
+  position: relative;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  vertical-align: top;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  background-image: none, linear-gradient(top, #f5f8fa, #e3e5e5);
+  background-image: none, -webkit-gradient(linear, left top, left bottom, from(#f5f8fa), to(#e3e5e5));
+  background-position: center;
+  background-repeat: none;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 0 #ffffff;
+  color: #454545;
+  text-shadow: 0 1px 0 #ffffff;
+}
+
+a.button:hover {
+  background-image: none, linear-gradient(top, #f8fafb, #edefef);
+  background-image: none, -webkit-gradient(linear, left top, left bottom, from(#f8fafb), to(#edefef));
+  background-position: center;
+  background-repeat: none;
+}
+
+a.button:active {
+  background-color: #d3d7d7;
+  background-image: none;
+  background-position: center;
+  background-repeat: none;
+  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+}

@@ -3,7 +3,7 @@ extends layout
 block content
 	include includes/navigation
 	h1 Average telemetry results
-	h4 Filters (<a> + </a> adds a filter) (<a> x </a> removes it)
+	h4 Filters (<a> + </a> adds a filter) (<a> &times; </a> removes it)
 	ul(id='filters')
 
 	form(action='/compare', method='POST')
@@ -41,7 +41,7 @@ block content
 								a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') + 
 							td(class='date')= el.formatedDate
 							td= el.count
-							td: a(href='/view/test/' + el._id) details
+							td: a(href='/view/test/' + el._id, class='average-details') details
 					- })
 					tr
 						td: button(type='submit') Compare
