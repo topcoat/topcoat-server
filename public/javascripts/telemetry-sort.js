@@ -53,7 +53,6 @@ var removeFilter = function (e) {
 	,	date = location.href.match(/date\=[0-9]*/i)
 	;
 
-
 	date = (date) ? date[0].split('=')[1] : 0;
 
 	if (date) formData.append('date', date);
@@ -116,10 +115,6 @@ var refreshFilters = function (filters) {
 
 				var f = filter.split('=');
 				if(f[0] != 'date') {
-
-					if (f[0] == 'test') {
-						return;
-					}
 
 					a.innerHTML = f[0]+' '+f[1];
 					close.classList.add('close');
@@ -249,14 +244,25 @@ var addEventListeners = function () {
 };
 
 function formatDate () {
-	[].forEach.call(document.querySelectorAll('.date'), function (el) {
-		console.log(el);
-		el.innerHTML = moment(el.innerHTML).format("MMMM Do YYYY, h:mm");
-	});
+	// [].forEach.call(document.querySelectorAll('.date'), function (el) {
+	// 	var date = el.innerHTML.split('T');
+	// 	el.innerHTML = date[0].substring(0, 10) + ' ' + date[1].substring(0,5);
+	// });
 
 	[].forEach.call(document.querySelectorAll('.average-details'), function (el) {
-		el.href += '?test=' + QueryString.test.join(',') + '&device=' + QueryString.device;
-		el.href += '&commit=' + QueryString.commit[0] + '&commit=' + QueryString.commit[1];
+
+		el.href += '?';
+		for (var i in QueryString) {
+			if (i) {
+				if (typeof QueryString[i] != 'string')
+					QueryString[i].forEach(function (val) {
+						el.href += '&' + i + '=' + val;
+					});
+				else
+					el.href += '&' + i + '=' + QueryString[i];
+			}
+		}
+
 	});
 }
 

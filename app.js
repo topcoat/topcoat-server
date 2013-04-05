@@ -179,6 +179,7 @@ app.get('/dashboard', function (req, res) {
 			} else {
 				var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 				docs.forEach(function (doc, idx) {
+					console.log(doc.date);
 					var date = new Date(doc.date);
 					docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
 					docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
@@ -212,9 +213,7 @@ app.get('/v2/view/results', function (req, res) {
 			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 			docs.forEach(function (doc, idx) {
 				var date = new Date(doc.date);
-				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
-				docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
-				docs[idx].miliseconds = date.getTime();
+				docs[idx].formatedDate = date.toISOString();
 			});
 
 			res.render('telemetry-average', {
@@ -397,7 +396,12 @@ app.post('/v2/view/results/filtered', function (req, res) {
 
 	if (typeof req.body.commit === 'object') {
 		var commits = req.body.commit;
-		req.body.commit = {$in:[commits[0],commits[1]]};
+		req.body.commit = {$in:commits};
+	}
+
+	if (typeof req.body.test === 'object') {
+		var tests = req.body.test;
+		req.body.test = {$in:tests};
 	}
 
 	req.body.date = {
@@ -414,10 +418,8 @@ app.post('/v2/view/results/filtered', function (req, res) {
 			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 			docs.forEach(function (doc, idx) {
 				var date = new Date(doc.date);
-				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
-				docs[idx].miliseconds = date.getTime();
+				docs[idx].formatedDate = date.toISOString();
 			});
-			// console.log(docs);
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs

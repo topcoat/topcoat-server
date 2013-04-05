@@ -5,32 +5,51 @@ var buildBreadcrumbs = function (filter) {
 	, a
 	;
 
-	if(QueryString.test) {
 
 		li = document.createElement('li');
 		a = document.createElement('a');
 
-		a.href = '/dashboard?test=' + QueryString.test + '&device=' + QueryString.device;
+		a.href = '/dashboard?';
+
+		if (QueryString.test) {
+			['test', 'device'].forEach(function(i){
+				if (QueryString[i] && typeof QueryString[i] != 'string')
+					QueryString[i].forEach(function (t) {
+						a.href += '&'+ i +'=' + t;
+					});
+				else
+					a.href += '&'+ i +'=' + QueryString[i];
+			});
+		}
+
 		a.innerHTML = 'Dashboard';
 		li.appendChild(a);
 
 		breadcrumb.appendChild(li);
 
-	}
 
-	if(QueryString.commit) {
 
 		li = document.createElement('li');
 		a = document.createElement('a');
 
-		a.href = '/v2/view/results?test=' + QueryString.test + '&device=' + QueryString.device;
-		a.href += '&commit=' + QueryString.commit[0];
-		a.href += '&commit=' + QueryString.commit[1];
+		a.href = '/v2/view/results?';
+
+		for (var i in QueryString) {
+			if (i) {
+				if (typeof QueryString[i] != 'string')
+					QueryString[i].forEach(function (val) {
+						a.href += '&' + i + '=' + val;
+					});
+				else
+					a.href += '&' + i + '=' + QueryString[i];
+			}
+		}
+
 		a.innerHTML = 'Average telemetry results';
 		li.appendChild(a);
 
 		breadcrumb.appendChild(li);
-	}
+	
 
 	li = document.createElement('li');
 	a = document.createElement('a');
