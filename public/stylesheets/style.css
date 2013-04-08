@@ -111,7 +111,6 @@ tr:hover img {
   border: 1px solid #9c9e9e;
   background: #e5e9e9;
   border-radius: 3px;
-  -webkit-box-shadow: inset 0 1px 0 #fff;
   box-shadow: inset 0 1px 0 #fff;
   color: #454545;
   text-shadow: 0 1px 0 #fff;
@@ -125,9 +124,13 @@ tr:hover img {
   top: 50px;
   right: 50px;
 }
+.legend ul {
+  margin: 1em 0;
+  padding: 0.2em;
+}
 .test-info {
   background: #f8f8f8;
-  width: 300px;
+  width: 250px;
   border-radius: 5px;
   border: 1px solid rgba(0,0,0,0.2);
   padding-left: 0.5em;
@@ -136,7 +139,6 @@ tr:hover img {
   list-style: none;
   border-bottom: 1px solid rgba(0,0,0,0.2);
   padding: 0.5em;
-  margin-left: -0.5em;
 }
 .test-info h2 {
   text-align: center;

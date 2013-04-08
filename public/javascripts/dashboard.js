@@ -39,7 +39,7 @@ var submit = function (formData, cb) {
 
 var updateInfo = function (tests) {
 
-	var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 	testInfo.innerHTML = '';
 	var docFrag = document.createDocumentFragment();
 
@@ -56,11 +56,16 @@ var updateInfo = function (tests) {
 		,	device = location.href.match(/device=.{1,}/)[0]
 		;
 
-		a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
-		a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
-		a.target = '_blank';
+		if (test.commit[0] != 's') {
+			a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
+			a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
+			a.target = '_blank';
+			h2.appendChild(a);
+		} else {
+			h2.innerHTML = 'snapshot ' + test.date;
+		}
 
-		h2.appendChild(a);
+		if (test.commit[0] == 's') test.commit = test.commit.substring(4,31);
 
 		a2.href = '/v2/view/results?commit='+test.commit+'&date=30&' + device;
 		a2.target = '_blank';
@@ -69,7 +74,7 @@ var updateInfo = function (tests) {
 
 		li.innerHTML = 'Date : ' + months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
 		li2.innerHTML = 'Test name : ' + test.test;
-		li3.innerHTML = 'Count : ' + test.count;
+		li3.innerHTML = 'Runs : ' + test.count;
 
 		docFrag.appendChild(h2);
 		docFrag.appendChild(li);
@@ -86,13 +91,19 @@ var updateInfo = function (tests) {
 
 var count = [0,0,0];
 
+// generateXaxis populates resx with x-axis coordinate for 
+// each of the 3 lines on the graph
+// since the commits are ordered by date in allcommits
+// i just multiple the indexOf the commit by 10
 var generateXaxis = function () {
-
 	filter.forEach(function(f, idx){
 		json.forEach(function (t) {
-			if (!t.result) return;
+			if (!t.result) return; // :( should never happen
 			if (t.result[f]) {
-				resx[idx].push(allcommits.indexOf(t.commit) * 10);
+				var commit = t.commit;
+				if (commit == 'snapshot')
+					commit += t.date;
+				resx[idx].push(allcommits.indexOf(commit) * 10);
 			}
 		});
 
@@ -103,8 +114,6 @@ var generateXaxis = function () {
 var allcommits = [];
 
 var plot = function (data, w,h) {
-
-	console.log(data);
 
 	var r = Raphael("holder")
 	,	xaxis = []
@@ -117,7 +126,12 @@ var plot = function (data, w,h) {
 	json = JSON.parse(data);
 
 	for(var i = 0 ; i < json.length; ++i) {
-		if (allcommits.indexOf(json[i].commit) == -1) allcommits.push(json[i].commit);
+		if (allcommits.indexOf(json[i].commit) == -1 && allcommits.indexOf(json[i].commit + json[i].date) == -1) {
+			if (json[i].commit[0] == 's')
+				allcommits.push(json[i].commit + json[i].date);
+			else
+				allcommits.push(json[i].commit);
+		}
 	}
 
 	generateXaxis();
@@ -186,11 +200,12 @@ var plot = function (data, w,h) {
 		}
 		strokes++;
 
-		var comm = allcommits[this.axis/10];
-		var tests = [];
-		var input = document.createElement('input');
-		var inputDate;
-		var deviceNode = document.querySelector('input[type=submit]');
+		var comm 		= allcommits[this.axis/10]
+		,	tests 		= []
+		,	input 		= document.createElement('input')
+		,	inputDate
+		,	deviceNode 	= document.querySelector('input[type=submit]')
+		;
 
 		if(!commitCompare.querySelectorAll('input[name=date]').length) {
 			inputDate = document.createElement('input');
@@ -204,6 +219,10 @@ var plot = function (data, w,h) {
 
 		input.type = 'text';
 		input.value = comm;
+		if(comm[0] == 's') {
+			input.value = comm.substring(8,48);
+		}
+		console.log(comm);
 		input.name = 'commit';
 
 		var selectedCommits = commitCompare.querySelectorAll('input[type=text]').length;
@@ -220,7 +239,7 @@ var plot = function (data, w,h) {
 
 
 		json.forEach(function (t) {
-			if (t.commit == comm) {
+			if (t.commit == comm || t.commit + t.date == comm) {
 				tests.push({
 					commit : comm,
 					test   : t.test,
@@ -239,7 +258,13 @@ var plot = function (data, w,h) {
 		commitPos.push(xPoint.attrs.x);
 
 		axisx[xPoint.attr('text')] = allcommits[idx];
-		xPoint.attr("text", allcommits[idx].substring(0, 7));
+		if (allcommits[idx][0] == 's') {
+			xPoint.attr('text', 'S@' + allcommits[idx].substring(8,18));
+			xPoint.attr('fill', '#f44');
+			console.log(xPoint);
+		}
+		else
+			xPoint.attr("text", allcommits[idx].substring(0, 7));
 	});
 
 };

@@ -51,6 +51,8 @@ app.post('/v2/benchmark', function (req, res) {
 	,	sanitize = require('validator').sanitize
 	;
 
+	console.log(req.body.date);
+
 	var telemetryTest = new TelemetryTest({
 			ua     : req.body.resultName['UserAgent ()']
 		,	device : sanitize(req.body.device).xss()
@@ -73,12 +75,17 @@ app.post('/v2/benchmark', function (req, res) {
 		}
 	});
 
-	TelemetryAvg.findOne({
+	var query = {
 		commit   : req.body.commit,
 		platform : ua.family + ' ' + ua.major + "." + ua.minor + "." + ua.patch + ' ' + ua.os.toString(),
 		test     : req.body.test,
 		device   : req.body.device
-	}, function (err, doc) {
+	};
+
+	if (req.body.date)
+		query['date'] = req.body.date;
+
+	TelemetryAvg.findOne(query, function (err, doc) {
 		if (err) {
 			console.log('Error : ', err);
 		} else {
@@ -120,12 +127,12 @@ app.post('/v2/benchmark', function (req, res) {
 app.get('/dashboard', function (req, res) {
 
 	var params = req.url.split('&');
-
-	if(params[1])
+	console.log(params);
+	if(params[2])
 		res.render('dashboard', {
 			'title'  : 'Topcoat Dashboard',
-			'test'   : params[0].substring(16, params[0].length).split(','), //fix me
-			'device' : params[1].substring(7, params[1].length)
+			'test'   : [params[0].split('=')[1], params[1].split('=')[1]], // :( i'm ashamed
+			'device' : params[2].split('=')[1]
 		});
 
 	res.render('dashboard', {
@@ -161,7 +168,7 @@ app.get('/dashboard', function (req, res) {
 
 		var search = {
 			test : {
-				$in : req.body.test.split(',')
+				$in : req.body.test
 			},
 			date : {
 				$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
@@ -172,7 +179,6 @@ app.get('/dashboard', function (req, res) {
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 		console.log(search);
 		TelemetryAvg.find(search).sort('+date').execFind(function (err, docs) {
-			// console.log(docs);
 			if (err) {
 				console.log(err);
 				res.json(err);
@@ -250,9 +256,6 @@ app.get('/view/test/:id', function (req, res) {
 		});
 
 	});
-
-
-
 
 });
 
@@ -388,15 +391,54 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
 	,	ua = uaParser.parse(req.body.ua)
+	,	query
 	;
 
 	var past = parseInt(req.body.date, 10) || 7;
 	var start = new Date(new Date().getTime() - past*86400*1000);
 
+	if (typeof req.body.commit === 'object')
+		req.body.commit.forEach(function (commit, idx) {
+			commit = commit.replace(/%3A/g, ':');
+			if (new Date(commit) != 'Invalid Date') {
+				query = {
+					$or : [
+						{
+							commit : (idx) ? req.body.commit[0] : req.body.commit[1]
+						},
+						{
+							date : commit
+						}
+						]
+				};
+
+				if (typeof req.body.test === 'object') {
+					var tests = req.body.test;
+					query.test = {$in:tests};
+				}
+
+				query.date = {
+					$gte: start
+				};
+
+			}
+		});
+
+	req.body.date = {
+		$gte: start
+	};
 
 	if (typeof req.body.commit === 'object') {
 		var commits = req.body.commit;
 		req.body.commit = {$in:commits};
+	} else {
+		var commit = req.body.commit.replace(/%3A/g, ':');
+		if (new Date(commit) != 'Invalid Date') {
+			req.body.date = commit;
+			delete req.body.commit;
+		} else {
+			console.log('isnt a valid date');
+		}
 	}
 
 	if (typeof req.body.test === 'object') {
@@ -404,14 +446,12 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		req.body.test = {$in:tests};
 	}
 
-	req.body.date = {
-		$gte: start
-	};
 
 
+	console.log(query);
 	console.log(req.body);
 
-	TelemetryAvg.find(req.body).sort('-test -date').execFind(function (err, docs) {
+	TelemetryAvg.find(query || req.body).sort('-test -date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
