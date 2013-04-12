@@ -11,7 +11,15 @@ var buildBreadcrumbs = function (filter) {
 		li = document.createElement('li');
 		a = document.createElement('a');
 
-		a.href = '/dashboard?test=' + QueryString.test + '&device=' + QueryString.device;
+		if (QueryString.test.forEach) {
+
+			a.href = '/dashboard?test=' + QueryString.test[0] + '&test=' + QueryString.test[1];
+
+		} else {
+			a.href = '/dashboard?test=' + QueryString.test;
+		}
+
+		a.href += '&device=' + QueryString.device;
 		a.innerHTML = 'Dashboard';
 		li.appendChild(a);
 
@@ -244,10 +252,10 @@ var addEventListeners = function () {
 };
 
 function formatDate () {
-	// [].forEach.call(document.querySelectorAll('.date'), function (el) {
-	// 	var date = el.innerHTML.split('T');
-	// 	el.innerHTML = date[0].substring(0, 10) + ' ' + date[1].substring(0,5);
-	// });
+	[].forEach.call(document.querySelectorAll('.date'), function (el) {
+		var date = el.innerHTML.split('T');
+		el.innerHTML = date[0].substring(0, 10) + ' ' + date[1].substring(0,5);
+	});
 
 	[].forEach.call(document.querySelectorAll('.average-details'), function (el) {
 
@@ -256,6 +264,7 @@ function formatDate () {
 			if (i) {
 				if (typeof QueryString[i] != 'string')
 					QueryString[i].forEach(function (val) {
+						console.log(i);
 						el.href += '&' + i + '=' + val;
 					});
 				else
