@@ -17,13 +17,19 @@ Running tests locally
        * TOPCOAT_BENCHMARK_PORT (3000 is default)
    * or go in settings.js (from the topcoat repo) and change the settings there
 4. Example command
+
 ````
 grunt telemetry-submit --path=/tmp/telemetry_output.txt --type=snapshot --device=mbp --test=test_name
 ````
 5. View tests results at (notice the URL params & the params for Grunt)
+
 ````
 http://localhost:3000/dashboard?test=test_name&device=mbp
-or at 
+````
+
+or at
+
+````
 http://localhost:3000/v2/view/results
 ````
 
