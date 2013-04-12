@@ -39,7 +39,7 @@ var submit = function (formData, cb) {
 
 var updateInfo = function (tests) {
 
-	var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 	testInfo.innerHTML = '';
 	var docFrag = document.createDocumentFragment();
 
@@ -56,11 +56,16 @@ var updateInfo = function (tests) {
 		,	device = location.href.match(/device=.{1,}/)[0]
 		;
 
-		a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
-		a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
-		a.target = '_blank';
+		if (test.commit[0] != 's') {
+			a.innerHTML = 'Commit #' + test.commit.substring(0, 7);
+			a.href = 'https://github.com/topcoat/topcoat/commit/' + test.commit;
+			a.target = '_blank';
+			h2.appendChild(a);
+		} else {
+			h2.innerHTML = 'snapshot ' + test.date;
+		}
 
-		h2.appendChild(a);
+		if (test.commit[0] == 's') test.commit = test.commit.substring(4,31);
 
 		a2.href = '/v2/view/results?commit='+test.commit+'&date=30&' + device;
 		a2.target = '_blank';
@@ -69,7 +74,7 @@ var updateInfo = function (tests) {
 
 		li.innerHTML = 'Date : ' + months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
 		li2.innerHTML = 'Test name : ' + test.test;
-		li3.innerHTML = 'Count : ' + test.count;
+		li3.innerHTML = 'Runs : ' + test.count;
 
 		docFrag.appendChild(h2);
 		docFrag.appendChild(li);
@@ -86,13 +91,19 @@ var updateInfo = function (tests) {
 
 var count = [0,0,0];
 
+// generateXaxis populates resx with x-axis coordinate for 
+// each of the 3 lines on the graph
+// since the commits are ordered by date in allcommits
+// i just multiple the indexOf the commit by 10
 var generateXaxis = function () {
-
 	filter.forEach(function(f, idx){
 		json.forEach(function (t) {
-			if (!t.result) return;
+			if (!t.result) return; // :( should never happen
 			if (t.result[f]) {
-				resx[idx].push(allcommits.indexOf(t.commit) * 10);
+				var commit = t.commit;
+				if (commit == 'snapshot')
+					commit += t.date;
+				resx[idx].push(allcommits.indexOf(commit) * 10);
 			}
 		});
 
@@ -104,20 +115,24 @@ var allcommits = [];
 
 var plot = function (data, w,h) {
 
-	console.log(data);
-
 	var r = Raphael("holder")
 	,	xaxis = []
 	,	commitPos = []
 	;
 
-	w = w || 800;
-	h = h || 700;
+	w = w || 1000;
+	h = h || 900;
 
 	json = JSON.parse(data);
+	console.log(json);
 
 	for(var i = 0 ; i < json.length; ++i) {
-		if (allcommits.indexOf(json[i].commit) == -1) allcommits.push(json[i].commit);
+		if (allcommits.indexOf(json[i].commit) == -1 && allcommits.indexOf(json[i].commit + json[i].date) == -1) {
+			if (json[i].commit[0] == 's')
+				allcommits.push(json[i].commit + json[i].date);
+			else
+				allcommits.push(json[i].commit);
+		}
 	}
 
 	generateXaxis();
@@ -142,23 +157,23 @@ var plot = function (data, w,h) {
 		xaxis.push(10*i);
 	}
 
-	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2]], [res[0], res[1], res[2]], {
-		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle"
-	}).hoverColumn(function () {
+	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2], [0]], [res[0], res[1], res[2], [500]], {
+		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle", colors: ['#2f6abd', '#bd572f', '#a0bd2f', 'transparent']
+	}, 0, 0,0,0).hoverColumn(function () {
 		this.tags = r.set();
 
 		var markers = [];
-		lines.eachColumn(function () {
-			this.y.forEach(function (y, idx) {
-				if (y)
-					markers[idx] = y;
-			});
-		});
+		// lines.eachColumn(function () {
+		// 	this.y.forEach(function (y, idx) {
+		// 		if (y)
+		// 			markers[idx] = y;
+		// 	});
+		// });
 
 		for (var i = 0, ii = this.y.length; i < ii; i++) {
 			if(this.y[i]) {
 				this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
-				this.tags.push(r.tag(900, markers[i], ' ' + filter[i] + ' ', 0, 0).insertBefore(this));
+				// this.tags.push(r.tag(900, markers[i], ' ' + filter[i] + ' ', 0, 0).insertBefore(this));
 				this.tags.animate({opacity:0}, 0);
 				this.tags.animate({opacity:1}, 400);
 			}
@@ -168,7 +183,7 @@ var plot = function (data, w,h) {
 		this.tags.animate({opacity:0}, 150, function () {
 			this.remove();
 		});
-		// this.tags && this.tags.remove();
+
 	}).clickColumn(function () {
 
 		var coordx = this.x;
@@ -186,11 +201,12 @@ var plot = function (data, w,h) {
 		}
 		strokes++;
 
-		var comm = allcommits[this.axis/10];
-		var tests = [];
-		var input = document.createElement('input');
-		var inputDate;
-		var deviceNode = document.querySelector('input[type=submit]');
+		var comm 		= allcommits[this.axis/10]
+		,	tests 		= []
+		,	input 		= document.createElement('input')
+		,	inputDate
+		,	deviceNode 	= document.querySelector('input[type=submit]')
+		;
 
 		if(!commitCompare.querySelectorAll('input[name=date]').length) {
 			inputDate = document.createElement('input');
@@ -204,6 +220,10 @@ var plot = function (data, w,h) {
 
 		input.type = 'text';
 		input.value = comm;
+		if(comm[0] == 's') {
+			input.value = comm.substring(8,48);
+		}
+		console.log(comm);
 		input.name = 'commit';
 
 		var selectedCommits = commitCompare.querySelectorAll('input[type=text]').length;
@@ -220,7 +240,7 @@ var plot = function (data, w,h) {
 
 
 		json.forEach(function (t) {
-			if (t.commit == comm) {
+			if (t.commit == comm || t.commit + t.date == comm) {
 				tests.push({
 					commit : comm,
 					test   : t.test,
@@ -239,7 +259,14 @@ var plot = function (data, w,h) {
 		commitPos.push(xPoint.attrs.x);
 
 		axisx[xPoint.attr('text')] = allcommits[idx];
-		xPoint.attr("text", allcommits[idx].substring(0, 7));
+		if (allcommits[idx]) {
+			if (allcommits[idx][0] == 's') {
+				xPoint.attr('text', 'S@' + allcommits[idx].substring(8,24));
+				xPoint.attr('fill', '#f44');
+			}
+			else
+				xPoint.attr("text", allcommits[idx].substring(0, 7));
+		}
 	});
 
 };

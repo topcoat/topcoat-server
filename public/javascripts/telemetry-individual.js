@@ -11,16 +11,24 @@ var buildBreadcrumbs = function (filter) {
 
 		a.href = '/dashboard?';
 
-		if (QueryString.test) {
-			['test', 'device'].forEach(function(i){
-				if (QueryString[i] && typeof QueryString[i] != 'string')
-					QueryString[i].forEach(function (t) {
-						a.href += '&'+ i +'=' + t;
-					});
-				else
-					a.href += '&'+ i +'=' + QueryString[i];
+		if(QueryString.test) {
+
+		li = document.createElement('li');
+		a = document.createElement('a');
+
+		if (QueryString.test.forEach) {
+
+			a.href = '/dashboard?';
+
+			QueryString.test.forEach(function (test) {
+				a.href += '&test=' + test;
 			});
+
+		} else {
+			a.href = '/dashboard?test=' + QueryString.test;
 		}
+	}
+		a.href += '&device=' + QueryString.device;
 
 		a.innerHTML = 'Dashboard';
 		li.appendChild(a);
