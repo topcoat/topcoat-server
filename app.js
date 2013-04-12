@@ -127,7 +127,7 @@ app.post('/v2/benchmark', function (req, res) {
 app.get('/dashboard', function (req, res) {
 
 	var params = req.url.split('&');
-	console.log(params);
+
 	if(params[2])
 		res.render('dashboard', {
 			'title'  : 'Topcoat Dashboard',
@@ -166,18 +166,29 @@ app.get('/dashboard', function (req, res) {
 
 	app.post('/dashboard/get', function (req, res) {
 
-		var search = {
-			test : {
+		var search = {};
+
+		console.log('req', req.body);
+
+		if (typeof req.body.test == 'object') {
+			search.test = {
 				$in : req.body.test
-			},
-			date : {
-				$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
-			},
-			device : req.body.device
+			};
+		} else {
+			search.test = req.body.test;
+		}
+
+		search.date = {
+			$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
 		};
 
+		search.device = req.body.device;
+
+		console.log('search', search);
+
+
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-		console.log(search);
+
 		TelemetryAvg.find(search).sort('+date').execFind(function (err, docs) {
 			if (err) {
 				console.log(err);
@@ -185,7 +196,6 @@ app.get('/dashboard', function (req, res) {
 			} else {
 				var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 				docs.forEach(function (doc, idx) {
-					console.log(doc.date);
 					var date = new Date(doc.date);
 					docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
 					docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();

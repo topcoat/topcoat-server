@@ -120,10 +120,11 @@ var plot = function (data, w,h) {
 	,	commitPos = []
 	;
 
-	w = w || 800;
-	h = h || 700;
+	w = w || 1000;
+	h = h || 900;
 
 	json = JSON.parse(data);
+	console.log(json);
 
 	for(var i = 0 ; i < json.length; ++i) {
 		if (allcommits.indexOf(json[i].commit) == -1 && allcommits.indexOf(json[i].commit + json[i].date) == -1) {
@@ -156,23 +157,23 @@ var plot = function (data, w,h) {
 		xaxis.push(10*i);
 	}
 
-	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2]], [res[0], res[1], res[2]], {
-		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle"
-	}).hoverColumn(function () {
+	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2], [0]], [res[0], res[1], res[2], [500]], {
+		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle", colors: ['#2f6abd', '#bd572f', '#a0bd2f', 'transparent']
+	}, 0, 0,0,0).hoverColumn(function () {
 		this.tags = r.set();
 
 		var markers = [];
-		lines.eachColumn(function () {
-			this.y.forEach(function (y, idx) {
-				if (y)
-					markers[idx] = y;
-			});
-		});
+		// lines.eachColumn(function () {
+		// 	this.y.forEach(function (y, idx) {
+		// 		if (y)
+		// 			markers[idx] = y;
+		// 	});
+		// });
 
 		for (var i = 0, ii = this.y.length; i < ii; i++) {
 			if(this.y[i]) {
 				this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
-				this.tags.push(r.tag(900, markers[i], ' ' + filter[i] + ' ', 0, 0).insertBefore(this));
+				// this.tags.push(r.tag(900, markers[i], ' ' + filter[i] + ' ', 0, 0).insertBefore(this));
 				this.tags.animate({opacity:0}, 0);
 				this.tags.animate({opacity:1}, 400);
 			}
@@ -182,7 +183,7 @@ var plot = function (data, w,h) {
 		this.tags.animate({opacity:0}, 150, function () {
 			this.remove();
 		});
-		// this.tags && this.tags.remove();
+
 	}).clickColumn(function () {
 
 		var coordx = this.x;
@@ -258,13 +259,14 @@ var plot = function (data, w,h) {
 		commitPos.push(xPoint.attrs.x);
 
 		axisx[xPoint.attr('text')] = allcommits[idx];
-		if (allcommits[idx][0] == 's') {
-			xPoint.attr('text', 'S@' + allcommits[idx].substring(8,18));
-			xPoint.attr('fill', '#f44');
-			console.log(xPoint);
+		if (allcommits[idx]) {
+			if (allcommits[idx][0] == 's') {
+				xPoint.attr('text', 'S@' + allcommits[idx].substring(8,24));
+				xPoint.attr('fill', '#f44');
+			}
+			else
+				xPoint.attr("text", allcommits[idx].substring(0, 7));
 		}
-		else
-			xPoint.attr("text", allcommits[idx].substring(0, 7));
 	});
 
 };
