@@ -4,8 +4,28 @@
 About
 -------------------
 * nodejs server for storing and viewing benchmark results
-* you can get more info about the topcoat project at http://adobe.github.com/topcoat
-* server is online at http://topcoat.herokuapps.com
+* you can get more info about the topcoat project at http://topcoat.io
+* server is online at http://bench.topcoat.io
+
+Running tests locally
+---------------------
+1. You need a mongodb
+2. You need telemetry, more info here https://github.com/topcoat/topcoat/tree/master/test/perf/telemetry
+3. You need to point the Grunt task (from the topcoat repo) to localhost
+   * either export 2 variables path
+       * TOPCOAT_BENCHMARK_SERVER (localhost)
+       * TOPCOAT_BENCHMARK_PORT (3000 is default)
+   * or go in settings.js (from the topcoat repo) and change the settings there
+4. Example command
+````
+grunt telemetry-submit --path=/tmp/telemetry_output.txt --type=snapshot --device=mbp --test=test_name
+````
+5. View tests results at (notice the URL params & the params for Grunt)
+````
+http://localhost:3000/dashboard?test=test_name&device=mbp
+or at 
+http://localhost:3000/v2/view/results
+````
 
 What you should know
 ---------------------
