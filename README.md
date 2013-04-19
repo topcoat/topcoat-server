@@ -4,8 +4,18 @@
 About
 -------------------
 * nodejs server for storing and viewing benchmark results
-* you can get more info about the topcoat project at http://adobe.github.com/topcoat
-* server is online at http://topcoat.herokuapps.com
+* you can get more info about the topcoat project at http://topcoat.io
+* server is online at http://bench.topcoat.io
+
+Running tests locally
+---------------------
+1. You need a mongodb
+2. You need telemetry, more info here https://github.com/topcoat/topcoat/tree/master/test/perf/telemetry
+3. Example
+````
+grunt telemetry-submit --path=/tmp/smoothness_benchmark_topcoat_buttons.txt --type=snapshot --device=macbook --test=smoothness_benchmark_topcoat_buttons
+````
+
 
 What you should know
 ---------------------

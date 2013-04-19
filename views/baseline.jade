@@ -1,0 +1,37 @@
+extends layout
+block content
+
+	include includes/navigation
+
+	#holder
+	.legend
+		ul.test-info
+			h3 Tests
+			select(id='select')
+				- test.forEach(function (t) {
+				option= t
+				- })
+			h3= 'Device: ' + device
+			//- h3
+			//- 	.progress.bar-a Mean Frame time (ms) <em>(more info)</em>
+			//- 		p.hidden Frame time represents the time it takes to render a frame and it's a more accurate measure of performance
+			//- 		p.hidden A frame time is calculated by dividing 1000 (ms in a second) to the number of frames per second
+			//- 	.progress.bar-b Layout (ms)
+			//- 	.progress.bar-c Load Time (ms)
+
+		//- form(action='../v2/view/results', method='GET').test-info
+		//- 	p: h3 Compare commits
+		//- 	p#compare-commits Click on 2 commits to compare
+		//- 	input(type='hidden', name='device', value=device)
+		//- 	input(type='hidden', name='test', value=test[0])
+		//- 	input(type='hidden', name='test', value=test[1])
+		//- 	p: button(type='submit') Compare
+		ul.test-info#commit-info
+
+
+	script(src='/javascripts/raphael-min.js')
+	script(src='/javascripts/g.raphael-min.js')
+	script(src='/javascripts/g.line-min.js')
+	script(src='/javascripts/baseline.js')
+	script
+		getParamsAndPlot();

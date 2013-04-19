@@ -25,6 +25,7 @@ var telemetry_test = new Schema({
 	,	commit : { type : String, default : 'github hash'}
 	,	date   : { type : Date }
 	,	test: { type: String, default: 'test name' }
+	,	component: {type: String, default: 'component'}
 });
 
 var telemetry_avg = new Schema({
@@ -37,6 +38,7 @@ var telemetry_avg = new Schema({
 	, 	device	 : { type : String, default : 'device?' }
 	,	count	 : { type : Number, default : 1}
 	,	ua		 : { type : String, default : 'ua string' }
+	,	component: { type : String, default : 'component'}
 });
 
 var commitSchema = new Schema({

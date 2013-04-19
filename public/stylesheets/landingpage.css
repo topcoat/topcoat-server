@@ -247,12 +247,8 @@ header {
             margin:0;
         }
 
-        ul.button {
+        .not-active {
             display:none;
-        }
-
-        ul.button_no_theme {
-            display: none;
         }
 
         ul.active {
