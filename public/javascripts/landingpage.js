@@ -1,32 +1,53 @@
 var dashboard = document.querySelector('#dashboard-link');
 var testNav = document.querySelector('.test-navigation');
-var liButton = document.querySelector('li.button');
-var liButtonNoTheme = document.querySelector('li.button_no_theme');
+var lis = document.querySelectorAll('#components li');
 var spinner = document.querySelector('.spinner');
 
-liButton.addEventListener('click', function () {
+[].forEach.call(lis, function (li) {
 
-	var activeCategory = document.querySelector('li.active');
-	if(activeCategory)
-		activeCategory.classList.remove('active');
-	this.classList.add('active');
+	li.addEventListener('click', function () {
 
-	document.querySelector('ul.button_no_theme').classList.remove('active');
-	document.querySelector('ul.button').classList.add('active');
+		var activeComponent = document.querySelector('li.active');
+		
+		if(activeComponent)
+			activeComponent.classList.remove('active');
 
-}, false);
+		var activeCategory = document.querySelector('ul.active');
+		if(activeCategory)
+			activeCategory.classList.remove('active');
 
-liButtonNoTheme.addEventListener('click', function () {
+		this.classList.add('active');
+		var category = document.querySelector('.' + this.id);
+		category.classList.add('active');
 
-	var activeCategory = document.querySelector('li.active');
-	if(activeCategory)
-		activeCategory.classList.remove('active');
-	this.classList.add('active');
 
-	document.querySelector('ul.button').classList.remove('active');
-	document.querySelector('ul.button_no_theme').classList.add('active');
+	});
 
-}, false);
+});
+
+// liButton.addEventListener('click', function () {
+
+// 	var activeCategory = document.querySelector('li.active');
+// 	if(activeCategory)
+// 		activeCategory.classList.remove('active');
+// 	this.classList.add('active');
+
+// 	document.querySelector('ul.button_no_theme').classList.remove('active');
+// 	document.querySelector('ul.button').classList.add('active');
+
+// }, false);
+
+// liButtonNoTheme.addEventListener('click', function () {
+
+// 	var activeCategory = document.querySelector('li.active');
+// 	if(activeCategory)
+// 		activeCategory.classList.remove('active');
+// 	this.classList.add('active');
+
+// 	document.querySelector('ul.button').classList.remove('active');
+// 	document.querySelector('ul.button_no_theme').classList.add('active');
+
+// }, false);
 
 [].forEach.call(document.querySelectorAll('li a:first-child'), function (el) {
 
