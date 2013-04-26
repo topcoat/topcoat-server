@@ -20,6 +20,7 @@ var spinner = document.querySelector('.spinner');
 		var category = document.querySelector('.' + this.id);
 		category.classList.add('active');
 
+		displayPlot();
 
 	});
 
