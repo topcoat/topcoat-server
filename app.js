@@ -402,13 +402,11 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		var commits = req.body.commit;
 		req.body.commit = {$in:commits};
 	} else {
-		if (req.body.commit && req.body.commit.match(/%3A/g).length)
+		if (req.body.commit && req.body.commit.match(/%3A/g))
 			var commit = req.body.commit.replace(/%3A/g, ':');
 		if (new Date(commit) != 'Invalid Date') {
 			req.body.date = commit;
 			delete req.body.commit;
-		} else {
-			console.log('isnt a valid date');
 		}
 	}
 
@@ -426,6 +424,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 				var date = new Date(doc.date);
 				docs[idx].formatedDate = date.toISOString();
 			});
+
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs
