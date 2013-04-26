@@ -8,7 +8,7 @@ var spinner = document.querySelector('.spinner');
 	li.addEventListener('click', function () {
 
 		var activeComponent = document.querySelector('li.active');
-		
+
 		if(activeComponent)
 			activeComponent.classList.remove('active');
 
@@ -25,69 +25,41 @@ var spinner = document.querySelector('.spinner');
 
 });
 
-// liButton.addEventListener('click', function () {
+function displayPlot () {
 
-// 	var activeCategory = document.querySelector('li.active');
-// 	if(activeCategory)
-// 		activeCategory.classList.remove('active');
-// 	this.classList.add('active');
+	document.querySelector('.plot li').innerHTML = document.querySelector('li.active').innerHTML + ' plot';
 
-// 	document.querySelector('ul.button_no_theme').classList.remove('active');
-// 	document.querySelector('ul.button').classList.add('active');
+	var svg = document.querySelector('svg');
+	if (svg)
+		svg.parentNode.removeChild(svg);
 
-// }, false);
+	spinner.style.display = 'block';
 
-// liButtonNoTheme.addEventListener('click', function () {
+	e.preventDefault();
+	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
+	var l = params.length;
+	var formdata = new FormData();
 
-// 	var activeCategory = document.querySelector('li.active');
-// 	if(activeCategory)
-// 		activeCategory.classList.remove('active');
-// 	this.classList.add('active');
+	res[0] = [];
+	res[1] = [];
+	res[2] = [];
 
-// 	document.querySelector('ul.button').classList.remove('active');
-// 	document.querySelector('ul.button_no_theme').classList.add('active');
+	resx[0] = [];
+	resx[1] = [];
+	resx[2] = [];
 
-// }, false);
+	allcommits = [];
 
-[].forEach.call(document.querySelectorAll('li a:first-child'), function (el) {
+	params.forEach(function (p) {
+		p = p.split('=');
 
-	el.addEventListener('click', function (e) {
-
-		document.querySelector('.plot li').innerHTML = document.querySelector('li.active').innerHTML + ' plot';
-
-		var svg = document.querySelector('svg');
-		if (svg)
-			svg.parentNode.removeChild(svg);
-
-		spinner.style.display = 'block';
-
-		e.preventDefault();
-		var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
-		var l = params.length;
-		var formdata = new FormData();
-
-		res[0] = [];
-		res[1] = [];
-		res[2] = [];
-
-		resx[0] = [];
-		resx[1] = [];
-		resx[2] = [];
-
-		allcommits = [];
-
-		params.forEach(function (p) {
-			p = p.split('=');
-
-			formdata.append(p[0],p[1]);
-			if(--l === 0) {
-				submit(formdata, function (data) {
-					spinner.style.display = 'none';
-					plot(data, 550, 300);
-				});
-			}
-		});
-
+		formdata.append(p[0],p[1]);
+		if(--l === 0) {
+			submit(formdata, function (data) {
+				spinner.style.display = 'none';
+				plot(data, 550, 300);
+			});
+		}
 	});
 
-});
+}

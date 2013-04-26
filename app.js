@@ -51,8 +51,6 @@ app.post('/v2/benchmark', function (req, res) {
 	,	sanitize = require('validator').sanitize
 	;
 
-	console.log(req.body.date);
-
 	var telemetryTest = new TelemetryTest({
 			ua     : req.body.resultName['UserAgent ()']
 		,	device : sanitize(req.body.device).xss()
@@ -113,7 +111,6 @@ app.post('/v2/benchmark', function (req, res) {
 						update[i] = req.body.resultName[i];
 					}
 				}
-				
 				doc.result = update;
 				doc.count += 1;
 				doc.save();
@@ -131,7 +128,7 @@ app.get('/dashboard', function (req, res) {
 	if(params[2])
 		res.render('dashboard', {
 			'title'  : 'Topcoat Dashboard',
-			'test'   : [params[0].split('=')[1], params[1].split('=')[1]], // :( i'm ashamed
+			'test'   : [params[0].split('=')[1], params[1].split('=')[1]], // fixme
 			'device' : params[2].split('=')[1]
 		});
 
@@ -143,32 +140,9 @@ app.get('/dashboard', function (req, res) {
 
 });
 
-	app.get('/devices', function (req, res) {
-
-		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-
-		console.log(req.url.split('&'));
-
-		TelemetryAvg.find().select('device').sort('-date').execFind(function (err, docs) {
-			if(err) {
-				console.log(err);
-			} else {
-				docs.forEach(function (d, idx) {
-					var dev = d.device.replace("\"", "");
-					dev = dev.replace("\"", "");
-					docs[idx].device = dev;
-					docs[idx].save();
-				});
-			}
-		});
-
-	});
-
 	app.post('/dashboard/get', function (req, res) {
 
 		var search = {};
-
-		console.log('req', req.body);
 
 		if (typeof req.body.test == 'object') {
 			search.test = {
@@ -183,9 +157,6 @@ app.get('/dashboard', function (req, res) {
 		};
 
 		search.device = req.body.device;
-
-		console.log('search', search);
-
 
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 
@@ -293,7 +264,7 @@ app.get('/remove', function (req, res) {
 				docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
 				docs[idx].miliseconds = date.getTime();
 			});
-			console.log(docs);
+
 			res.render('telemetry-remove', {
 				title : 'telemetry average',
 				results: docs
@@ -341,9 +312,6 @@ app.get('/remove', function (req, res) {
 
 			}
 
-			console.log('going to remove', findAndRemove);
-			console.log('going to average', docsRemaining);
-
 			TelemetryTest.remove({_id : { $in: findAndRemove }}, function () {
 				// after i removed them i need to make up the average
 				TelemetryTest.find({_id : { $in : docsRemaining }}, function (err, docs) {
@@ -386,14 +354,8 @@ app.get('/remove', function (req, res) {
 						TelemetryAvg.remove({_id: average_id}, function () {
 							res.end('Average removed');
 						});
-
 				});
-
-
 			});
-
-
-
 		});
 
 app.post('/v2/view/results/filtered', function (req, res) {
@@ -407,18 +369,16 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	var past = parseInt(req.body.date, 10) || 7;
 	var start = new Date(new Date().getTime() - past*86400*1000);
 
+	console.log('start',start);
+
 	if (typeof req.body.commit === 'object')
 		req.body.commit.forEach(function (commit, idx) {
 			commit = commit.replace(/%3A/g, ':');
 			if (new Date(commit) != 'Invalid Date') {
 				query = {
 					$or : [
-						{
-							commit : (idx) ? req.body.commit[0] : req.body.commit[1]
-						},
-						{
-							date : commit
-						}
+							{ commit : (idx) ? req.body.commit[0] : req.body.commit[1] },
+							{ date : commit }
 						]
 				};
 
@@ -442,7 +402,8 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		var commits = req.body.commit;
 		req.body.commit = {$in:commits};
 	} else {
-		var commit = req.body.commit.replace(/%3A/g, ':');
+		if (req.body.commit && req.body.commit.match(/%3A/g).length)
+			var commit = req.body.commit.replace(/%3A/g, ':');
 		if (new Date(commit) != 'Invalid Date') {
 			req.body.date = commit;
 			delete req.body.commit;
@@ -455,11 +416,6 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		var tests = req.body.test;
 		req.body.test = {$in:tests};
 	}
-
-
-
-	console.log(query);
-	console.log(req.body);
 
 	TelemetryAvg.find(query || req.body).sort('-test -date').execFind(function (err, docs) {
 		if(err)
