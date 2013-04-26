@@ -2,7 +2,7 @@ var dashboard = document.querySelector('#dashboard-link');
 var testNav = document.querySelector('.test-navigation');
 var lis = document.querySelectorAll('#components li');
 var spinner = document.querySelector('.spinner');
-
+var t;
 [].forEach.call(lis, function (li) {
 
 	li.addEventListener('click', function () {
@@ -20,7 +20,7 @@ var spinner = document.querySelector('.spinner');
 		var category = document.querySelector('.' + this.id);
 		category.classList.add('active');
 
-		displayPlot();
+		displayPlot.call(document.querySelector('.' + this.id + ' a'));
 
 	});
 
@@ -35,8 +35,7 @@ function displayPlot () {
 		svg.parentNode.removeChild(svg);
 
 	spinner.style.display = 'block';
-
-	e.preventDefault();
+	console.log(this);
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
 	var l = params.length;
 	var formdata = new FormData();
