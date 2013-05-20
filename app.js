@@ -166,7 +166,17 @@ app.get('/dashboard', function (req, res) {
 				res.json(err);
 			} else {
 				var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+				filter = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 				docs.forEach(function (doc, idx) {
+					if (doc.test.match(/base/g)) {
+						for (var i in filter) {
+							if (doc.result[filter[i]]) {
+								console.log(doc.result[filter[i]]);
+								doc.result[filter[i] + ' base'] = doc.result[filter[i]];
+								delete doc.result[filter[i]];
+							}
+						}
+					}
 					var date = new Date(doc.date);
 					docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
 					docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
