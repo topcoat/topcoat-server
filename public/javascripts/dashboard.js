@@ -168,8 +168,8 @@ var plot = function (data, w,h) {
 		xaxis.push(10*i);
 	}
 
-	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2], [0]], [res[0], res[1], res[2], [500]], {
-		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle", colors: ['#2f6abd', '#bd572f', '#a0bd2f', 'transparent']
+	var lines = r.linechart(50, 20, w, h, [[0],resx[0], resx[1], resx[2]], [[900],res[0], res[1], res[2]], {
+		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle", colors: ['transparent', '#2f6abd', '#bd572f', '#a0bd2f']
 	}, 0, 0,0,0).hoverColumn(function () {
 		this.tags = r.set();
 
@@ -181,7 +181,7 @@ var plot = function (data, w,h) {
 		// 	});
 		// });
 
-		for (var i = 0, ii = 3; i < ii; i++) {
+		for (var i = 1, ii = this.y.length; i < ii; i++) {
 			if(this.y[i]) {
 				this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
 				// this.tags.push(r.tag(900, markers[i], ' ' + filter[i] + ' ', 0, 0).insertBefore(this));
@@ -200,7 +200,7 @@ var plot = function (data, w,h) {
 		var coordx = this.x;
 		if (strokes==2) strokes = 0;
 
-		for(var i = 0; i < 3; ++i) {
+		for(var i = 1; i < lines.symbols.length; ++i) {
 			for (var j = 0 ; j < lines.symbols[i].length; ++j) {
 				if (strokes === 0) {
 					lines.symbols[i][j].attr({'stroke-width':0});
