@@ -5,32 +5,22 @@ var params   = window.location.href.match(/\?.{0,}/g)
 ,	testInfo = document.querySelector('#commit-info')
 ,	res = {} // y coords
 ,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)']
-,	baselineFilter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)', 'mean_frame_time (ms) base', 'load_time (ms) base', 'Layout (ms) base']
 ,	commitCompare = document.querySelector('#compare-commits')
-,	strokes = 0
+,	strokes = 0;
 ;
 
 params = (params) ? params[0].slice(1).split('&') : null;
 
 // 3 arrays for 3 different tests
 // x axis is always the same
-res[0] = [];
+res[0] = []; 
 res[1] = [];
 res[2] = [];
-res[3] = [];
-res[4] = [];
-res[5] = [];
 
 resx = {};
-resx[0] = [];
+resx[0] = []; 
 resx[1] = [];
 resx[2] = [];
-resx[3] = [];
-resx[4] = [];
-resx[5] = [];
-
-_xaxis = [[0], resx[0], resx[1], resx[2], resx[3], resx[4], resx[5]];
-_yaxis = [[999], res[0], res[1], res[2], res[3], res[4], res[5]];
 
 axisx = {};
 
@@ -117,9 +107,10 @@ var count = [0,0,0];
 // since the commits are ordered by date in allcommits
 // i just multiple the indexOf the commit by 10
 var generateXaxis = function () {
-	baselineFilter.forEach(function(f, idx){
+	filter.forEach(function(f, idx){
 		json.forEach(function (t) {
-			if (t.result && t.result[f]) {
+			if (!t.result) return; // :( should never happen
+			if (t.result[f]) {
 				var commit = t.commit;
 				if (commit == 'snapshot')
 					commit += t.date;
@@ -135,19 +126,18 @@ var allcommits = [];
 
 var plot = function (data, w,h) {
 
-	json = JSON.parse(data);
-	if(!json.length) return;
-
 	var r = Raphael("holder")
 	,	xaxis = []
 	,	commitPos = []
 	;
 
 	w = w || 1000;
-	h = h || 700;
+	h = h || 900;
 
-	var i = 0;
-	for( ; i < json.length; ++i) {
+	json = JSON.parse(data);
+	console.log(json);
+
+	for(var i = 0 ; i < json.length; ++i) {
 		if (allcommits.indexOf(json[i].commit) == -1 && allcommits.indexOf(json[i].commit + json[i].date) == -1) {
 			if (json[i].commit[0] == 's')
 				allcommits.push(json[i].commit + json[i].date);
@@ -158,38 +148,45 @@ var plot = function (data, w,h) {
 
 	generateXaxis();
 
+	if(!json.length) return;
+
 	json.forEach(function (doc) {
 
 		commits.push(doc.commit);
-		baselineFilter.forEach(function (field) {
-			if (doc.result && doc.result[field]) {
-				res[baselineFilter.indexOf(field)].push(parseInt(doc.result[field], 10));
-				count[baselineFilter.indexOf(field)]++;
+
+		filter.forEach(function (field) {
+			if (!doc.result) return;
+			if (doc.result[field]) {
+				res[filter.indexOf(field)].push(parseInt(doc.result[field], 10));
+				count[filter.indexOf(field)]++;
 			}
 		});
 	});
 
 	// simulate distance between commits
-	i = 0;
-	for ( ; i < Math.max(res[0].length, res[1].length); ++i) {
+	for (var i = 0; i < Math.max(res[0].length, res[1].length); ++i) {
 		xaxis.push(10*i);
 	}
 
-	var lines = r.linechart(50, 20, w, h, _xaxis, _yaxis, {
-		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle",
-		colors : ['transparent', '#70c056', '#4a6491', '#b23612', '#96ed89', '#e4861f', '#d0e4f2']
+	var lines = r.linechart(50, 20, w, h, [[0],resx[0], resx[1], resx[2]], [[900],res[0], res[1], res[2]], {
+		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle", colors: ['transparent', '#2f6abd', '#bd572f', '#a0bd2f']
 	}, 0, 0,0,0).hoverColumn(function () {
 		this.tags = r.set();
 
 		var markers = [];
+		// lines.eachColumn(function () {
+		// 	this.y.forEach(function (y, idx) {
+		// 		if (y)
+		// 			markers[idx] = y;
+		// 	});
+		// });
 
-		for (var i = 0, ii = this.values.length; i < ii; i++) {
+		for (var i = 1, ii = this.y.length; i < ii; i++) {
 			if(this.y[i]) {
-				if (this.values[i] != 999) { // 999 is a dummy value to force higher values not to render outside the graph
-					this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
-					this.tags.animate({opacity:0}, 0);
-					this.tags.animate({opacity:1}, 400);
-				}
+				this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
+				// this.tags.push(r.tag(900, markers[i], ' ' + filter[i] + ' ', 0, 0).insertBefore(this));
+				this.tags.animate({opacity:0}, 0);
+				this.tags.animate({opacity:1}, 400);
 			}
 		}
 	}, function () {
@@ -238,6 +235,7 @@ var plot = function (data, w,h) {
 		if(comm[0] == 's') {
 			input.value = comm.substring(8,48);
 		}
+		console.log(comm);
 		input.name = 'commit';
 
 		if (comm && comm.length == 40)
@@ -289,7 +287,7 @@ var plot = function (data, w,h) {
 };
 
 function getCommitMsg(commit) {
-
+	// https://api.github.com/repos/topcoat/topcoat/git/commits/c042c2b37f77c5cb782b7e93cc67ac3277b9e261
 	var url = 'https://api.github.com/repos/topcoat/topcoat/git/commits/' + commit;
 	get(url, function (data) {
 		var json = JSON.parse(data);
