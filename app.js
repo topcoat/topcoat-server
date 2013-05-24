@@ -40,6 +40,15 @@ app.get('/', function(req, res){
 
 });
 
+app.get('/baseline', function(req, res){
+
+	res.render('baseline', {
+		layout : 'none',
+		title : 'TopCoat Server'
+	});
+
+});
+
 app.post('/v2/benchmark', function (req, res) {
 
 	res.header("Access-Control-Allow-Origin", "*");
