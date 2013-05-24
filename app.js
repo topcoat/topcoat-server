@@ -182,7 +182,6 @@ app.get('/dashboard', function (req, res) {
 							if (doc.result[filter[i]]) {
 								console.log(doc.result[filter[i]]);
 								doc.result[filter[i] + ' base'] = doc.result[filter[i]];
-								delete doc.result[filter[i]];
 							}
 						}
 					}
