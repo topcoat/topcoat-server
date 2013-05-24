@@ -135,7 +135,6 @@ var plot = function (data, w,h) {
 	h = h || 900;
 
 	json = JSON.parse(data);
-	console.log(json);
 
 	for(var i = 0 ; i < json.length; ++i) {
 		if (allcommits.indexOf(json[i].commit) == -1 && allcommits.indexOf(json[i].commit + json[i].date) == -1) {
@@ -174,13 +173,6 @@ var plot = function (data, w,h) {
 		this.tags = r.set();
 
 		var markers = [];
-		// lines.eachColumn(function () {
-		// 	this.y.forEach(function (y, idx) {
-		// 		if (y)
-		// 			markers[idx] = y;
-		// 	});
-		// });
-
 		for (var i = 1, ii = this.y.length; i < ii; i++) {
 			if(this.y[i]) {
 				this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));

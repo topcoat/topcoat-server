@@ -1,0 +1,28 @@
+var-barBg = #70AFC4
+var-barBase = #a0cad8
+
+body
+  background #f5f5f5
+
+svg
+  // display block
+
+.chart rect
+  fill var-barBg
+  stroke rgba(0,0,0,.3);
+
+.chart .base
+	fill var-barBase
+
+.tooltip
+	padding 0 .5em
+	border-radius 10px
+	background var-barBase
+	color #fff
+	position absolute
+	z-index 100
+	-webkit-transition-duration .5s
+	opacity 0
+	font-size 12px
+	p
+		margin .2em
