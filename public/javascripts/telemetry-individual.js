@@ -1,17 +1,12 @@
 var buildBreadcrumbs = function (filter) {
 
 	var breadcrumb = document.querySelector('.breadcrumbs')
-	, li
-	, a
-	;
+	, li = document.createElement('li')
+	, a = document.createElement('a');
 
+	a.href = '/dashboard?';
 
-		li = document.createElement('li');
-		a = document.createElement('a');
-
-		a.href = '/dashboard?';
-
-		if(QueryString.test) {
+	if(QueryString.test) {
 
 		li = document.createElement('li');
 		a = document.createElement('a');
@@ -57,7 +52,6 @@ var buildBreadcrumbs = function (filter) {
 		li.appendChild(a);
 
 		breadcrumb.appendChild(li);
-	
 
 	li = document.createElement('li');
 	a = document.createElement('a');
@@ -71,25 +65,23 @@ var buildBreadcrumbs = function (filter) {
 };
 
 var QueryString = function () {
-  // This function is anonymous, is executed immediately and 
+  // This function is anonymous, is executed immediately and
   // the return value is assigned to QueryString!
   var query_string = {};
   var query = window.location.search.substring(1);
   var vars = query.split("&");
   for (var i=0;i<vars.length;i++) {
 	var pair = vars[i].split("=");
-		// If first entry with this name
 	if (typeof query_string[pair[0]] === "undefined") {
-	  query_string[pair[0]] = pair[1];
-		// If second entry with this name
+		query_string[pair[0]] = pair[1];
 	} else if (typeof query_string[pair[0]] === "string") {
-	  var arr = [ query_string[pair[0]], pair[1] ];
-	  query_string[pair[0]] = arr;
+		var arr = [ query_string[pair[0]], pair[1] ];
+		query_string[pair[0]] = arr;
 		// If third or later entry with this name
 	} else {
-	  query_string[pair[0]].push(pair[1]);
+		query_string[pair[0]].push(pair[1]);
 	}
-  } 
+  }
 	return query_string;
 } ();
 
