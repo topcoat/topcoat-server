@@ -162,7 +162,7 @@ app.get('/dashboard', function (req, res) {
 		}
 
 		search.date = {
-			$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
+			$gte: new Date(new Date().getTime() - 50*86400*1000).toISOString()
 		};
 
 		search.device = req.body.device;
@@ -267,7 +267,7 @@ app.get('/remove', function (req, res) {
 
 	var date = {
 		date : {
-			$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
+			$gte: new Date(new Date().getTime() - 50*86400*1000).toISOString()
 		}
 	};
 

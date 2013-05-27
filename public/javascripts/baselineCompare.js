@@ -29,13 +29,13 @@ function plot () {
 				.domain(data)
 				.rangeBands([0, h]);
 
-		// chart.selectAll('text')
-		// 	.data([i])
-		// 	.enter()
-		// 	.append('text')
-		// 	.text(function (d) { console.log(d);return d; })
-		// 	.attr('x', 0)
-		// 	.attr('y', - barPadding * 4);
+     chart.selectAll('text')
+       .data([i])
+       .enter()
+       .append('text')
+       .text(function (d) { console.log(d);return d; })
+       .attr('x', 0)
+       .attr('y', - barPadding * 4);
 
 		chart.selectAll('text')
 			.data(data)
@@ -69,7 +69,7 @@ function plot () {
 				var _baselineTime = parseInt(d3.select(this).attr('delta'), 10);
 				tooltip.transition()
 					.duration(200);
-				tooltip.html('<p>Time is ' + d + '</p>' + '<p>Delta is ' + (Math.floor(d - _baselineTime)) + ' ms</p>')
+				tooltip.html('<p>Time is ' + d + ' ms </p>' + displayMessage(Math.floor(d - _baselineTime)) + '</p>')
 						.style('opacity', 1)
 						.style('left', d3.event.pageX + 'px')
 						.style('top', d3.event.pageY - 28 + 'px');
@@ -102,4 +102,10 @@ function plot () {
 
 
 	}
+}
+
+function displayMessage(value) {
+  if (value) return '<p>Delta is '+ value +' ms</p>';
+  if (isNaN(value)) return '<p>No baseline results available</p>';
+  return '<p>This is the baseline</p>';
 }
