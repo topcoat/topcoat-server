@@ -441,7 +441,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 				var date = new Date(doc.date);
 				docs[idx].formatedDate = date.toISOString();
 			});
-			console.log(docs[0]['_id']);
+
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs
