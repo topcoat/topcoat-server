@@ -1,4 +1,5 @@
 var tbody = document.querySelector('tbody');
+var dates = [7, 14, 30, 365];
 
 var buildBreadcrumbs = function (filter) {
 	var breadcrumb = document.querySelector('.breadcrumbs')
@@ -44,6 +45,7 @@ var submit = function (formData, cb) {
 	xhr.open('POST', '/v2/view/results/filtered', true);
 	xhr.onload = function(e) {
 		if (this.status == 200) {
+			console.log(this.response);
 			cb(this.response);
 		}
 	};
@@ -93,7 +95,6 @@ var createFilterURL = function () {
 };
 
 window.addEventListener('popstate', function () {
-	// x.match(/commit\=([0-9]|[a-f]){40}/g)
 	console.log('triggered');
 	var filters = location.href.split('?');
 	if(filters.length > 1)
@@ -104,7 +105,7 @@ window.addEventListener('popstate', function () {
 var refreshFilters = function (filters) {
 
 	if(filters) {
-		
+
 		filters = filters.trim().replace('#', '').replace(/%20/g, " ");
 		var docFrag = document.createDocumentFragment()
 		,	formData = new FormData()
@@ -138,10 +139,8 @@ var refreshFilters = function (filters) {
 					close.addEventListener('click', removeFilter, false);
 					docFrag.appendChild(li);
 				} else {
-					var d = parseInt(f[1]);
-					var i = 1;
-					(d == 7) ? i = 0 : (d == 14) ? i = 1 : i = 2;
-					select.selectedIndex = i;
+					var d = parseInt(f[1], 10);
+					select.selectedIndex = dates.indexOf(d);
 					formData.append('date', select.options[select.selectedIndex].dataset.value);
 				}
 
@@ -151,9 +150,9 @@ var refreshFilters = function (filters) {
 
 		document.querySelector('#filters').innerHTML = '';
 		document.querySelector('#filters').appendChild(docFrag);
-		console.log('refresh filter submit');
+		console.log(docFrag);
 		submit(formData, function (data) {
-			// console.log(data);
+			console.log(data);
 			tbody.innerHTML = data;
 			formatDate();
 		});
@@ -186,7 +185,7 @@ var addFilter = function (e) {
 	,	formData = new FormData()
 	;
 
-	var date = location.href.match(/date\=[0-9]*/i)
+	var date = location.href.match(/date\=[0-9]*/i);
 	date = (date) ? date[0].split('=')[1] : 0;
 
 	formData.append(this.dataset.filter, this.dataset.value);
@@ -294,7 +293,7 @@ var QueryString = function () {
     } else {
       query_string[pair[0]].push(pair[1]);
     }
-  } 
+  }
     return query_string;
 } ();
 

@@ -1,8 +1,7 @@
-var params   = window.location.href.match(/\?.{0,}/g)
-,	formdata = new FormData()
-,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)']
-,	plotData = {}
-;
+var params   = window.location.href.match(/\?.{0,}/g),
+	formdata = new FormData(),
+	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'],
+	plotData = {};
 
 params = (params) ? params[0].slice(1).split('&') : null;
 
@@ -18,7 +17,7 @@ var parse = function (data) {
 	separates the base results from the rest
 */
 var filterResults = function (d) {
-	filter.forEach(function (f) {
+	filter.forEach(function baseOrStandard (f) {
 		if (d.result[f] || d.result[f + ' base']) {
 			if (plotData[f]) {
 				if (d.test.match(/base/g))
@@ -40,7 +39,7 @@ var submit = function (formData, cb) {
 
 	var xhr = new XMLHttpRequest();
 	xhr.open('POST', '/dashboard/get', true);
-	xhr.onload = function(e) {
+	xhr.onload = function xhrLoaded (e) {
 		if (this.status == 200) {
 			cb(this.response);
 		}
@@ -52,7 +51,7 @@ var submit = function (formData, cb) {
 (function plot () {
 
 	var l = params.length;
-	params.forEach(function (p) {
+	params.forEach(function urlParams (p) {
 		p = p.split('=');
 
 		formdata.append(p[0],p[1]);

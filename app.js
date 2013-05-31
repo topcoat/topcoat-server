@@ -236,22 +236,21 @@ app.get('/view/test/:id', function (req, res) {
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 
-	TelemetryAvg.findOne({'_id' : id}, function (err, doc) {
-
+	TelemetryAvg.findOne({_id: id}, function (err, doc) {
 		var find = {
 			test   : doc.test,
 			commit : doc.commit,
 			device : doc.device
 		};
 
-		TelemetryTest.find(find, function (err, docs) {
+		if (find.device == 'device?') delete find.device; // don't match the default value
 
+		TelemetryTest.find(find, function (err, docs) {
 			res.render('telemetry-individual', {
 				title : 'Telemetry individual results',
 				results: docs,
 				average_id :id
 			});
-
 		});
 
 	});
@@ -384,10 +383,10 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	,	query
 	;
 
-	var past = parseInt(req.body.date, 10) || 7;
+	var past = parseInt(req.body.date, 10) || 365;
 	var start = new Date(new Date().getTime() - past*86400*1000);
 
-	console.log('start',start);
+	console.log(req.body);
 
 	if (typeof req.body.commit === 'object')
 		req.body.commit.forEach(function (commit, idx) {
@@ -442,7 +441,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 				var date = new Date(doc.date);
 				docs[idx].formatedDate = date.toISOString();
 			});
-
+			console.log(docs[0]['_id']);
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs
