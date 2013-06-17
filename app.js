@@ -35,7 +35,7 @@ app.get('/', function(req, res){
 
 	res.render('index', {
 		layout : 'landing-layout.jade',
-		title : 'TopCoat Server'
+		title : 'Topcoat Server'
 	});
 
 });
@@ -113,7 +113,7 @@ app.post('/v2/benchmark', function (req, res) {
 						update[i] = req.body.resultName[i];
 					}
 				}
-				
+
 				doc.result = update;
 				doc.count += 1;
 				doc.save();
@@ -142,27 +142,6 @@ app.get('/dashboard', function (req, res) {
 		});
 
 });
-
-	app.get('/devices', function (req, res) {
-
-		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-
-		console.log(req.url.split('&'));
-
-		TelemetryAvg.find().select('device').sort('-date').execFind(function (err, docs) {
-			if(err) {
-				console.log(err);
-			} else {
-				docs.forEach(function (d, idx) {
-					var dev = d.device.replace("\"", "");
-					dev = dev.replace("\"", "");
-					docs[idx].device = dev;
-					docs[idx].save();
-				});
-			}
-		});
-
-	});
 
 	app.post('/dashboard/get', function (req, res) {
 
@@ -341,9 +320,6 @@ app.get('/remove', function (req, res) {
 
 			}
 
-			console.log('going to remove', findAndRemove);
-			console.log('going to average', docsRemaining);
-
 			TelemetryTest.remove({_id : { $in: findAndRemove }}, function () {
 				// after i removed them i need to make up the average
 				TelemetryTest.find({_id : { $in : docsRemaining }}, function (err, docs) {
@@ -442,12 +418,14 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		var commits = req.body.commit;
 		req.body.commit = {$in:commits};
 	} else {
-		var commit = req.body.commit.replace(/%3A/g, ':');
-		if (new Date(commit) != 'Invalid Date') {
-			req.body.date = commit;
-			delete req.body.commit;
-		} else {
-			console.log('isnt a valid date');
+		if (commit) {
+			var commit = req.body.commit.replace(/%3A/g, ':');
+			if (new Date(commit) != 'Invalid Date') {
+				req.body.date = commit;
+				delete req.body.commit;
+			} else {
+				console.log('isnt a valid date');
+			}
 		}
 	}
 
@@ -455,8 +433,6 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		var tests = req.body.test;
 		req.body.test = {$in:tests};
 	}
-
-
 
 	console.log(query);
 	console.log(req.body);
