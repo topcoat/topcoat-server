@@ -6,7 +6,7 @@ var params   = window.location.href.match(/\?.{0,}/g)
 ,	res = {} // y coords
 ,	filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)']
 ,	commitCompare = document.querySelector('#compare-commits')
-,	strokes = 0;
+,	strokes = 0
 ;
 
 params = (params) ? params[0].slice(1).split('&') : null;
@@ -76,7 +76,7 @@ var updateInfo = function (tests) {
 			h2.innerHTML = 'snapshot ' + test.date;
 		}
 
-		if (test.commit[0] == 's') test.commit = test.commit.substring(4,31);
+		if (test.commit[0] == 's') test.commit = 'snapshot';
 
 		a2.href = '/v2/view/results?commit='+test.commit+'&date=30&' + device;
 		a2.target = '_blank';
@@ -132,10 +132,10 @@ var plot = function (data, w,h) {
 	;
 
 	w = w || 1000;
-	h = h || 900;
+	h = h || 600;
 
 	json = JSON.parse(data);
-	console.log(json);
+	if (!json.length) return;
 
 	for(var i = 0 ; i < json.length; ++i) {
 		if (allcommits.indexOf(json[i].commit) == -1 && allcommits.indexOf(json[i].commit + json[i].date) == -1) {
@@ -148,8 +148,6 @@ var plot = function (data, w,h) {
 
 	generateXaxis();
 
-	if(!json.length) return;
-
 	json.forEach(function (doc) {
 
 		commits.push(doc.commit);
@@ -157,7 +155,8 @@ var plot = function (data, w,h) {
 		filter.forEach(function (field) {
 			if (!doc.result) return;
 			if (doc.result[field]) {
-				res[filter.indexOf(field)].push(parseInt(doc.result[field], 10));
+				var value = parseInt(doc.result[field], 10);
+				res[filter.indexOf(field)].push(value);
 				count[filter.indexOf(field)]++;
 			}
 		});
@@ -168,26 +167,38 @@ var plot = function (data, w,h) {
 		xaxis.push(10*i);
 	}
 
-	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2], [0]], [res[0], res[1], res[2], [500]], {
+	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2], [0, 0]], [res[0], res[1], res[2], [900, 0]], {
 		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle", colors: ['#2f6abd', '#bd572f', '#a0bd2f', 'transparent']
-	}, 0, 0,0,0).hoverColumn(function () {
+	}, 0, 0,0,0).hoverColumn(function (e) {
+
+		var xoffset = this.x;
+		var comm = allcommits[this.axis/10];
+		var tests;
+		json.forEach(function (t) {
+			if (t.commit == comm || t.commit + t.date == comm) {
+				tests = {
+					test   : t.test
+				}
+				for(var i in t.result) {
+					if (~filter.indexOf(i)) {
+						tests[i] = t.result[i];
+					}
+				}
+			}
+		});
+
+		// the tooltip below the x axis
+		tooltip(xoffset, tests);
+
 		this.tags = r.set();
 
 		var markers = [];
-		// lines.eachColumn(function () {
-		// 	this.y.forEach(function (y, idx) {
-		// 		if (y)
-		// 			markers[idx] = y;
-		// 	});
-		// });
 
-		for (var i = 0, ii = 3; i < ii; i++) {
-			if(this.y[i]) {
-				this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
-				// this.tags.push(r.tag(900, markers[i], ' ' + filter[i] + ' ', 0, 0).insertBefore(this));
-				this.tags.animate({opacity:0}, 0);
-				this.tags.animate({opacity:1}, 400);
-			}
+		for (var i = 0, ii = this.y.length; i < ii; i++) {
+			if (this.values[i] == 900 || this.values[i] == 0) continue; // skip the dummy value
+			this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
+			this.tags.animate({opacity:0}, 0);
+			this.tags.animate({opacity:1}, 400);
 		}
 	}, function () {
 
@@ -200,7 +211,7 @@ var plot = function (data, w,h) {
 		var coordx = this.x;
 		if (strokes==2) strokes = 0;
 
-		for(var i = 0; i < 3; ++i) {
+		for(var i = 0; i < lines.symbols.length; ++i) {
 			for (var j = 0 ; j < lines.symbols[i].length; ++j) {
 				if (strokes === 0) {
 					lines.symbols[i][j].attr({'stroke-width':0});
@@ -218,7 +229,6 @@ var plot = function (data, w,h) {
 		,	inputDate
 		,	deviceNode 	= document.querySelector('input[type=submit]')
 		;
-
 
 		if(!commitCompare.querySelectorAll('input[name=date]').length) {
 			inputDate = document.createElement('input');
@@ -287,7 +297,6 @@ var plot = function (data, w,h) {
 };
 
 function getCommitMsg(commit) {
-	// https://api.github.com/repos/topcoat/topcoat/git/commits/c042c2b37f77c5cb782b7e93cc67ac3277b9e261
 	var url = 'https://api.github.com/repos/topcoat/topcoat/git/commits/' + commit;
 	get(url, function (data) {
 		var json = JSON.parse(data);
@@ -301,7 +310,6 @@ function getCommitMsg(commit) {
 }
 
 function displayCommitInfo(json, avatar) {
-
 
 	var docFrag = document.createDocumentFragment();
 	var p = document.createElement('p');
@@ -325,6 +333,19 @@ function displayCommitInfo(json, avatar) {
 
 	testInfo.appendChild(docFrag);
 
+}
+
+function tooltip (xoffset, tests) {
+	var t = document.querySelector('.tooltip');
+	t.innerHTML = '';
+	var fragment = document.createDocumentFragment();
+	for (var i in tests) {
+		var p = document.createElement('p');
+		p.innerHTML = i + ': ' + tests[i];
+		fragment.appendChild(p);
+	}
+	t.appendChild(fragment);
+	t.style.left = xoffset + 'px';
 }
 
 //fetch url params and get data

@@ -19,8 +19,22 @@ a {
   color: #0083e8;
 }
 svg {
-  height: 1100px;
+  height: 800px;
   width: 1100px;
+}
+.tooltip {
+  position: absolute;
+  top: 800px;
+  left: -200px;
+  background: #ddd;
+  padding: 0.5em;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  border-radius: 6px;
+}
+.tooltip p {
+  margin: 2px;
 }
 table {
   margin: 2em 0;
@@ -39,17 +53,19 @@ td:hover .add-filter {
 }
 thead tr {
   background: #dfe2e2;
+  cursor: default;
 }
 thead tr:hover {
   background: #dfe2e2;
 }
 thead tr th {
-  padding: 0.5em 0.5em 0.5em 1em;
+  padding: 1rem;
   text-align: left !important;
   text-shadow: 0 1px 0 #fff;
 }
 tr {
   -webkit-transition-duration: 0.1s;
+  cursor: pointer;
 }
 tr:hover {
   background: #f4f4f4;
@@ -114,6 +130,10 @@ tr:hover img {
   box-shadow: inset 0 1px 0 #fff;
   color: #454545;
   text-shadow: 0 1px 0 #fff;
+}
+.inline li {
+  display: inline-block;
+  list-style-type: none;
 }
 .close {
   visibility: visible;

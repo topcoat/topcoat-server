@@ -2,14 +2,11 @@ var tbody = document.querySelector('tbody');
 
 var buildBreadcrumbs = function (filter) {
 	var breadcrumb = document.querySelector('.breadcrumbs')
-	,	li
-	,	a
-	;
 
 	if(QueryString.test) {
 
-		li = document.createElement('li');
-		a = document.createElement('a');
+		var li = document.createElement('li');
+		var a = document.createElement('a');
 
 		if (QueryString.test.forEach) {
 
@@ -24,11 +21,10 @@ var buildBreadcrumbs = function (filter) {
 		li.appendChild(a);
 
 		breadcrumb.appendChild(li);
-
 	}
 
-	li = document.createElement('li');
-	a = document.createElement('a');
+	var li = document.createElement('li');
+	var a = document.createElement('a');
 
 	a.href = '#';
 	a.innerHTML = document.title;
@@ -38,6 +34,28 @@ var buildBreadcrumbs = function (filter) {
 
 };
 
+var plotHandler = function (e) {
+
+	e.preventDefault();
+	e.stopPropagation();
+
+	var checked = document.querySelectorAll('td input[type=checkbox]:checked')
+	,	plotUrl = '/dashboard?';
+
+	[].forEach.call(checked, function (el) {
+		if (!~plotUrl.search('test=' + el.dataset.test))
+			plotUrl += '&test=' + el.dataset.test;
+		else
+			console.log(plotUrl, el.dataset.test);
+		if (!~plotUrl.search('device=' + el.dataset.device))
+			plotUrl += '&device=' + el.dataset.device;
+		else
+			console.log(plotUrl, el.dataset.device);
+	});
+
+	location.href = plotUrl;
+}
+
 var submit = function (formData, cb) {
 
 	var xhr = new XMLHttpRequest();
@@ -45,6 +63,12 @@ var submit = function (formData, cb) {
 	xhr.onload = function(e) {
 		if (this.status == 200) {
 			cb(this.response);
+			addEventListeners();
+			var plotBtn = document.querySelectorAll('.js-handler--plot');
+			[].forEach.call(plotBtn, function (b) {
+				console.log(b);
+				b.addEventListener('click', plotHandler, false);
+			});
 		}
 	};
 	xhr.send(formData);
@@ -56,9 +80,9 @@ var removeFilter = function (e) {
 
 	this.parentNode.parentNode.removeChild(this.parentNode);
 
-	var formData = new FormData()
-	,	filters = document.querySelectorAll('#filters li')
-	,	date = location.href.match(/date\=[0-9]*/i)
+	var formData = new FormData(),
+		filters = document.querySelectorAll('#filters li'),
+		date = location.href.match(/date\=[0-9]*/i)
 	;
 
 	date = (date) ? date[0].split('=')[1] : 0;
@@ -69,15 +93,11 @@ var removeFilter = function (e) {
 		formData.append(li.dataset.filter, li.dataset.value);
 	});
 
-	console.log('remove filter submit');
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
-		addEventListeners();
 	});
 
 	createFilterURL();
-	return false;
-
 };
 
 var createFilterURL = function () {
@@ -92,19 +112,10 @@ var createFilterURL = function () {
 
 };
 
-window.addEventListener('popstate', function () {
-	// x.match(/commit\=([0-9]|[a-f]){40}/g)
-	console.log('triggered');
-	var filters = location.href.split('?');
-	if(filters.length > 1)
-		refreshFilters(filters[1].replace('#', ''));
-
-}, false);
-
 var refreshFilters = function (filters) {
 
 	if(filters) {
-		
+
 		filters = filters.trim().replace('#', '').replace(/%20/g, " ");
 		var docFrag = document.createDocumentFragment()
 		,	formData = new FormData()
@@ -138,10 +149,8 @@ var refreshFilters = function (filters) {
 					close.addEventListener('click', removeFilter, false);
 					docFrag.appendChild(li);
 				} else {
-					var d = parseInt(f[1]);
-					var i = 1;
-					(d == 7) ? i = 0 : (d == 14) ? i = 1 : i = 2;
-					select.selectedIndex = i;
+					var values = ['7', '14', '30', '365'];
+					select.selectedIndex = values.indexOf(f[1]);
 					formData.append('date', select.options[select.selectedIndex].dataset.value);
 				}
 
@@ -153,15 +162,11 @@ var refreshFilters = function (filters) {
 		document.querySelector('#filters').appendChild(docFrag);
 		console.log('refresh filter submit');
 		submit(formData, function (data) {
-			// console.log(data);
 			tbody.innerHTML = data;
-			formatDate();
 		});
 
 	} else {
-
 		document.querySelector('#filters').innerHTML = '';
-
 	}
 
 };
@@ -177,7 +182,7 @@ document.querySelector('#selectall').addEventListener('change', function () {
 // add a new filter to the view
 // the function also handles previous filters
 var addFilter = function (e) {
-
+	console.log('added filter');
 	e.preventDefault();
 
 	var li       = document.createElement('li')
@@ -215,89 +220,67 @@ var addFilter = function (e) {
 	console.log('add filter submit');
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
-		addEventListeners();
 	});
 
 	createFilterURL();
-
 };
 
 document.querySelector('select').addEventListener('change', function (e) {
-	var stringURL = 'results?';
-	var formData = new FormData();
 
+	var date = location.href.match(/date=[0-9]{1,3}/);
+	var stringURL = '';
+	if (date) {
+		date = date[0];
+		var newDate = date.split('=');
+		newDate[1] = this.options[this.selectedIndex].dataset.value;
+		newDate = newDate.join('=');
+		stringURL = location.href.replace(date, newDate);
+	}
+
+	var formData = new FormData();
+	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
+		formData.append(li.dataset.filter, li.dataset.value);
+	});
 	formData.append('date', this.options[this.selectedIndex].dataset.value);
 
-	console.log('select change submit');
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
-		addEventListeners();
 	});
 
-	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
-		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
-	});
-	stringURL += 'date=' + this.options[this.selectedIndex].dataset.value + '&';
 	history.pushState('', '', stringURL);
-
 });
 
 var addEventListeners = function () {
-
 	var filterButton = document.querySelectorAll('.add-filter');
 	[].forEach.call(filterButton, function (button) {
 		button.addEventListener('click', addFilter, false);
 	});
-	formatDate();
 };
 
-function formatDate () {
-	[].forEach.call(document.querySelectorAll('.date'), function (el) {
-		var date = el.innerHTML.split('T');
-		el.innerHTML = date[0].substring(0, 10) + ' ' + date[1].substring(0,5);
-	});
-
-	[].forEach.call(document.querySelectorAll('.average-details'), function (el) {
-
-		el.href += '?';
-		for (var i in QueryString) {
-			if (i) {
-				if (typeof QueryString[i] != 'string')
-					QueryString[i].forEach(function (val) {
-						console.log(i);
-						el.href += '&' + i + '=' + val;
-					});
-				else
-					el.href += '&' + i + '=' + QueryString[i];
-			}
-		}
-
-	});
-}
-
 var QueryString = function () {
-  // This function is anonymous, is executed immediately and 
+  // This function is anonymous, is executed immediately and
   // the return value is assigned to QueryString!
   var query_string = {};
   var query = window.location.search.substring(1);
   var vars = query.split("&");
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
-    	// If first entry with this name
     if (typeof query_string[pair[0]] === "undefined") {
       query_string[pair[0]] = pair[1];
-    	// If second entry with this name
     } else if (typeof query_string[pair[0]] === "string") {
       var arr = [ query_string[pair[0]], pair[1] ];
       query_string[pair[0]] = arr;
-    	// If third or later entry with this name
     } else {
       query_string[pair[0]].push(pair[1]);
     }
-  } 
+  }
     return query_string;
 } ();
 
-buildBreadcrumbs();
-
-addEventListeners();
+(function init () {
+	var filters = location.href.split('?');
+	if(filters.length > 1)
+		refreshFilters(filters[1].replace('#', ''));
+	buildBreadcrumbs();
+	addEventListeners();
+})();

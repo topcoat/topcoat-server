@@ -169,7 +169,7 @@ body {
   background: #3a3f42 url("../img/bg_dark.png") repeat-x;
   color: #c7c7c7;
   font-size: 12px;
-  padding: 20px;
+  padding:7px 5px 5px;
 }
 .bg-white .title {
   color: #000;

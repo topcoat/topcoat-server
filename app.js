@@ -4,7 +4,8 @@ var express = require('express')
   , mongoose = require('mongoose')
   , schemes = require('./schemes')
   , path = require('path')
-  , uaParser = require('ua-parser');
+  , uaParser = require('ua-parser')
+  , url = require('url');
 
 var app = express();
 var db;
@@ -127,27 +128,19 @@ app.post('/v2/benchmark', function (req, res) {
 app.get('/dashboard', function (req, res) {
 
 	var params = req.url.split('&');
-
-	if(params[2])
-		res.render('dashboard', {
-			'title'  : 'Topcoat Dashboard',
-			'test'   : [params[0].split('=')[1], params[1].split('=')[1]], // :( i'm ashamed
-			'device' : params[2].split('=')[1]
-		});
+	var parser = require('./lib/parser');
+	var query = parser.query(url.parse(req.url).query);
 
 	res.render('dashboard', {
-			'title'  : 'Topcoat Dashboard',
-			'test'   : params[0].substring(16, params[0].length).split(','),
-			'device' : 'none'
-		});
+		'title'  : 'Topcoat Dashboard',
+		'test'   : query.test,
+		'device' : query.device
+	});
 
 });
 
 	app.post('/dashboard/get', function (req, res) {
-
 		var search = {};
-
-		console.log('req', req.body);
 
 		if (typeof req.body.test == 'object') {
 			search.test = {
@@ -163,11 +156,8 @@ app.get('/dashboard', function (req, res) {
 
 		search.device = req.body.device;
 
-		console.log('search', search);
-
-
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-
+		console.log(search);
 		TelemetryAvg.find(search).sort('+date').execFind(function (err, docs) {
 			if (err) {
 				console.log(err);
@@ -211,6 +201,7 @@ app.get('/v2/view/results', function (req, res) {
 				docs[idx].formatedDate = date.toISOString();
 			});
 
+			console.log(docs);
 			res.render('telemetry-average', {
 				title : 'Average telemetry results',
 				results: docs
@@ -244,40 +235,6 @@ app.get('/view/test/:id', function (req, res) {
 
 		});
 
-	});
-
-});
-
-app.get('/remove', function (req, res) {
-
-	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
-	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
-	,	ua = uaParser.parse(req.body.ua)
-	;
-
-	var date = {
-		date : {
-			$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
-		}
-	};
-
-	TelemetryAvg.find(date).sort('-test -date').execFind(function (err, docs) {
-		if(err)
-			console.log(err);
-		else {
-			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-			docs.forEach(function (doc, idx) {
-				var date = new Date(doc.date);
-				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
-				docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
-				docs[idx].miliseconds = date.getTime();
-			});
-			console.log(docs);
-			res.render('telemetry-remove', {
-				title : 'telemetry average',
-				results: docs
-			});
-		}
 	});
 
 });
@@ -317,7 +274,6 @@ app.get('/remove', function (req, res) {
 					findAndRemove.push(req.body[i]);
 				}
 				docsRemaining.push(req.body[i]);
-
 			}
 
 			TelemetryTest.remove({_id : { $in: findAndRemove }}, function () {
@@ -429,13 +385,11 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		}
 	}
 
+
 	if (typeof req.body.test === 'object') {
 		var tests = req.body.test;
 		req.body.test = {$in:tests};
 	}
-
-	console.log(query);
-	console.log(req.body);
 
 	TelemetryAvg.find(query || req.body).sort('-test -date').execFind(function (err, docs) {
 		if(err)
@@ -446,6 +400,8 @@ app.post('/v2/view/results/filtered', function (req, res) {
 				var date = new Date(doc.date);
 				docs[idx].formatedDate = date.toISOString();
 			});
+
+			console.log(docs);
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs
