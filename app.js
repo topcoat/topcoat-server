@@ -41,6 +41,15 @@ app.get('/', function(req, res){
 
 });
 
+app.get('/baseline', function(req, res){
+
+	res.render('baseline', {
+		layout : 'none',
+		title : 'TopCoat Server'
+	});
+
+});
+
 app.post('/v2/benchmark', function (req, res) {
 
 	res.header("Access-Control-Allow-Origin", "*");
@@ -51,8 +60,6 @@ app.post('/v2/benchmark', function (req, res) {
 	,	ua = uaParser.parse(req.body.ua || req.body.resultName['UserAgent ()'])
 	,	sanitize = require('validator').sanitize
 	;
-
-	console.log(req.body.date);
 
 	var telemetryTest = new TelemetryTest({
 			ua     : req.body.resultName['UserAgent ()']
@@ -114,7 +121,6 @@ app.post('/v2/benchmark', function (req, res) {
 						update[i] = req.body.resultName[i];
 					}
 				}
-
 				doc.result = update;
 				doc.count += 1;
 				doc.save();
@@ -141,6 +147,7 @@ app.get('/dashboard', function (req, res) {
 
 	app.post('/dashboard/get', function (req, res) {
 		var search = {};
+		console.log('/dash/get');
 
 		if (typeof req.body.test == 'object') {
 			search.test = {
@@ -150,26 +157,32 @@ app.get('/dashboard', function (req, res) {
 			search.test = req.body.test;
 		}
 
-		search.date = {
-			$gte: new Date(new Date().getTime() - 30*86400*1000).toISOString()
-		};
-
 		search.device = req.body.device;
 
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-		console.log(search);
+
 		TelemetryAvg.find(search).sort('+date').execFind(function (err, docs) {
 			if (err) {
 				console.log(err);
 				res.json(err);
 			} else {
 				var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+				filter = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 				docs.forEach(function (doc, idx) {
+					if (doc.test.match(/base/g)) {
+						for (var i in filter) {
+							if (doc.result[filter[i]]) {
+								console.log(doc.result[filter[i]]);
+								doc.result[filter[i] + ' base'] = doc.result[filter[i]];
+							}
+						}
+					}
 					var date = new Date(doc.date);
 					docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
 					docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
 					docs[idx].miliseconds = date.getTime();
 				});
+				console.log(docs);
 				res.json(docs);
 			}
 
@@ -217,22 +230,21 @@ app.get('/view/test/:id', function (req, res) {
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 
-	TelemetryAvg.findOne({'_id' : id}, function (err, doc) {
-
+	TelemetryAvg.findOne({_id: id}, function (err, doc) {
 		var find = {
 			test   : doc.test,
 			commit : doc.commit,
 			device : doc.device
 		};
 
-		TelemetryTest.find(find, function (err, docs) {
+		if (find.device == 'device?') delete find.device; // don't match the default value
 
+		TelemetryTest.find(find, function (err, docs) {
 			res.render('telemetry-individual', {
 				title : 'Telemetry individual results',
 				results: docs,
 				average_id :id
 			});
-
 		});
 
 	});
@@ -318,14 +330,8 @@ app.get('/view/test/:id', function (req, res) {
 						TelemetryAvg.remove({_id: average_id}, function () {
 							res.end('Average removed');
 						});
-
 				});
-
-
 			});
-
-
-
 		});
 
 app.post('/v2/view/results/filtered', function (req, res) {
@@ -336,7 +342,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	,	query
 	;
 
-	var past = parseInt(req.body.date, 10) || 7;
+	var past = parseInt(req.body.date, 10) || 365;
 	var start = new Date(new Date().getTime() - past*86400*1000);
 
 	if (typeof req.body.commit === 'object')
@@ -345,12 +351,8 @@ app.post('/v2/view/results/filtered', function (req, res) {
 			if (new Date(commit) != 'Invalid Date') {
 				query = {
 					$or : [
-						{
-							commit : (idx) ? req.body.commit[0] : req.body.commit[1]
-						},
-						{
-							date : commit
-						}
+							{ commit : (idx) ? req.body.commit[0] : req.body.commit[1] },
+							{ date : commit }
 						]
 				};
 
@@ -374,14 +376,11 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		var commits = req.body.commit;
 		req.body.commit = {$in:commits};
 	} else {
-		if (commit) {
+		if (req.body.commit && req.body.commit.match(/%3A/g))
 			var commit = req.body.commit.replace(/%3A/g, ':');
-			if (new Date(commit) != 'Invalid Date') {
-				req.body.date = commit;
-				delete req.body.commit;
-			} else {
-				console.log('isnt a valid date');
-			}
+		if (new Date(commit) != 'Invalid Date') {
+			req.body.date = commit;
+			delete req.body.commit;
 		}
 	}
 
@@ -390,6 +389,9 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		var tests = req.body.test;
 		req.body.test = {$in:tests};
 	}
+
+	console.log(query);
+	console.log(req.body);
 
 	TelemetryAvg.find(query || req.body).sort('-test -date').execFind(function (err, docs) {
 		if(err)
@@ -400,8 +402,6 @@ app.post('/v2/view/results/filtered', function (req, res) {
 				var date = new Date(doc.date);
 				docs[idx].formatedDate = date.toISOString();
 			});
-
-			console.log(docs);
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs

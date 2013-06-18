@@ -6,21 +6,13 @@ block content
 	#holder
 	.legend
 		ul.test-info
-			h3
-				.progress.bar-a Mean Frame time (ms) <em>(more info)</em>
-					p.hidden Frame time represents the time it takes to render a frame and it's a more accurate measure of performance
-					p.hidden A frame time is calculated by dividing 1000 (ms in a second) to the number of frames per second
-				.progress.bar-b Layout (ms)
-				.progress.bar-c Load Time (ms)
-
-		form(action='../v2/view/results', method='GET').test-info
-			p: h3 Compare commits
-			p#compare-commits Click on 2 commits to compare
-			input(type='hidden', name='device', value=device)
-			input(type='hidden', name='test', value=test[0])
-			input(type='hidden', name='test', value=test[1])
-			p: button(type='submit') Compare
-		ul.test-info#commit-info
+			table
+				tr.bar-a
+					td Mean frame ms
+				tr.bar-b
+					td Load ms
+				tr.bar-c
+					td Layout ms
 	.tooltip
 		h4 tooltip info
 

@@ -1,4 +1,5 @@
 var tbody = document.querySelector('tbody');
+var dates = [7, 14, 30, 365];
 
 var buildBreadcrumbs = function (filter) {
 	var breadcrumb = document.querySelector('.breadcrumbs')
@@ -43,14 +44,9 @@ var plotHandler = function (e) {
 	,	plotUrl = '/dashboard?';
 
 	[].forEach.call(checked, function (el) {
-		if (!~plotUrl.search('test=' + el.dataset.test))
-			plotUrl += '&test=' + el.dataset.test;
-		else
-			console.log(plotUrl, el.dataset.test);
+		plotUrl += '&test=' + el.dataset.test;
 		if (!~plotUrl.search('device=' + el.dataset.device))
 			plotUrl += '&device=' + el.dataset.device;
-		else
-			console.log(plotUrl, el.dataset.device);
 	});
 
 	location.href = plotUrl;
@@ -62,11 +58,10 @@ var submit = function (formData, cb) {
 	xhr.open('POST', '/v2/view/results/filtered', true);
 	xhr.onload = function(e) {
 		if (this.status == 200) {
-			cb(this.response);
+			cb(this.responseText);
 			addEventListeners();
 			var plotBtn = document.querySelectorAll('.js-handler--plot');
 			[].forEach.call(plotBtn, function (b) {
-				console.log(b);
 				b.addEventListener('click', plotHandler, false);
 			});
 		}
@@ -160,7 +155,7 @@ var refreshFilters = function (filters) {
 
 		document.querySelector('#filters').innerHTML = '';
 		document.querySelector('#filters').appendChild(docFrag);
-		console.log('refresh filter submit');
+		console.log(docFrag);
 		submit(formData, function (data) {
 			tbody.innerHTML = data;
 		});
@@ -191,7 +186,7 @@ var addFilter = function (e) {
 	,	formData = new FormData()
 	;
 
-	var date = location.href.match(/date\=[0-9]*/i)
+	var date = location.href.match(/date\=[0-9]*/i);
 	date = (date) ? date[0].split('=')[1] : 0;
 
 	formData.append(this.dataset.filter, this.dataset.value);
@@ -229,12 +224,15 @@ document.querySelector('select').addEventListener('change', function (e) {
 
 	var date = location.href.match(/date=[0-9]{1,3}/);
 	var stringURL = '';
+
 	if (date) {
 		date = date[0];
 		var newDate = date.split('=');
 		newDate[1] = this.options[this.selectedIndex].dataset.value;
 		newDate = newDate.join('=');
 		stringURL = location.href.replace(date, newDate);
+	} else {
+		stringURL = insertParam('date', this.options[this.selectedIndex].dataset.value);
 	}
 
 	var formData = new FormData();
@@ -244,6 +242,7 @@ document.querySelector('select').addEventListener('change', function (e) {
 	formData.append('date', this.options[this.selectedIndex].dataset.value);
 
 	submit(formData, function (data) {
+		console.log(data);
 		document.querySelector('tbody').innerHTML = data;
 	});
 
@@ -257,6 +256,27 @@ var addEventListeners = function () {
 	});
 };
 
+function insertParam(key, value) {
+	var params = document.location.search.substr(1).split('&')
+	,	i=params.length
+	,	x
+	;
+
+	while(i--) {
+		x = params[i].split('=');
+
+		if (x[0]==key) {
+			x[1] = value;
+			params[i] = x.join('=');
+			break;
+		}
+	}
+
+	if(i<0) params[params.length] = [key,value].join('=');
+
+	return location.pathname + '?' + params.join('&');
+}
+
 var QueryString = function () {
   // This function is anonymous, is executed immediately and
   // the return value is assigned to QueryString!
@@ -264,17 +284,17 @@ var QueryString = function () {
   var query = window.location.search.substring(1);
   var vars = query.split("&");
   for (var i=0;i<vars.length;i++) {
-    var pair = vars[i].split("=");
-    if (typeof query_string[pair[0]] === "undefined") {
-      query_string[pair[0]] = pair[1];
-    } else if (typeof query_string[pair[0]] === "string") {
-      var arr = [ query_string[pair[0]], pair[1] ];
-      query_string[pair[0]] = arr;
-    } else {
-      query_string[pair[0]].push(pair[1]);
-    }
+	var pair = vars[i].split("=");
+	if (typeof query_string[pair[0]] === "undefined") {
+	  query_string[pair[0]] = pair[1];
+	} else if (typeof query_string[pair[0]] === "string") {
+	  var arr = [ query_string[pair[0]], pair[1] ];
+	  query_string[pair[0]] = arr;
+	} else {
+	  query_string[pair[0]].push(pair[1]);
+	}
   }
-    return query_string;
+	return query_string;
 } ();
 
 (function init () {

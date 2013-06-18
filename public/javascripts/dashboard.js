@@ -13,12 +13,12 @@ params = (params) ? params[0].slice(1).split('&') : null;
 
 // 3 arrays for 3 different tests
 // x axis is always the same
-res[0] = []; 
+res[0] = [];
 res[1] = [];
 res[2] = [];
 
 resx = {};
-resx[0] = []; 
+resx[0] = [];
 resx[1] = [];
 resx[2] = [];
 
@@ -129,10 +129,11 @@ var plot = function (data, w,h) {
 	var r = Raphael("holder")
 	,	xaxis = []
 	,	commitPos = []
+	,	maxValue = 0;
 	;
 
 	w = w || 1000;
-	h = h || 600;
+	h = h || 1000;
 
 	json = JSON.parse(data);
 	if (!json.length) return;
@@ -157,6 +158,9 @@ var plot = function (data, w,h) {
 			if (doc.result[field]) {
 				var value = parseInt(doc.result[field], 10);
 				res[filter.indexOf(field)].push(value);
+				if (value > maxValue) {
+					maxValue += 1000;
+				}
 				count[filter.indexOf(field)]++;
 			}
 		});
@@ -167,8 +171,9 @@ var plot = function (data, w,h) {
 		xaxis.push(10*i);
 	}
 
-	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2], [0, 0]], [res[0], res[1], res[2], [900, 0]], {
-		axis: "0 0 1 1", axisxstep : allcommits.length-1, axisystep : 10,symbol: "circle", colors: ['#2f6abd', '#bd572f', '#a0bd2f', 'transparent']
+	var steps = allcommits.length-1 || 1;
+	var lines = r.linechart(50, 20, w, h, [resx[0], resx[1], resx[2], [0, 0]], [res[0], res[1], res[2], [maxValue, 0]], {
+		axis: "0 0 1 1", axisxstep : steps, axisystep : 10,symbol: "circle", colors: ['#2f6abd', '#bd572f', '#a0bd2f', 'transparent']
 	}, 0, 0,0,0).hoverColumn(function (e) {
 
 		var xoffset = this.x;
@@ -177,7 +182,9 @@ var plot = function (data, w,h) {
 		json.forEach(function (t) {
 			if (t.commit == comm || t.commit + t.date == comm) {
 				tests = {
-					test   : t.test
+					test   : t.test,
+					commit : t.commit,
+					date : (new Date(t.date)).toString()
 				}
 				for(var i in t.result) {
 					if (~filter.indexOf(i)) {
@@ -195,7 +202,7 @@ var plot = function (data, w,h) {
 		var markers = [];
 
 		for (var i = 0, ii = this.y.length; i < ii; i++) {
-			if (this.values[i] == 900 || this.values[i] == 0) continue; // skip the dummy value
+			if (this.values[i] == maxValue || this.values[i] == 0) continue; // skip the dummy value
 			this.tags.push(r.tag(this.x, this.y[i], this.values[i] + ' ms', 0, 8).insertBefore(this));
 			this.tags.animate({opacity:0}, 0);
 			this.tags.animate({opacity:1}, 400);
@@ -212,7 +219,8 @@ var plot = function (data, w,h) {
 		if (strokes==2) strokes = 0;
 
 		for(var i = 0; i < lines.symbols.length; ++i) {
-			for (var j = 0 ; j < lines.symbols[i].length; ++j) {
+			for (var j = 0; j < lines.symbols[i].length; ++j) {
+				if (lines.symbols[i][j].attrs.fill == 'transparent') continue; // dummy elements
 				if (strokes === 0) {
 					lines.symbols[i][j].attr({'stroke-width':0});
 				}
@@ -229,40 +237,6 @@ var plot = function (data, w,h) {
 		,	inputDate
 		,	deviceNode 	= document.querySelector('input[type=submit]')
 		;
-
-		if(!commitCompare.querySelectorAll('input[name=date]').length) {
-			inputDate = document.createElement('input');
-			inputDate.type = 'hidden';
-			inputDate.name = 'date';
-			inputDate.value = '30';
-			commitCompare.insertBefore(inputDate, deviceNode);
-		} else {
-			inputDate = commitCompare.querySelector('input[name=date]');
-		}
-
-		input.type = 'text';
-		input.value = comm;
-		if(comm[0] == 's') {
-			input.value = comm.substring(8,48);
-		}
-		console.log(comm);
-		input.name = 'commit';
-
-		if (comm && comm.length == 40)
-			getCommitMsg(comm);
-
-		var selectedCommits = commitCompare.querySelectorAll('input[type=text]').length;
-
-		if (selectedCommits < 2) {
-			commitCompare.insertBefore(input, inputDate);
-		} else {
-			var replacement = commitCompare.querySelector(':first-child');
-			replacement.parentNode.removeChild(replacement);
-
-			// commitCompare.innerHTML = '';
-			commitCompare.insertBefore(input, inputDate);
-		}
-
 
 		json.forEach(function (t) {
 			if (t.commit == comm || t.commit + t.date == comm) {
@@ -310,7 +284,6 @@ function getCommitMsg(commit) {
 }
 
 function displayCommitInfo(json, avatar) {
-
 	var docFrag = document.createDocumentFragment();
 	var p = document.createElement('p');
 	var a = document.createElement('a');
@@ -336,13 +309,21 @@ function displayCommitInfo(json, avatar) {
 }
 
 function tooltip (xoffset, tests) {
+	console.log(tests);
 	var t = document.querySelector('.tooltip');
 	t.innerHTML = '';
 	var fragment = document.createDocumentFragment();
 	for (var i in tests) {
 		var p = document.createElement('p');
-		p.innerHTML = i + ': ' + tests[i];
-		fragment.appendChild(p);
+		if (i == 'commit') {
+			p.innerHTML = i + ': ';
+			var a = document.createElement('a');
+			a.innerHTML = tests[i];
+			a.href = 'https://github.com/topcoat/topcoat/commit/' + tests[i];
+			p.appendChild(a);
+		} else
+			p.innerHTML = i + ': ' + tests[i];
+			fragment.appendChild(p);
 	}
 	t.appendChild(fragment);
 	t.style.left = xoffset + 'px';
