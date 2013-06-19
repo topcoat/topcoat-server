@@ -145,6 +145,20 @@ app.get('/dashboard', function (req, res) {
 
 });
 
+app.get('/dashboard/jplot', function (req, res) {
+
+	var params = req.url.split('&');
+	var parser = require('./lib/parser');
+	var query = parser.query(url.parse(req.url).query);
+
+	res.render('telemetry.jplot.jade', {
+		'title'  : 'Topcoat Dashboard',
+		'test'   : query.test,
+		'device' : query.device
+	});
+
+});
+
 	app.post('/dashboard/get', function (req, res) {
 		var search = {};
 		console.log('/dash/get');
