@@ -3,6 +3,22 @@ var testNav = document.querySelector('.test-navigation');
 var lis = document.querySelectorAll('#components li');
 var spinner = document.querySelector('.spinner');
 var t;
+var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
+var plotData = {
+	'mean_frame_time (ms)' : [],
+	'load_time (ms)' : [],
+	'Layout (ms)' : []
+};
+var toolTipInfo = {
+	'mean_frame_time (ms)' : [],
+	'load_time (ms)' : [],
+	'Layout (ms)' : []
+};
+var count = {
+	'mean_frame_time (ms)' : 0,
+	'load_time (ms)' : 0,
+	'Layout (ms)' : 0
+};
 [].forEach.call(lis, function (li) {
 
 	li.addEventListener('click', function () {
@@ -26,28 +42,70 @@ var t;
 
 });
 
+/*
+	Get the data
+*/
+var submit = function (formData, cb) {
+
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', '/dashboard/get', true);
+	xhr.onload = function xhrLoaded (e) {
+		if (this.status == 200) {
+			cb(this.response);
+		}
+	};
+	xhr.send(formData);
+
+};
+
+var parse = function (data) {
+	data = JSON.parse(data);
+	plotData = {
+	'mean_frame_time (ms)' : [],
+	'load_time (ms)' : [],
+	'Layout (ms)' : []
+	};
+	toolTipInfo = {
+		'mean_frame_time (ms)' : [],
+		'load_time (ms)' : [],
+		'Layout (ms)' : []
+	};
+	count = {
+		'mean_frame_time (ms)' : 0,
+		'load_time (ms)' : 0,
+		'Layout (ms)' : 0
+	};
+	data.forEach(filterResults);
+	plot();
+};
+
+
+/*
+	filters through the results
+	separates the base results from the rest
+*/
+var filterResults = function (d) {
+	for (var row in d.result) {
+		if (plotData.hasOwnProperty(row)) {
+			toolTipInfo[row].push({
+				date: d.date,
+				commit: d.commit
+			});
+			plotData[row].push([count[row]++, parseFloat(d.result[row])]);
+		}
+	}
+};
+
+
 function displayPlot () {
 
 	document.querySelector('.plot li').innerHTML = document.querySelector('li.active').innerHTML + ' plot';
-
-	var svg = document.querySelector('svg');
-	if (svg)
-		svg.parentNode.removeChild(svg);
 
 	spinner.style.display = 'block';
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
 	var l = params.length;
 	var formdata = new FormData();
 
-	res[0] = [];
-	res[1] = [];
-	res[2] = [];
-
-	resx[0] = [];
-	resx[1] = [];
-	resx[2] = [];
-
-	allcommits = [];
 	console.log(params);
 	params.forEach(function (p) {
 		p = p.split('=');
@@ -56,7 +114,7 @@ function displayPlot () {
 		if(--l === 0) {
 			submit(formdata, function (data) {
 				spinner.style.display = 'none';
-				plot(data, 550, 300);
+				parse(data);
 			});
 		}
 	});

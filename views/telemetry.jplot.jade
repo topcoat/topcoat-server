@@ -1,0 +1,16 @@
+extends layout
+block content
+
+	include includes/navigation
+	include includes/subheader
+
+	.demo-container
+			#placeholder.demo-placeholder
+	p
+		span#hoverdata
+		span#clickdata
+
+	script(src='/javascripts/jquery.min.js')
+	script(src='/javascripts/jquery.flot.min.js')
+	script(src='/javascripts/baseline.jplot.js')
+	script(src='/javascripts/script.jplot.js')
