@@ -1,40 +1,6 @@
 var tbody = document.querySelector('tbody');
 var dates = [7, 14, 30, 365];
 
-var buildBreadcrumbs = function (filter) {
-	var breadcrumb = document.querySelector('.breadcrumbs')
-
-	if(QueryString.test) {
-
-		var li = document.createElement('li');
-		var a = document.createElement('a');
-
-		if (QueryString.test.forEach) {
-
-			a.href = '/dashboard?test=' + QueryString.test[0] + '&test=' + QueryString.test[1];
-
-		} else {
-			a.href = '/dashboard?test=' + QueryString.test;
-		}
-
-		a.href += '&device=' + QueryString.device;
-		a.innerHTML = 'Dashboard';
-		li.appendChild(a);
-
-		breadcrumb.appendChild(li);
-	}
-
-	var li = document.createElement('li');
-	var a = document.createElement('a');
-
-	a.href = '#';
-	a.innerHTML = document.title;
-	li.appendChild(a);
-
-	breadcrumb.appendChild(li);
-
-};
-
 var plotHandler = function (e) {
 
 	e.preventDefault();
@@ -60,10 +26,6 @@ var submit = function (formData, cb) {
 		if (this.status == 200) {
 			cb(this.responseText);
 			addEventListeners();
-			var plotBtn = document.querySelectorAll('.js-handler--plot');
-			[].forEach.call(plotBtn, function (b) {
-				b.addEventListener('click', plotHandler, false);
-			});
 		}
 	};
 	xhr.send(formData);
@@ -254,6 +216,11 @@ var addEventListeners = function () {
 	[].forEach.call(filterButton, function (button) {
 		button.addEventListener('click', addFilter, false);
 	});
+	var plotBtn = document.querySelectorAll('.js-handler--plot');
+	[].forEach.call(plotBtn, function (b) {
+		console.log('added' , b );
+		b.addEventListener('click', plotHandler, false);
+	});
 };
 
 function insertParam(key, value) {
@@ -277,30 +244,9 @@ function insertParam(key, value) {
 	return location.pathname + '?' + params.join('&');
 }
 
-var QueryString = function () {
-  // This function is anonymous, is executed immediately and
-  // the return value is assigned to QueryString!
-  var query_string = {};
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  for (var i=0;i<vars.length;i++) {
-	var pair = vars[i].split("=");
-	if (typeof query_string[pair[0]] === "undefined") {
-	  query_string[pair[0]] = pair[1];
-	} else if (typeof query_string[pair[0]] === "string") {
-	  var arr = [ query_string[pair[0]], pair[1] ];
-	  query_string[pair[0]] = arr;
-	} else {
-	  query_string[pair[0]].push(pair[1]);
-	}
-  }
-	return query_string;
-} ();
-
 (function init () {
 	var filters = location.href.split('?');
 	if(filters.length > 1)
 		refreshFilters(filters[1].replace('#', ''));
-	buildBreadcrumbs();
 	addEventListeners();
 })();

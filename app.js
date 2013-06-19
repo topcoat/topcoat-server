@@ -5,7 +5,8 @@ var express = require('express')
   , schemes = require('./schemes')
   , path = require('path')
   , uaParser = require('ua-parser')
-  , url = require('url');
+  , url = require('url')
+  , parser = require('./lib/parser');
 
 var app = express();
 var db;
@@ -134,21 +135,6 @@ app.post('/v2/benchmark', function (req, res) {
 app.get('/dashboard', function (req, res) {
 
 	var params = req.url.split('&');
-	var parser = require('./lib/parser');
-	var query = parser.query(url.parse(req.url).query);
-
-	res.render('dashboard', {
-		'title'  : 'Topcoat Dashboard',
-		'test'   : query.test,
-		'device' : query.device
-	});
-
-});
-
-app.get('/dashboard/jplot', function (req, res) {
-
-	var params = req.url.split('&');
-	var parser = require('./lib/parser');
 	var query = parser.query(url.parse(req.url).query);
 
 	res.render('telemetry.jplot.jade', {
@@ -161,7 +147,6 @@ app.get('/dashboard/jplot', function (req, res) {
 
 	app.post('/dashboard/get', function (req, res) {
 		var search = {};
-		console.log('/dash/get');
 
 		if (typeof req.body.test == 'object') {
 			search.test = {
@@ -171,7 +156,7 @@ app.get('/dashboard/jplot', function (req, res) {
 			search.test = req.body.test;
 		}
 
-		search.device = req.body.device;
+		search.device = unescape(req.body.device);
 
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 

@@ -45,39 +45,6 @@ function placeCheckboxes () {
 	}
 }
 
-// function plot () {
-// 	var points = [];
-// 	maxValue = 0;
-// 	for (var i in plotData) {
-// 		points.push({
-// 			data: plotData[i], label: i
-// 		});
-// 		plotData[i].forEach(function (arr) {
-// 			if (arr[1] > maxValue)
-// 				maxValue = arr[1];
-// 		})
-// 	}
-
-// 	$.plot("#placeholder", points, {
-// 		series: {
-// 			lines: {
-// 				show: true
-// 			},
-// 			points: {
-// 				show: true
-// 			}
-// 		},
-// 		grid: {
-// 			hoverable: true,
-// 			clickable: true
-// 		},
-// 		yaxis: {
-// 			min: -1.2,
-// 			max: maxValue + 20
-// 		}
-// 	});
-// }
-
 function showTooltip(x, y, contents) {
 	$("<div id='tooltip'>" + contents + "</div>").css({
 		position: "absolute",
@@ -122,8 +89,8 @@ function deltaValue (key, x) {
 	if (x) {
 		var delta = plotData[key][x][1] - plotData[key][x-1][1];
 		content += '<br> delta ' + (delta.toString()).slice(0,8) + ' ms';
+		content += (delta < 0 ? ' (better)' : ' (worse)');
 	}
-	content += (delta < 0 ? ' (better)' : ' (worse)');
 	content += '<br> commit: ' + toolTipInfo[key][x].commit.substring(0,8);
 	content += '<br> date: ' + toolTipInfo[key][x].date;
 	return content;
