@@ -1,10 +1,28 @@
- /* Topcoat benchmark server */
+/**
+ *
+ * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 
 var express = require('express')
   , mongoose = require('mongoose')
   , schemes = require('./schemes')
   , path = require('path')
-  , uaParser = require('ua-parser');
+  , uaParser = require('ua-parser')
+  , url = require('url')
+  , parser = require('./lib/parser');
 
 var app = express();
 var db;
@@ -35,7 +53,7 @@ app.get('/', function(req, res){
 
 	res.render('index', {
 		layout : 'landing-layout.jade',
-		title : 'TopCoat Server'
+		title : 'Topcoat Server'
 	});
 
 });
@@ -133,24 +151,17 @@ app.post('/v2/benchmark', function (req, res) {
 app.get('/dashboard', function (req, res) {
 
 	var params = req.url.split('&');
+	var query = parser.query(url.parse(req.url).query);
 
-	if(params[2])
-		res.render('dashboard', {
-			'title'  : 'Topcoat Dashboard',
-			'test'   : [params[0].split('=')[1], params[1].split('=')[1]], // fixme
-			'device' : params[2].split('=')[1]
-		});
-
-	res.render('dashboard', {
-			'title'  : 'Topcoat Dashboard',
-			'test'   : params[0].substring(16, params[0].length).split(','),
-			'device' : 'none'
-		});
+	res.render('telemetry.jplot.jade', {
+		'title'  : 'Topcoat Dashboard',
+		'test'   : query.test,
+		'device' : unescape(query.device)
+	});
 
 });
 
 	app.post('/dashboard/get', function (req, res) {
-
 		var search = {};
 
 		if (typeof req.body.test == 'object') {
@@ -161,11 +172,7 @@ app.get('/dashboard', function (req, res) {
 			search.test = req.body.test;
 		}
 
-		search.date = {
-			$gte: new Date(new Date().getTime() - 50*86400*1000).toISOString()
-		};
-
-		search.device = req.body.device;
+		search.device = unescape(req.body.device);
 
 		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 
@@ -190,6 +197,7 @@ app.get('/dashboard', function (req, res) {
 					docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
 					docs[idx].miliseconds = date.getTime();
 				});
+				console.log(docs);
 				res.json(docs);
 			}
 
@@ -221,6 +229,7 @@ app.get('/v2/view/results', function (req, res) {
 				docs[idx].formatedDate = date.toISOString();
 			});
 
+			console.log(docs);
 			res.render('telemetry-average', {
 				title : 'Average telemetry results',
 				results: docs
@@ -253,40 +262,6 @@ app.get('/view/test/:id', function (req, res) {
 			});
 		});
 
-	});
-
-});
-
-app.get('/remove', function (req, res) {
-
-	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
-	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
-	,	ua = uaParser.parse(req.body.ua)
-	;
-
-	var date = {
-		date : {
-			$gte: new Date(new Date().getTime() - 50*86400*1000).toISOString()
-		}
-	};
-
-	TelemetryAvg.find(date).sort('-test -date').execFind(function (err, docs) {
-		if(err)
-			console.log(err);
-		else {
-			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-			docs.forEach(function (doc, idx) {
-				var date = new Date(doc.date);
-				docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
-				docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
-				docs[idx].miliseconds = date.getTime();
-			});
-
-			res.render('telemetry-remove', {
-				title : 'telemetry average',
-				results: docs
-			});
-		}
 	});
 
 });
@@ -326,7 +301,6 @@ app.get('/remove', function (req, res) {
 					findAndRemove.push(req.body[i]);
 				}
 				docsRemaining.push(req.body[i]);
-
 			}
 
 			TelemetryTest.remove({_id : { $in: findAndRemove }}, function () {
@@ -386,8 +360,6 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	var past = parseInt(req.body.date, 10) || 365;
 	var start = new Date(new Date().getTime() - past*86400*1000);
 
-	console.log(req.body);
-
 	if (typeof req.body.commit === 'object')
 		req.body.commit.forEach(function (commit, idx) {
 			commit = commit.replace(/%3A/g, ':');
@@ -427,10 +399,14 @@ app.post('/v2/view/results/filtered', function (req, res) {
 		}
 	}
 
+
 	if (typeof req.body.test === 'object') {
 		var tests = req.body.test;
 		req.body.test = {$in:tests};
 	}
+
+	console.log(query);
+	console.log(req.body);
 
 	TelemetryAvg.find(query || req.body).sort('-test -date').execFind(function (err, docs) {
 		if(err)
@@ -441,7 +417,6 @@ app.post('/v2/view/results/filtered', function (req, res) {
 				var date = new Date(doc.date);
 				docs[idx].formatedDate = date.toISOString();
 			});
-
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs

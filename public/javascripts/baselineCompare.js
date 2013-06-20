@@ -1,9 +1,27 @@
+/**
+ *
+ * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 function plot () {
 	var barW = 45,
-		h = 1000,
+		h = 600,
 		textColor = 'rgba(0,0,0,.3)',
 		barPadding = 5,
-		chartPrecision = 60;
+		chartPrecision = 30;
 
 	var tooltip = d3.select('body').append('div')
 				.attr('class', 'tooltip')
@@ -11,13 +29,12 @@ function plot () {
 
 	for (var i in plotData) {
 		var data = plotData[i];
-		var chart = d3.select("body").append("svg")
+		var chart = d3.select('.charts').append("svg")
 					.attr("class", "chart")
 					.attr("width", '30%')
 					.attr("height", h)
 					.append('g')
 					.attr('transform', 'translate(10,45)');
-
 
 		var l = data.length + 1;
 
@@ -34,6 +51,8 @@ function plot () {
        .enter()
        .append('text')
        .text(function (d) { console.log(d);return d; })
+       .attr('font-size', '20px')
+       .attr('font-weight', 'bold')
        .attr('x', 0)
        .attr('y', - barPadding * 4);
 
@@ -66,10 +85,10 @@ function plot () {
 			.attr("height", function(d, i) { return x(d); })
 			.attr('delta', data[0])
 			.on('mouseover', function (d) {
-				var _baselineTime = parseInt(d3.select(this).attr('delta'), 10);
+				var _baselineTime = parseFloat(d3.select(this).attr('delta'));
 				tooltip.transition()
 					.duration(200);
-				tooltip.html('<p>Time is ' + d + ' ms </p>' + displayMessage(Math.floor(d - _baselineTime)) + '</p>')
+				tooltip.html('<p>Time is ' + d + ' ms </p>' + displayMessage(d - _baselineTime) + '</p>')
 						.style('opacity', 1)
 						.style('left', d3.event.pageX + 'px')
 						.style('top', d3.event.pageY - 28 + 'px');
@@ -95,17 +114,12 @@ function plot () {
 			.attr('y2', h-47)
 			.attr('x1', -barW/2)
 			.attr('x2', l*barW + barW/2)
-			.style('fill', '#343838')
-			.style('stroke', '#343838')
 			.style('stroke-width', '3px');
-
-
-
 	}
 }
 
-function displayMessage(value) {
-  if (value) return '<p>Delta is '+ value +' ms</p>';
-  if (isNaN(value)) return '<p>No baseline results available</p>';
-  return '<p>This is the baseline</p>';
+function displayMessage (value) {
+	if (value) return '<p>Delta is '+ value +' ms</p>';
+	if (isNaN(value)) return '<p>No baseline results available</p>';
+	return '<p>This is the baseline</p>';
 }

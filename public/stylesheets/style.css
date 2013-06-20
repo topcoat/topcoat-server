@@ -1,3 +1,4 @@
+@import "checkbox.css";
 @font-face {
   font-family: "source-l";
   src: url("../font/SourceSansPro/SourceSansPro-Light.otf");
@@ -18,9 +19,29 @@ body {
 a {
   color: #0083e8;
 }
-svg {
-  height: 1100px;
-  width: 1100px;
+.tooltip {
+  position: absolute;
+  top: 1200px;
+  left: -200px;
+  background: #ddd;
+  padding: 0.5em;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  border-radius: 6px;
+}
+.tooltip:after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 30%;
+  width: 16px;
+  height: 16px;
+  background: #ddd;
+  -webkit-transform: rotate(45deg);
+}
+.tooltip p {
+  margin: 2px;
 }
 table {
   margin: 2em 0;
@@ -39,24 +60,22 @@ td:hover .add-filter {
 }
 thead tr {
   background: #dfe2e2;
+  cursor: default;
 }
 thead tr:hover {
   background: #dfe2e2;
 }
 thead tr th {
-  padding: 0.5em 0.5em 0.5em 1em;
+  padding: 1rem;
   text-align: left !important;
   text-shadow: 0 1px 0 #fff;
 }
 tr {
   -webkit-transition-duration: 0.1s;
+  cursor: pointer;
 }
 tr:hover {
   background: #f4f4f4;
-}
-#holder {
-  width: 800px;
-  height: 600px;
 }
 .odd {
   background: #e5e9e9;
@@ -115,6 +134,10 @@ tr:hover img {
   color: #454545;
   text-shadow: 0 1px 0 #fff;
 }
+.inline li {
+  display: inline-block;
+  list-style-type: none;
+}
 .close {
   visibility: visible;
   cursor: pointer;
@@ -166,27 +189,27 @@ button {
 input[type="checkbox"] {
   margin-right: 0.5em;
 }
-.bar-a,
-.bar-a td {
-  background: #4a6491;
-}
-.bar-a td:nth-child(2) {
-  background: #d0e4f2;
-}
-.bar-b,
-.bar-b td {
-  background: #b23612;
-}
-.bar-b td:nth-child(2) {
-  background: #e4861f;
-}
-.bar-c,
-.bar-c td {
-  background: #a0bd2f;
-}
-.bar-c td:nth-child(2) {
-  background: #96ed89;
-}
 nav {
   margin: -40px -40px 40px -40px;
+}
+.demo-container {
+  width: 80%;
+  height: 450px;
+}
+.fade {
+  opacity: 0.5;
+}
+.inline {
+  display: inline !important;
+}
+.demo-placeholder {
+  width: 100%;
+  height: 100%;
+}
+.legend > div {
+  display: none;
+}
+.legend {
+  position: absolute;
+  right: -50px;
 }
