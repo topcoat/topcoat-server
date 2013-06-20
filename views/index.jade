@@ -8,7 +8,9 @@ block content
 		
 	.test-navigation
 		.container
-			h3 Dashboard
+			h3
+				| Dashboard | 
+				a(href='/view/results') Aggregated results
 			ul#components
 				li.category Component
 				li#button Button
@@ -21,52 +23,52 @@ block content
 				li#navigation_bar Navigation bar
 				li#navigation_bar_base Navigation bar base
 			ul.button.not-active
-				li.category Machine - Button
+				li.category  Button
 				li
 					a(href='/dashboard?test=smoothness_benchmark_topcoat_button&test=loading_benchmark_topcoat_button&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=smoothness_benchmark_topcoat_button&test=loading_benchmark_topcoat_button&device=Nexus4') details
 					a(class='button', href='/baseline?test=smoothness_benchmark_topcoat_button&test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button&test=smoothness_benchmark_topcoat_button-base&device=Nexus4') baseline
 			ul.button_no_theme.not-active
-				li.category Machine - Button base
+				li.category  Button base
 				li
 					a(href='/dashboard?test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button-base&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button-base&device=Nexus4') details
 			ul.text_input.not-active
-				li.category Machine - Text input
+				li.category  Text input
 				li
 					a(href='/dashboard?test=loading_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_text-input&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=loading_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_text-input&device=Nexus4') details
 					a(class='button', href='/baseline?test=loading_benchmark_topcoat_text-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
 			ul.input_base.not-active
-				li.category Machine - Input base
+				li.category  Input base
 				li
 					a(href='/dashboard?test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') details
 			ul.textarea.not-active
-				li.category Machine - Textarea
+				li.category  Textarea
 				li
 					a(href='/dashboard?test=loading_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=loading_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea&device=Nexus4') details
 					a(class='button', href='/baseline?test=loading_benchmark_topcoat_textarea&test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') details
 			ul.textarea_base.not-active
-				li.category Machine - Textarea base
+				li.category  Textarea base
 				li
 					a(href='/dashboard?test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') details
 			ul.search_input.not-active
-				li.category Machine - Search input
+				li.category  Search input
 				li
 					a(href='/dashboard?test=loading_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_search-input&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=loading_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_search-input&device=Nexus4') details
 					a(class='button', href='/baseline?test=loading_benchmark_topcoat_search-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
 			ul.navigation_bar.not-active
-				li.category Machine - Navigation bar
+				li.category  Navigation bar
 				li
 					a(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=loading_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar&device=Nexus4') details
 					a(class='button', href='/baseline?test=loading_benchmark_topcoat_navigation-bar&test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') baseline
 			ul.navigation_bar_base.not-active
-				li.category Machine - Navigation bar base
+				li.category  Navigation bar base
 				li
 					a(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') Nexus 4 
 					a(class='button', href='/dashboard?test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') details
@@ -74,11 +76,10 @@ block content
 				li.category Plot
 				#holder
 					.spinner
-			h3 View 
-				a(href='/view/results') Click for aggregated results
+					#placeholder
 
-	script(src='/javascripts/raphael-min.js')
-	script(src='/javascripts/g.raphael-min.js')
-	script(src='/javascripts/g.line-min.js')
-	script(src='/javascripts/dashboard.js')
+	script(src='/javascripts/libraries/jquery.min.js')
+	script(src='/javascripts/libraries/jquery.flot.min.js')
+	script(src='/javascripts/baseline.jplot.js')
 	script(src='/javascripts/landingpage.js')
+	script(src='/javascripts/script.jplot.js')

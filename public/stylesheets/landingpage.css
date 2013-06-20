@@ -356,3 +356,7 @@ a.button:active {
   box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
   text-decoration: none;
 }
+#placeholder {
+  height: 300px;
+  width: 600px;
+}

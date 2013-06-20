@@ -2,16 +2,23 @@ body {
   background: #f5f5f5;
 }
 .chart rect {
-  fill: #70afc4;
+  fill: #093;
   stroke: rgba(0,0,0,0.3);
+}
+.charts svg:nth-child(2) rect {
+  fill: #0188dd;
+}
+.charts svg:nth-child(3) rect {
+  fill: #f60;
 }
 .chart .base {
   fill: #a0cad8;
 }
 .tooltip {
-  padding: 0 0.5em;
+  padding: 1em;
   border-radius: 10px;
   background: #a0cad8;
+  border: 1px solid rgba(0,0,0,0.2);
   color: #fff;
   position: absolute;
   z-index: 100;

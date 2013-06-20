@@ -1,23 +1,29 @@
-var-barBg = #70AFC4
+var-barBg--mean = rgb(0,153,51)
+var-barBg--load = rgb(1,136,221)
+var-barBg--layout = rgb(255,102,0)
 var-barBase = #a0cad8
 
 body
   background #f5f5f5
 
-svg
-  // display block
-
 .chart rect
-  fill var-barBg
+  fill var-barBg--mean
   stroke rgba(0,0,0,.3);
+
+.charts svg:nth-child(2) rect
+	fill var-barBg--load
+
+.charts svg:nth-child(3) rect
+	fill var-barBg--layout
 
 .chart .base
 	fill var-barBase
 
 .tooltip
-	padding 0 .5em
+	padding 1em
 	border-radius 10px
 	background var-barBase
+	border 1px solid rgba(0,0,0,.2)
 	color #fff
 	position absolute
 	z-index 100

@@ -1,43 +1,40 @@
+/**
+ *
+ * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 var tbody = document.querySelector('tbody');
 var dates = [7, 14, 30, 365];
 
-var buildBreadcrumbs = function (filter) {
-	var breadcrumb = document.querySelector('.breadcrumbs')
-	,	li
-	,	a
-	;
+var plotHandler = function (e) {
 
-	if(QueryString.test) {
+	e.preventDefault();
+	e.stopPropagation();
 
-		li = document.createElement('li');
-		a = document.createElement('a');
+	var checked = document.querySelectorAll('td input[type=checkbox]:checked')
+	,	plotUrl = '/dashboard?';
 
-		if (QueryString.test.forEach) {
+	[].forEach.call(checked, function (el) {
+		plotUrl += '&test=' + el.dataset.test;
+		if (!~plotUrl.search('device=' + el.dataset.device))
+			plotUrl += '&device=' + el.dataset.device;
+	});
 
-			a.href = '/dashboard?test=' + QueryString.test[0] + '&test=' + QueryString.test[1];
-
-		} else {
-			a.href = '/dashboard?test=' + QueryString.test;
-		}
-
-		a.href += '&device=' + QueryString.device;
-		a.innerHTML = 'Dashboard';
-		li.appendChild(a);
-
-		breadcrumb.appendChild(li);
-
-	}
-
-	li = document.createElement('li');
-	a = document.createElement('a');
-
-	a.href = '#';
-	a.innerHTML = document.title;
-	li.appendChild(a);
-
-	breadcrumb.appendChild(li);
-
-};
+	location.href = plotUrl;
+}
 
 var submit = function (formData, cb) {
 
@@ -45,8 +42,8 @@ var submit = function (formData, cb) {
 	xhr.open('POST', '/v2/view/results/filtered', true);
 	xhr.onload = function(e) {
 		if (this.status == 200) {
-			console.log(this.response);
-			cb(this.response);
+			cb(this.responseText);
+			addEventListeners();
 		}
 	};
 	xhr.send(formData);
@@ -58,9 +55,9 @@ var removeFilter = function (e) {
 
 	this.parentNode.parentNode.removeChild(this.parentNode);
 
-	var formData = new FormData()
-	,	filters = document.querySelectorAll('#filters li')
-	,	date = location.href.match(/date\=[0-9]*/i)
+	var formData = new FormData(),
+		filters = document.querySelectorAll('#filters li'),
+		date = location.href.match(/date\=[0-9]*/i)
 	;
 
 	date = (date) ? date[0].split('=')[1] : 0;
@@ -71,15 +68,11 @@ var removeFilter = function (e) {
 		formData.append(li.dataset.filter, li.dataset.value);
 	});
 
-	console.log('remove filter submit');
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
-		addEventListeners();
 	});
 
 	createFilterURL();
-	return false;
-
 };
 
 var createFilterURL = function () {
@@ -93,14 +86,6 @@ var createFilterURL = function () {
 	history.pushState('', '', stringURL);
 
 };
-
-window.addEventListener('popstate', function () {
-	console.log('triggered');
-	var filters = location.href.split('?');
-	if(filters.length > 1)
-		refreshFilters(filters[1].replace('#', ''));
-
-}, false);
 
 var refreshFilters = function (filters) {
 
@@ -139,8 +124,8 @@ var refreshFilters = function (filters) {
 					close.addEventListener('click', removeFilter, false);
 					docFrag.appendChild(li);
 				} else {
-					var d = parseInt(f[1], 10);
-					select.selectedIndex = dates.indexOf(d);
+					var values = ['7', '14', '30', '365'];
+					select.selectedIndex = values.indexOf(f[1]);
 					formData.append('date', select.options[select.selectedIndex].dataset.value);
 				}
 
@@ -152,15 +137,11 @@ var refreshFilters = function (filters) {
 		document.querySelector('#filters').appendChild(docFrag);
 		console.log(docFrag);
 		submit(formData, function (data) {
-			console.log(data);
 			tbody.innerHTML = data;
-			formatDate();
 		});
 
 	} else {
-
 		document.querySelector('#filters').innerHTML = '';
-
 	}
 
 };
@@ -176,7 +157,7 @@ document.querySelector('#selectall').addEventListener('change', function () {
 // add a new filter to the view
 // the function also handles previous filters
 var addFilter = function (e) {
-
+	console.log('added filter');
 	e.preventDefault();
 
 	var li       = document.createElement('li')
@@ -214,89 +195,83 @@ var addFilter = function (e) {
 	console.log('add filter submit');
 	submit(formData, function (data) {
 		document.querySelector('tbody').innerHTML = data;
-		addEventListeners();
 	});
 
 	createFilterURL();
-
 };
 
 document.querySelector('select').addEventListener('change', function (e) {
-	var stringURL = 'results?';
-	var formData = new FormData();
 
+	var date = location.href.match(/date=[0-9]{1,3}/);
+	var stringURL = '';
+
+	if (date) {
+		date = date[0];
+		var newDate = date.split('=');
+		newDate[1] = this.options[this.selectedIndex].dataset.value;
+		newDate = newDate.join('=');
+		stringURL = location.href.replace(date, newDate);
+	} else {
+		stringURL = insertParam('date', this.options[this.selectedIndex].dataset.value);
+	}
+
+	var formData = new FormData();
+	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
+		formData.append(li.dataset.filter, li.dataset.value);
+	});
 	formData.append('date', this.options[this.selectedIndex].dataset.value);
 
-	console.log('select change submit');
 	submit(formData, function (data) {
+		console.log(data);
 		document.querySelector('tbody').innerHTML = data;
-		addEventListeners();
 	});
 
-	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
-		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
-	});
-	stringURL += 'date=' + this.options[this.selectedIndex].dataset.value + '&';
 	history.pushState('', '', stringURL);
-
 });
 
 var addEventListeners = function () {
-
 	var filterButton = document.querySelectorAll('.add-filter');
 	[].forEach.call(filterButton, function (button) {
 		button.addEventListener('click', addFilter, false);
 	});
-	formatDate();
+	var plotBtn = document.querySelectorAll('.js-handler--plot');
+	[].forEach.call(plotBtn, function (b) {
+		console.log('added' , b );
+		b.addEventListener('click', plotHandler, false);
+	});
+	$('input[name^=average_]').on('change', function () {
+		if (!$('input[name^=average_]:checked').length) {
+			$('.js-handler--plot').attr('disabled', true);
+		} else {
+			$('.js-handler--plot').attr('disabled', false);
+		}
+	})
 };
 
-function formatDate () {
-	[].forEach.call(document.querySelectorAll('.date'), function (el) {
-		var date = el.innerHTML.split('T');
-		el.innerHTML = date[0].substring(0, 10) + ' ' + date[1].substring(0,5);
-	});
+function insertParam(key, value) {
+	var params = document.location.search.substr(1).split('&')
+	,	i=params.length
+	,	x
+	;
 
-	[].forEach.call(document.querySelectorAll('.average-details'), function (el) {
+	while(i--) {
+		x = params[i].split('=');
 
-		el.href += '?';
-		for (var i in QueryString) {
-			if (i) {
-				if (typeof QueryString[i] != 'string')
-					QueryString[i].forEach(function (val) {
-						console.log(i);
-						el.href += '&' + i + '=' + val;
-					});
-				else
-					el.href += '&' + i + '=' + QueryString[i];
-			}
+		if (x[0]==key) {
+			x[1] = value;
+			params[i] = x.join('=');
+			break;
 		}
+	}
 
-	});
+	if(i<0) params[params.length] = [key,value].join('=');
+
+	return location.pathname + '?' + params.join('&');
 }
 
-var QueryString = function () {
-  // This function is anonymous, is executed immediately and 
-  // the return value is assigned to QueryString!
-  var query_string = {};
-  var query = window.location.search.substring(1);
-  var vars = query.split("&");
-  for (var i=0;i<vars.length;i++) {
-    var pair = vars[i].split("=");
-    	// If first entry with this name
-    if (typeof query_string[pair[0]] === "undefined") {
-      query_string[pair[0]] = pair[1];
-    	// If second entry with this name
-    } else if (typeof query_string[pair[0]] === "string") {
-      var arr = [ query_string[pair[0]], pair[1] ];
-      query_string[pair[0]] = arr;
-    	// If third or later entry with this name
-    } else {
-      query_string[pair[0]].push(pair[1]);
-    }
-  }
-    return query_string;
-} ();
-
-buildBreadcrumbs();
-
-addEventListeners();
+(function init () {
+	var filters = location.href.split('?');
+	if(filters.length > 1)
+		refreshFilters(filters[1].replace('#', ''));
+	addEventListeners();
+})();

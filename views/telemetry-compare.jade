@@ -1,7 +1,9 @@
 extends layout
-//- "#" + Math.random().toString(16).slice(2, 8)
+
 block content
-	h1 Telemetry compare results <a href="http://topcoat.herokuapp.com/v2/view/results">Go back</a>
+
+	include includes/navigation
+
 	- var tests = []
 	- results.forEach(function (r) {
 		- each val, key in r.result
@@ -9,11 +11,11 @@ block content
 				- tests.push(key)
 	- })
 	- var colors = ['#8AC8C3', '#D3EBC7', '#AABFAA', '#BF9692', '#FC0284']
-	
+
 	- results.forEach(function (r, i) {
 		.progress(style="width:500px;background:"+colors[i])
 			p= 'Commit version '
-				a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit.substring(0,6) 
+				a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit.substring(0,6)
 				- var date = " " + r.date.toString().substring(0,21)
 				strong= date
 			p= r.platform + ' on ' + r.device
