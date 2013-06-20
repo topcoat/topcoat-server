@@ -19,10 +19,6 @@ body {
 a {
   color: #0083e8;
 }
-svg {
-  height: 1100px;
-  width: 1100px;
-}
 .tooltip {
   position: absolute;
   top: 1200px;
@@ -80,10 +76,6 @@ tr {
 }
 tr:hover {
   background: #f4f4f4;
-}
-#holder {
-  width: 800px;
-  height: 600px;
 }
 .odd {
   background: #e5e9e9;
@@ -197,27 +189,6 @@ button {
 input[type="checkbox"] {
   margin-right: 0.5em;
 }
-.bar-a,
-.bar-a td {
-  background: #4a6491;
-}
-.bar-a td:nth-child(2) {
-  background: #d0e4f2;
-}
-.bar-b,
-.bar-b td {
-  background: #b23612;
-}
-.bar-b td:nth-child(2) {
-  background: #e4861f;
-}
-.bar-c,
-.bar-c td {
-  background: #a0bd2f;
-}
-.bar-c td:nth-child(2) {
-  background: #96ed89;
-}
 nav {
   margin: -40px -40px 40px -40px;
 }
@@ -227,6 +198,9 @@ nav {
 }
 .fade {
   opacity: 0.5;
+}
+.inline {
+  display: inline !important;
 }
 .demo-placeholder {
   width: 100%;

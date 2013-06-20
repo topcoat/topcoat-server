@@ -9,9 +9,8 @@ About
 
 Running tests locally
 ---------------------
-1. You need a mongodb
+1. You need a mongo database
 2. You need telemetry, more info here https://github.com/topcoat/topcoat/tree/master/test/perf/telemetry
-<<<<<<< HEAD
 3. Example
 ````
 grunt telemetry-submit --path=/tmp/smoothness_benchmark_topcoat_buttons.txt --type=snapshot --device=macbook --test=smoothness_benchmark_topcoat_buttons
@@ -26,12 +25,12 @@ grunt telemetry-submit --path=/tmp/smoothness_benchmark_topcoat_buttons.txt --ty
 4. Example command
 
 ````
-grunt telemetry-submit --path=/tmp/telemetry_output.txt --type=snapshot --device=mbp --test=test_name
+grunt telemetry-submit
 ````
-5. View tests results at (notice the URL params & the params for Grunt)
+5. View tests results at (notice the URL params)
 
 ````
-http://localhost:3000/dashboard?test=test_name&device=mbp
+http://localhost:3000/dashboard?test=test_name&device=device
 ````
 
 or at
@@ -39,12 +38,10 @@ or at
 ````
 http://localhost:3000/v2/view/results
 ````
->>>>>>> ac60c17913be74963606307a27df3172757ad0f4
 
 What you should know
 ---------------------
 * the app looks for a `process.env.PORT` or defaults to port 3000
-* also using the same process var it detects if it's deployed on local or on heroku to use different databases
 
 Copyright and license
 ---------------------

@@ -140,7 +140,7 @@ app.get('/dashboard', function (req, res) {
 	res.render('telemetry.jplot.jade', {
 		'title'  : 'Topcoat Dashboard',
 		'test'   : query.test,
-		'device' : query.device
+		'device' : unescape(query.device)
 	});
 
 });

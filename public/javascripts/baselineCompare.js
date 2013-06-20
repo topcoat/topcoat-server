@@ -1,9 +1,9 @@
 function plot () {
 	var barW = 45,
-		h = 800,
+		h = 600,
 		textColor = 'rgba(0,0,0,.3)',
 		barPadding = 5,
-		chartPrecision = 60;
+		chartPrecision = 30;
 
 	var tooltip = d3.select('body').append('div')
 				.attr('class', 'tooltip')
@@ -17,7 +17,6 @@ function plot () {
 					.attr("height", h)
 					.append('g')
 					.attr('transform', 'translate(10,45)');
-
 
 		var l = data.length + 1;
 

@@ -221,6 +221,13 @@ var addEventListeners = function () {
 		console.log('added' , b );
 		b.addEventListener('click', plotHandler, false);
 	});
+	$('input[name^=average_]').on('change', function () {
+		if (!$('input[name^=average_]:checked').length) {
+			$('.js-handler--plot').attr('disabled', true);
+		} else {
+			$('.js-handler--plot').attr('disabled', false);
+		}
+	})
 };
 
 function insertParam(key, value) {

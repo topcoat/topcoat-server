@@ -31,6 +31,9 @@ function plot () {
 		yaxis: {
 			min: -1.2,
 			max: maxValue + 20
+		},
+		xaxis: {
+			show: false
 		}
 	});
 }
@@ -91,6 +94,6 @@ function deltaValue (key, x) {
 		content += (delta < 0 ? ' (better)' : ' (worse)');
 	}
 	content += '<br> commit: ' + toolTipInfo[key][x].commit.substring(0,8);
-	content += '<br> date: ' + toolTipInfo[key][x].date;
+	content += '<br> date: ' + (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15);
 	return content;
 }
