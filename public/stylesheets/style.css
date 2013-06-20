@@ -1,3 +1,4 @@
+@import "checkbox.css";
 @font-face {
   font-family: "source-l";
   src: url("../font/SourceSansPro/SourceSansPro-Light.otf");
@@ -221,23 +222,8 @@ nav {
   margin: -40px -40px 40px -40px;
 }
 .demo-container {
-  box-sizing: border-box;
   width: 80%;
   height: 450px;
-  padding: 20px 15px 15px 15px;
-  margin: 15px auto 30px auto;
-  border: 1px solid #ddd;
-  background: #fff;
-  background: linear-gradient(#f6f6f6 0, #fff 50px);
-  background: -o-linear-gradient(#f6f6f6 0, #fff 50px);
-  background: -ms-linear-gradient(#f6f6f6 0, #fff 50px);
-  background: -moz-linear-gradient(#f6f6f6 0, #fff 50px);
-  background: -webkit-linear-gradient(#f6f6f6 0, #fff 50px);
-  box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-  -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-  -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 .fade {
   opacity: 0.5;
@@ -245,8 +231,6 @@ nav {
 .demo-placeholder {
   width: 100%;
   height: 100%;
-  font-size: 14px;
-  line-height: 1.2em;
 }
 .legend > div {
   display: none;

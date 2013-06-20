@@ -51,7 +51,6 @@ var submit = function (formData, cb) {
 	xhr.open('POST', '/dashboard/get', true);
 	xhr.onload = function xhrLoaded (e) {
 		if (this.status == 200) {
-			console.log(this.response);
 			cb(this.response);
 		}
 	};

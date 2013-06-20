@@ -1,4 +1,4 @@
-var maxValue = 0;
+var maxValue = 0; // used to scale the plot
 
 function plot () {
 	var points = [];
@@ -37,8 +37,7 @@ function plot () {
 
 function placeCheckboxes () {
 	for (var i in plotData) {
-		$("<label><input type='checkbox' name='" + i +
-			"' checked='checked'></input>"
+		$("<input type='checkbox' name='" + i +"' checked='checked' id='"+i+"'><label class='topcoat-checkbox-label topcoat-checkbox-label--left' for='"+i+"'>"
 			+ i + "</label>")
 			.on('click', plot)
 			.appendTo('p');
@@ -95,10 +94,3 @@ function deltaValue (key, x) {
 	content += '<br> date: ' + toolTipInfo[key][x].date;
 	return content;
 }
-
-$("#placeholder").bind("plotclick", function (event, pos, item) {
-	if (item) {
-		$("#clickdata").text(" - click point " + item.dataIndex + " in " + item.series.label);
-		plot.highlight(item.series, item.datapoint);
-	}
-});
