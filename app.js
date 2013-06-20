@@ -26,9 +26,10 @@ var express = require('express')
 
 var app = express();
 var db;
+var port = 80;
 
 
-if(process.env.PORT) { // switch between local and production env
+if(port) { // switch between local and production env
 	db = mongoose.connect('mongodb://ec2-54-245-99-50.us-west-2.compute.amazonaws.com/topcoat');
 	console.log('Connected to amazondb');
 } else {
@@ -37,7 +38,7 @@ if(process.env.PORT) { // switch between local and production env
 }
 
 app.configure(function () {
-  app.set('port', process.env.PORT || 3000);
+  app.set('port', port || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -460,7 +461,6 @@ app.get('/view/results', function (req, res) {
 
 });
 
-var port = process.env.PORT || 3000;
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
