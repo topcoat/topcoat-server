@@ -11,14 +11,14 @@ Running tests locally
 ---------------------
 1. You need a mongo database
 2. You need telemetry, more info here https://github.com/topcoat/topcoat/tree/master/test/perf/telemetry
-3. Example
+3. $ cd /topcoat (not the topcoat-server)
 ````
-grunt telemetry-submit --path=/tmp/smoothness_benchmark_topcoat_buttons.txt --type=snapshot --device=macbook --test=smoothness_benchmark_topcoat_buttons
+grunt telemetry-submit
 ````
 
 =======
 3. You need to point the Grunt task (from the topcoat repo) to localhost
-   * either export 2 variables path
+   * either export 2 path variables
        * TOPCOAT_BENCHMARK_SERVER (localhost)
        * TOPCOAT_BENCHMARK_PORT (3000 is default)
    * or go in settings.js (from the topcoat repo) and change the settings there
