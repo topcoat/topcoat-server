@@ -11,26 +11,20 @@ Running tests locally
 ---------------------
 1. You need a mongo database
 2. You need telemetry, more info here https://github.com/topcoat/topcoat/tree/master/test/perf/telemetry
-3. $ cd /topcoat (not the topcoat-server)
+3. You need to start the topcoat-server
+4. $ cd topcoat (not the topcoat-server)
+5. Run
 ````
 grunt telemetry-submit
 ````
-
+I will offer step by step instructions on submitting the data. They are sent to http://localhost:3000.
+There is a settings.js under ./topcoat/test/perf/telemetry/lib/settings.js where you can change the endpoint.
 =======
-3. You need to point the Grunt task (from the topcoat repo) to localhost
-   * either export 2 path variables
-       * TOPCOAT_BENCHMARK_SERVER (localhost)
-       * TOPCOAT_BENCHMARK_PORT (3000 is default)
-   * or go in settings.js (from the topcoat repo) and change the settings there
-4. Example command
 
-````
-grunt telemetry-submit
-````
 5. View tests results at (notice the URL params)
 
 ````
-http://localhost:3000/dashboard?test=test_name&device=device
+http://localhost:3000/dashboard [?test=test_name&device=device]
 ````
 
 or at
