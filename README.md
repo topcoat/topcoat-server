@@ -17,8 +17,10 @@ Running tests locally
 ````
 grunt telemetry-submit
 ````
-I will offer step by step instructions on submitting the data. They are sent to http://localhost:3000.
+
+It will offer step by step instructions on submitting the data. They are sent to http://localhost:3000.
 There is a settings.js under ./topcoat/test/perf/telemetry/lib/settings.js where you can change the endpoint.
+
 =======
 
 5. View tests results at (notice the URL params)
