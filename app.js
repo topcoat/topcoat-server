@@ -26,10 +26,8 @@ var express = require('express')
 
 var app = express();
 var db;
-var port = 80;
 
-
-if(port) { // switch between local and production env
+if(process.env.PORT) { // switch between local and production env
 	db = mongoose.connect('mongodb://ec2-54-245-99-50.us-west-2.compute.amazonaws.com/topcoat');
 	console.log('Connected to amazondb');
 } else {
@@ -38,7 +36,7 @@ if(port) { // switch between local and production env
 }
 
 app.configure(function () {
-  app.set('port', port || 3000);
+  app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
@@ -163,6 +161,7 @@ app.get('/dashboard', function (req, res) {
 });
 
 	app.post('/dashboard/get', function (req, res) {
+
 		var search = {};
 
 		if (typeof req.body.test == 'object') {
@@ -188,7 +187,6 @@ app.get('/dashboard', function (req, res) {
 					if (doc.test.match(/base/g)) {
 						for (var i in filter) {
 							if (doc.result[filter[i]]) {
-								console.log(doc.result[filter[i]]);
 								doc.result[filter[i] + ' base'] = doc.result[filter[i]];
 							}
 						}
@@ -198,7 +196,6 @@ app.get('/dashboard', function (req, res) {
 					docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
 					docs[idx].miliseconds = date.getTime();
 				});
-				console.log(docs);
 				res.json(docs);
 			}
 
@@ -230,7 +227,6 @@ app.get('/v2/view/results', function (req, res) {
 				docs[idx].formatedDate = date.toISOString();
 			});
 
-			console.log(docs);
 			res.render('telemetry-average', {
 				title : 'Average telemetry results',
 				results: docs
@@ -358,58 +354,9 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	,	query
 	;
 
-	var past = parseInt(req.body.date, 10) || 365;
-	var start = new Date(new Date().getTime() - past*86400*1000);
+	var query = parser.urlQuery(req.body);
 
-	if (typeof req.body.commit === 'object')
-		req.body.commit.forEach(function (commit, idx) {
-			commit = commit.replace(/%3A/g, ':');
-			if (new Date(commit) != 'Invalid Date') {
-				query = {
-					$or : [
-							{ commit : (idx) ? req.body.commit[0] : req.body.commit[1] },
-							{ date : commit }
-						]
-				};
-
-				if (typeof req.body.test === 'object') {
-					var tests = req.body.test;
-					query.test = {$in:tests};
-				}
-
-				query.date = {
-					$gte: start
-				};
-
-			}
-		});
-
-	req.body.date = {
-		$gte: start
-	};
-
-	if (typeof req.body.commit === 'object') {
-		var commits = req.body.commit;
-		req.body.commit = {$in:commits};
-	} else {
-		if (req.body.commit && req.body.commit.match(/%3A/g))
-			var commit = req.body.commit.replace(/%3A/g, ':');
-		if (new Date(commit) != 'Invalid Date') {
-			req.body.date = commit;
-			delete req.body.commit;
-		}
-	}
-
-
-	if (typeof req.body.test === 'object') {
-		var tests = req.body.test;
-		req.body.test = {$in:tests};
-	}
-
-	console.log(query);
-	console.log(req.body);
-
-	TelemetryAvg.find(query || req.body).sort('-test -date').execFind(function (err, docs) {
+	TelemetryAvg.find(query).sort('-test -date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
@@ -443,7 +390,6 @@ app.post('/compare', function (req, res) {
 			console.log(err);
 			res.end('Error');
 		} else {
-			console.log(docs);
 			res.render('telemetry-compare', {
 				title : 'telemetry average',
 				results: docs
@@ -461,6 +407,7 @@ app.get('/view/results', function (req, res) {
 
 });
 
+var port = process.env.PORT || 3000;
 app.listen(port, function() {
   console.log("Listening on " + port);
 });
