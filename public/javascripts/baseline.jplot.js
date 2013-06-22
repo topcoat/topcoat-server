@@ -76,16 +76,22 @@ var submit = function (formData, cb) {
 
 };
 
-(function getUrlParams () {
+function resultsFilter () {
 
-	var l = params.length;
+	var formdata = new FormData();
+
 	params.forEach(function urlParams (p) {
 		p = p.split('=');
-
 		formdata.append(p[0],p[1]);
-		if(--l === 0) {
-			submit(formdata, parse);
-		}
 	});
 
+	return formdata;
+}
+
+(function plot () {
+
+	var params   = window.location.href.match(/\?.{0,}/g);
+	params = (params) ? params[0].slice(1).split('&') : null;
+
+	submit(resultsFilter(params), parse);
 })();

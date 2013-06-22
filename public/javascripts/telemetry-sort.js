@@ -49,14 +49,8 @@ var submit = function (formData, cb) {
 	xhr.send(formData);
 };
 
-var removeFilter = function (e) {
-
-	e.preventDefault();
-
-	this.parentNode.parentNode.removeChild(this.parentNode);
-
+function updateResults () {
 	var formData = new FormData(),
-		filters = document.querySelectorAll('#filters li'),
 		date = location.href.match(/date\=[0-9]*/i)
 	;
 
@@ -64,89 +58,84 @@ var removeFilter = function (e) {
 
 	if (date) formData.append('date', date);
 
-	[].forEach.call(filters, function (li, idx) {
-		formData.append(li.dataset.filter, li.dataset.value);
+	$('#filters li').each(function (idx, li) {
+		formData.append($(li).data('filter'), $(li).data('value'));
 	});
 
 	submit(formData, function (data) {
-		document.querySelector('tbody').innerHTML = data;
+		$('tbody').html(data);
 	});
 
 	createFilterURL();
+}
+
+function removeFilter (e) {
+	e.preventDefault();
+	this.parentNode.parentNode.removeChild(this.parentNode);
+	updateResults();
 };
 
 var createFilterURL = function () {
 	var stringURL = 'results?';
-	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
-		stringURL += li.dataset.filter + '=' + li.dataset.value + '&';
+	$('#filters li').each(function (idx, li) {
+		stringURL += $(li).data('filter') + '=' + $(li).data('value') + '&';
 	});
 	var select = document.querySelector('select');
 	stringURL += 'date=' + select.options[select.selectedIndex].dataset.value + '&';
 
 	history.pushState('', '', stringURL);
-
 };
 
-var refreshFilters = function (filters) {
+var appendFilter = function (key, value) {
 
-	if(filters) {
+	var $div = $('<div/>');
 
-		filters = filters.trim().replace('#', '').replace(/%20/g, " ");
-		var docFrag = document.createDocumentFragment()
-		,	formData = new FormData()
-		;
+	var $li = $('<li/>')
+		.data('filter', key)
+		.data('value', value);
 
-		var select = document.querySelector('select');
+	$('<a/>').text(key + ' ' + value)
+		.appendTo($li);
 
-		filters.split('&').forEach(function (filter) {
+	$('<a/>').addClass('close')
+		.html('&times;')
+		.on('click', removeFilter)
+		.appendTo($li);
 
-			if (filter.length) {
-				console.log('handling filter ' + filter);
-				var li       = document.createElement('li')
-				,	a        = document.createElement('a')
-				,	close    = document.createElement('a')
-				;
+	$div.append($li);
 
-				var f = filter.split('=');
-				if(f[0] != 'date') {
+	$('#filters').append($div);
+};
 
-					a.innerHTML = f[0]+' '+f[1];
-					close.classList.add('close');
-					close.innerHTML = '×';
+function appendDate (date) {
+	var select = document.querySelector('select'),
+		values = ['7', '14', '30', '365']
+	;
+	select.selectedIndex = values.indexOf(date);
+}
 
-					li.appendChild(a);
-					li.appendChild(close);
+function appendFilters (filters) {
 
-					li.dataset.filter = f[0];
-					li.dataset.value  = f[1];
-					formData.append(f[0], f[1]);
+	var formData = new FormData();
+	var l = filters.length;
 
-					close.addEventListener('click', removeFilter, false);
-					docFrag.appendChild(li);
-				} else {
-					var values = ['7', '14', '30', '365'];
-					select.selectedIndex = values.indexOf(f[1]);
-					formData.append('date', select.options[select.selectedIndex].dataset.value);
-				}
+	filters.forEach(function (filter) {
+		if (filter[0] != 'date')
+			appendFilter(filter[0], filter[1]);
+		else
+			appendDate(filter[1]);
 
+		formData.append(filter[0], filter[1]);
+
+		if (--l == 0) {
+			submit(formData, function (data) {
+				$('tbody').html(data);
+			});
 		}
+	});
+}
 
-		});
-
-		document.querySelector('#filters').innerHTML = '';
-		document.querySelector('#filters').appendChild(docFrag);
-		console.log(docFrag);
-		submit(formData, function (data) {
-			tbody.innerHTML = data;
-		});
-
-	} else {
-		document.querySelector('#filters').innerHTML = '';
-	}
-
-};
-
-document.querySelector('#selectall').addEventListener('change', function () {
+$('#selectall').on('change', function () {
 
 	[].forEach.call(document.querySelectorAll('input[name*=average]'), function (input) {
 		(input.checked) ? input.checked = false : input.checked = true;
@@ -157,47 +146,23 @@ document.querySelector('#selectall').addEventListener('change', function () {
 // add a new filter to the view
 // the function also handles previous filters
 var addFilter = function (e) {
-	console.log('added filter');
 	e.preventDefault();
 
-	var li       = document.createElement('li')
-	,	a        = document.createElement('a')
-	,	close    = document.createElement('a')
-	,	formData = new FormData()
+	var $li   = $('<li/>')
+	,	$this = $(this)
 	;
 
-	var date = location.href.match(/date\=[0-9]*/i);
-	date = (date) ? date[0].split('=')[1] : 0;
+	$('<a/>').html(this.dataset.filter + ' ' + this.dataset.value)
+			.appendTo($li);
+	$('<a/>').addClass('close').html('&times;')
+			.on('click', removeFilter)
+			.appendTo($li);
 
-	formData.append(this.dataset.filter, this.dataset.value);
+	$li.data('filter', this.dataset.filter)
+		.data('value', this.dataset.value)
 
-	[].forEach.call(document.querySelectorAll('#filters li'), function (li, idx) {
-		formData.append(li.dataset.filter, li.dataset.value);
-	});
-
-	if (date)
-		formData.append('date', date);
-
-	a.innerHTML = this.dataset.filter+' '+this.dataset.value;
-	close.classList.add('close');
-	close.innerHTML = '×';
-
-	li.appendChild(a);
-	li.appendChild(close);
-
-	li.dataset.filter = this.dataset.filter;
-	li.dataset.value  = this.dataset.value;
-
-	close.addEventListener('click', removeFilter, false);
-
-	document.querySelector('#filters').appendChild(li);
-
-	console.log('add filter submit');
-	submit(formData, function (data) {
-		document.querySelector('tbody').innerHTML = data;
-	});
-
-	createFilterURL();
+	$('#filters').append($li);
+	updateResults();
 };
 
 document.querySelector('select').addEventListener('change', function (e) {
@@ -222,8 +187,7 @@ document.querySelector('select').addEventListener('change', function (e) {
 	formData.append('date', this.options[this.selectedIndex].dataset.value);
 
 	submit(formData, function (data) {
-		console.log(data);
-		document.querySelector('tbody').innerHTML = data;
+		$('tbody').html(data);
 	});
 
 	history.pushState('', '', stringURL);
@@ -236,7 +200,6 @@ var addEventListeners = function () {
 	});
 	var plotBtn = document.querySelectorAll('.js-handler--plot');
 	[].forEach.call(plotBtn, function (b) {
-		console.log('added' , b );
 		b.addEventListener('click', plotHandler, false);
 	});
 	$('input[name^=average_]').on('change', function () {
@@ -269,9 +232,23 @@ function insertParam(key, value) {
 	return location.pathname + '?' + params.join('&');
 }
 
+function existy (el) {
+	return (el && el !== null) ? true : false;
+}
+
+function parseFilter () {
+	var filters = location.search.substr(1);
+	filters = window.decodeURI(filters);
+	filters = filters.split('&');
+	filters = filters.filter(existy);
+	filters = filters.map(function (el, idx) {
+		return el.split('=');
+	});
+	return filters;
+}
+
 (function init () {
-	var filters = location.href.split('?');
-	if(filters.length > 1)
-		refreshFilters(filters[1].replace('#', ''));
+	var filters = parseFilter();
+	appendFilters(filters);
 	addEventListeners();
 })();

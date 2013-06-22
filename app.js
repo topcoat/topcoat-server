@@ -355,7 +355,7 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	;
 
 	var query = parser.urlQuery(req.body);
-
+	console.log(query);
 	TelemetryAvg.find(query).sort('-test -date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
