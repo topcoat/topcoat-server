@@ -69,7 +69,7 @@ app.get('/baseline', function(req, res){
 
 });
 
-app.post('/benchmark', benchmark.add);
+app.post('/v2/benchmark', benchmark.add);
 
 app.get('/dashboard', function (req, res) {
 
