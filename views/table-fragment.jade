@@ -3,8 +3,6 @@ tr
 	td: button(class='js-handler--plot', disabled) Plot
 	td(colspan=7)
 - results.forEach(function (el, idx) {
-	- if (el.commit[0] == 's')
-		- el.commit += ' ' + el.formatedDate;
 	tr
 		td: input(type='checkbox', name='average_' + idx, value=el._id, data-test=el.test, data-device=el.device)
 		td= el.test
@@ -15,7 +13,7 @@ tr
 			a(title='Add as a filter', href='#', class='add-filter', data-value=el.platform, data-filter='platform') +
 		td= el.commit
 			a(title='Add as a filter', href='#', class='add-filter', data-value=el.commit, data-filter='commit') +
-		td(class='date')= el.formatedDate
+		td(class='date')= (el.date.toString()).slice(0,15)
 		td= el.count
 		td: a(href='/view/test/' + el._id, class='average-details') details
 - })

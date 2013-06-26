@@ -39,7 +39,7 @@ var plotHandler = function (e) {
 var submit = function (formData, cb) {
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/v2/view/results/filtered', true);
+	xhr.open('POST', '/view/results/filtered', true);
 	xhr.onload = function(e) {
 		if (this.status == 200) {
 			cb(this.responseText);

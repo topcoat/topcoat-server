@@ -68,10 +68,9 @@ var submit = function (formData, cb) {
 		}
 	};
 	xhr.send(formData);
-
 };
 
-function resultsFilter () {
+function resultsFilter (params) {
 
 	var formdata = new FormData();
 

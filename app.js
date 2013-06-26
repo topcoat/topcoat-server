@@ -22,7 +22,8 @@ var express = require('express')
   , path = require('path')
   , uaParser = require('ua-parser')
   , url = require('url')
-  , parser = require('./lib/parser');
+  , parser = require('./lib/parser')
+  ;
 
 var app = express();
 var db;
@@ -34,6 +35,8 @@ if(process.env.PORT) { // switch between local and production env
 	db = mongoose.connect('mongodb://localhost:27017/topcoat');
 	console.log('Fallback to localdb');
 }
+
+var benchmark = require('./routes/benchmark')(db);
 
 app.configure(function () {
   app.set('port', process.env.PORT || 3000);
@@ -58,101 +61,22 @@ app.get('/', function(req, res){
 });
 
 app.get('/baseline', function(req, res){
-
+	console.log('baseline');
 	res.render('baseline', {
 		layout : 'none',
-		title : 'TopCoat Server'
+		title : 'Topcoat Server'
 	});
 
 });
 
-app.post('/v2/benchmark', function (req, res) {
-
-	res.header("Access-Control-Allow-Origin", "*");
-	req.body = JSON.parse(req.body.data);
-
-	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
-	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
-	,	ua = uaParser.parse(req.body.ua || req.body.resultName['UserAgent ()'])
-	,	sanitize = require('validator').sanitize
-	;
-
-	var telemetryTest = new TelemetryTest({
-			ua     : req.body.resultName['UserAgent ()']
-		,	device : sanitize(req.body.device).xss()
-		,	os 	   : ua.os.toString()
-		,	browser: ua.family
-		,	version: ua.major + "." + ua.minor + "." + ua.patch
-		,	commit : sanitize(req.body.commit).xss()
-		,	date   : req.body.date
-		,	result : {}
-		,	test   : sanitize(req.body.test).xss()
-	});
-
-	for(var i in req.body.resultName) {
-		telemetryTest.result[i] = sanitize(req.body.resultName[i]).xss();
-	}
-
-	telemetryTest.save(function (err) {
-		if(err) {
-			console.log('Error saving result');
-		}
-	});
-
-	var query = {
-		commit   : req.body.commit,
-		platform : ua.family + ' ' + ua.major + "." + ua.minor + "." + ua.patch + ' ' + ua.os.toString(),
-		test     : req.body.test,
-		device   : req.body.device
-	};
-
-	if (req.body.date)
-		query['date'] = req.body.date;
-
-	TelemetryAvg.findOne(query, function (err, doc) {
-		if (err) {
-			console.log('Error : ', err);
-		} else {
-			if (!doc) {
-				var telemetryAvg = new TelemetryAvg({
-					result   : telemetryTest.result,
-					commit   : req.body.commit,
-					date 	 : req.body.date,
-					platform : ua.family + ' ' + ua.major + "." + ua.minor + "." + ua.patch + ' ' + ua.os.toString(),
-					test     : req.body.test,
-					device   : req.body.device,
-					count	 : 1,
-					ua       : telemetryTest.ua
-				});
-				telemetryAvg.save(function (err) {
-					if(err) console.log('err', err);
-				});
-				res.end('Result saved. New result');
-			} else {
-				var update = {};
-				for(var i in req.body.resultName) {
-					if (!isNaN(parseFloat(req.body.resultName[i]))) {
-						update[i] = (parseFloat(doc.result[i]) * doc.count + parseFloat(req.body.resultName[i])) / (doc.count+1);
-					} else {
-						update[i] = req.body.resultName[i];
-					}
-				}
-				doc.result = update;
-				doc.count += 1;
-				doc.save();
-				res.end('Result saved. Average updated');
-			}
-		}
-	});
-
-});
+app.post('/benchmark', benchmark.add);
 
 app.get('/dashboard', function (req, res) {
 
 	var params = req.url.split('&');
 	var query = parser.query(url.parse(req.url).query);
 
-	res.render('telemetry.jplot.jade', {
+	res.render('dashboard.jade', {
 		'title'  : 'Topcoat Dashboard',
 		'test'   : query.test,
 		'device' : unescape(query.device)
@@ -160,81 +84,10 @@ app.get('/dashboard', function (req, res) {
 
 });
 
-	app.post('/dashboard/get', function (req, res) {
-
-		var search = {};
-
-		if (typeof req.body.test == 'object') {
-			search.test = {
-				$in : req.body.test
-			};
-		} else {
-			search.test = req.body.test;
-		}
-
-		search.device = unescape(req.body.device);
-
-		var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-
-		TelemetryAvg.find(search).sort('+date').execFind(function (err, docs) {
-			if (err) {
-				console.log(err);
-				res.json(err);
-			} else {
-				var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-				filter = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
-				docs.forEach(function (doc, idx) {
-					if (doc.test.match(/base/g)) {
-						for (var i in filter) {
-							if (doc.result[filter[i]]) {
-								doc.result[filter[i] + ' base'] = doc.result[filter[i]];
-							}
-						}
-					}
-					var date = new Date(doc.date);
-					docs[idx].formatedDate = months[date.getMonth()] + ' ' + date.getDate() + ' ' + date.getFullYear();
-					docs[idx].formatedDate += " " + date.getHours() + ":" + date.getMinutes();
-					docs[idx].miliseconds = date.getTime();
-				});
-				res.json(docs);
-			}
-
-		});
-
-	});
+	app.post('/dashboard/get', benchmark.get);
 
 
-app.get('/v2/view/results', function (req, res) {
-
-	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
-	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
-	,	ua = uaParser.parse(req.body.ua)
-	;
-
-	var date = {
-		date : {
-			$gte: new Date(new Date().getTime() - 7*86400*1000).toISOString()
-		}
-	};
-
-	TelemetryAvg.find(date).sort('-test -date').execFind(function (err, docs) {
-		if(err)
-			console.log(err);
-		else {
-			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-			docs.forEach(function (doc, idx) {
-				var date = new Date(doc.date);
-				docs[idx].formatedDate = date.toISOString();
-			});
-
-			res.render('telemetry-average', {
-				title : 'Average telemetry results',
-				results: docs
-			});
-		}
-	});
-
-});
+app.get('/view/results', benchmark.viewResults);
 
 app.get('/view/test/:id', function (req, res) {
 
@@ -252,7 +105,7 @@ app.get('/view/test/:id', function (req, res) {
 		if (find.device == 'device?') delete find.device; // don't match the default value
 
 		TelemetryTest.find(find, function (err, docs) {
-			res.render('telemetry-individual', {
+			res.render('view-test', {
 				title : 'Telemetry individual results',
 				results: docs,
 				average_id :id
@@ -281,72 +134,9 @@ app.get('/view/test/:id', function (req, res) {
 
 	});
 
-		app.post('/remove/test', function (req, res) {
+		app.post('/remove/test', benchmark.removeTest);
 
-			var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
-			,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
-			,	ua = uaParser.parse(req.body.ua)
-			;
-
-			var findAndRemove = []; // i'll add the docs that need removing here
-			var docsRemaining = []; // these will make up the average later
-			var average_id = req.body.average_id;
-			delete req.body.average_id;
-
-			for (var i in req.body) {
-				if (docsRemaining.indexOf(req.body[i]) > -1) {
-					findAndRemove.push(req.body[i]);
-				}
-				docsRemaining.push(req.body[i]);
-			}
-
-			TelemetryTest.remove({_id : { $in: findAndRemove }}, function () {
-				// after i removed them i need to make up the average
-				TelemetryTest.find({_id : { $in : docsRemaining }}, function (err, docs) {
-
-					if (err) res.end(err);
-					var update = {};
-
-					// sum up all the results
-					docs.forEach(function (doc) {
-						for(var i in doc.result) {
-							if (!update[i]) {
-								if(!isNaN(parseFloat(doc.result[i])))
-									update[i] = parseFloat(doc.result[i]);
-								else
-									update[i] = doc.result[i];
-							} else
-								if(!isNaN(parseFloat(doc.result[i]))) {
-									update[i] += parseFloat(doc.result[i]);
-								}
-						}
-					});
-
-					// divide by the number of results;
-					var count = docs.length;
-					for (var i in update)
-						if(!isNaN(parseFloat(update[i])))
-							update[i] /= count;
-					if (count) // if there is something left updating
-						TelemetryAvg.findOne({_id : average_id}, function (err, doc) {
-							if (err) res.json(err);
-							else {
-								doc.result = update;
-								doc.count = count;
-								doc.save(function () {
-									res.end('average saved');
-								});
-							}
-						});
-					else
-						TelemetryAvg.remove({_id: average_id}, function () {
-							res.end('Average removed');
-						});
-				});
-			});
-		});
-
-app.post('/v2/view/results/filtered', function (req, res) {
+app.post('/view/results/filtered', function (req, res) {
 
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
@@ -355,21 +145,14 @@ app.post('/v2/view/results/filtered', function (req, res) {
 	;
 
 	var query = parser.urlQuery(req.body);
-	console.log(query);
 	TelemetryAvg.find(query).sort('-test -date').execFind(function (err, docs) {
 		if(err)
 			console.log(err);
 		else {
-			var months = ['Jan', 'Feb', 'Mar', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-			docs.forEach(function (doc, idx) {
-				var date = new Date(doc.date);
-				docs[idx].formatedDate = date.toISOString();
-			});
 			res.render('table-fragment', {
 				layout  : false,
 				results : docs
 			});
-
 		}
 	});
 
@@ -390,20 +173,14 @@ app.post('/compare', function (req, res) {
 			console.log(err);
 			res.end('Error');
 		} else {
-			res.render('telemetry-compare', {
-				title : 'telemetry average',
+			res.render('compare', {
+				title : 'Compare results',
 				results: docs
 			});
 
 		}
 
 	});
-
-});
-
-app.get('/view/results', function (req, res) {
-
-	res.redirect('/v2/view/results');
 
 });
 

@@ -1,3 +1,21 @@
+/**
+ *
+ * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 @font-face {
     font-family: "source-l";
     src: url("../font/SourceSansPro/SourceSansPro-Light.otf");
@@ -55,15 +73,14 @@ h2, h3 {
 
 h3 {
     font-family: source-sb;
-    border-bottom: 1px solid #bbbdbd;
+    border-bottom: 1px solid #e0e0e0;
     padding: 0 0 0.7em;
 }
 
 .container {
-    width: 400px;
-    height: auto !important;
+    width:90%;
     font-family: "source-l";
-    text-align: center;
+    text-align: left;
     margin: 0 auto 0 auto;
 }
 
@@ -73,6 +90,10 @@ h3 {
 
 header {
     padding: 2em 0 2.5em;
+}
+
+header h4 {
+  margin: 0;
 }
 
 .title {
@@ -161,7 +182,7 @@ header {
 @media only screen and (min-width: 35em) {
 
     .container {
-        width: 550px;
+        width: 90%;
     }
 
     .copy {
@@ -179,9 +200,8 @@ header {
 }
 
 .test-navigation {
-    background : #DFE2E2;
+    background : rgb(244,244,244);
     width : 100%;
-    box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     padding: 0.3em 0;
     position:relative;
     color: #454545;
@@ -210,6 +230,7 @@ header {
         -webkit-transition-duration:.5s;
         -moz-transition-duration:.5s;
         transition-duration:.5s;
+        border-bottom: 1px solid #e0e0e0;
     }
 
         li small {
@@ -233,11 +254,10 @@ header {
         }
 
         .category {
-            background: #d3d7d7;
+            background: #eee;
         }
 
     .test-navigation ul {
-        border-right : 1px solid #bbbdbd;
         width: 23%;
         padding:0;
         float:left;
