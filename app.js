@@ -39,10 +39,10 @@ if(process.env.PORT) { // switch between local and production env
 var benchmark = require('./routes/benchmark')(db);
 
 app.configure(function () {
+  app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.use(express.favicon());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);

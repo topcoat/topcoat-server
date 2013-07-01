@@ -16,7 +16,6 @@
  *
  */
 @import "checkbox.css";
-@import "topcoat-button.min.css";
 @font-face {
   font-family: "source-l";
   src: url("../font/SourceSansPro/SourceSansPro-Light.otf");

@@ -151,7 +151,7 @@ li small:before {
   content: " — ";
 }
 li.active {
-  color: #a1a7a7;
+  color: #fff;
   font-weight: bold;
   position: relative;
   padding-left: 35px;
@@ -161,12 +161,15 @@ li.active {
 }
 ul {
   margin: 0;
-  overflow: hidden;
   box-sizing: border-box;
 }
 .test-navigation ul {
   float: left;
-  padding: 0 2rem 0 0;
+  padding: 0;
+}
+.test-navigation ul .quarter {
+  margin: 0 2rem 0 0;
+  box-sizing: border-box;
 }
 .not-active {
   display: none;
@@ -240,15 +243,12 @@ nav a {
   margin: 0 auto;
 }
 .docNav {
+  width: 100%;
+  box-sizing: border-box;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
-  background: #595b5b;
-  background-image: none;
   box-shadow: 0 0 0 1px #303233;
-  border: none;
-  border-top: 2px solid #666767;
-  color: #fff;
   text-shadow: 0 -1px 0 #000;
   overflow: hidden;
   font-size: 14px;

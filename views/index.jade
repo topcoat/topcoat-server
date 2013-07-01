@@ -17,12 +17,12 @@ block content
 
 	.test-navigation
 		.container.max-width
-			.div
+			.quarter
 				select.docNav
-					option Dashboard
-					option Aggregated results
+					option(value='/') Dashboard
+					option(value='/view/results') Aggregated results
 			ul#components.quarter
-				li#button Button
+				li#button.active Button
 				li#button_no_theme Button base
 				li#text_input Text Input
 				li#search_input Search input
@@ -33,7 +33,7 @@ block content
 				li#textarea_base Textarea Base
 				li#navigation_bar Navigation bar
 				li#navigation_bar_base Navigation bar base
-			ul.button.not-active.three-quarters
+			ul.button.active.three-quarters
 				header
 					h2 Button
 				li

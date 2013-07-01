@@ -33,8 +33,10 @@ var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 			activeComponent.classList.remove('active');
 
 		var activeCategory = document.querySelector('ul.active');
-		if(activeCategory)
+		if(activeCategory) {
 			activeCategory.classList.remove('active');
+			activeCategory.classList.add('not-active');
+		}
 
 		this.classList.add('active');
 		var category = document.querySelector('.' + this.id);
@@ -53,7 +55,6 @@ function displayPlot () {
 	var l = params.length;
 	var formdata = new FormData();
 
-	console.log(params);
 	params.forEach(function (p) {
 		p = p.split('=');
 
@@ -82,3 +83,9 @@ function displayPlot () {
 	});
 
 }
+
+document.querySelector('select.docNav').addEventListener('change', function () {
+	location.href = this.value;
+})
+
+displayPlot.call(document.querySelector('.button a'));

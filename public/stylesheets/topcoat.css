@@ -31,12 +31,14 @@ body {
 
 .quarter {
   width: 25%;
+  box-sizing: border-box;
 }
 .half {
   width: 50%;
 }
 .three-quarters {
   width: 75%;
+  box-sizing: border-box;
 }
 .third {
   width: 33.333%;
