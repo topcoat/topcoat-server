@@ -48,8 +48,6 @@ var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 
 function displayPlot () {
 
-	document.querySelector('.plot li').innerHTML = document.querySelector('li.active').innerHTML + ' plot';
-
 	spinner.style.display = 'block';
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
 	var l = params.length;
