@@ -10,7 +10,7 @@ About
 Running tests locally
 ---------------------
 1. You need a mongo database
-2. You need telemetry, more info here https://github.com/topcoat/topcoat/tree/master/test/perf/telemetry
+2. You need telemetry, more info here https://github.com/topcoat/topcoat/tree/master/dev/test/perf/telemetry
 3. You need to start the topcoat-server
 4. $ cd topcoat (not the topcoat-server)
 5. Run
