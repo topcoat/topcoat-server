@@ -38,7 +38,7 @@ function plot () {
 			lines: {
 				show: true
 			},
-		points: {
+			points: {
 				show: true
 			}
 		},

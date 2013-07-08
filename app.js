@@ -89,33 +89,6 @@ app.get('/dashboard', function (req, res) {
 
 app.get('/view/results', benchmark.viewResults);
 
-app.get('/view/test/:id', function (req, res) {
-
-	var id = req.params.id;
-	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
-	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-
-	TelemetryAvg.findOne({_id: id}, function (err, doc) {
-		var find = {
-			test   : doc.test,
-			commit : doc.commit,
-			device : doc.device
-		};
-
-		if (find.device == 'device?') delete find.device; // don't match the default value
-
-		TelemetryTest.find(find, function (err, docs) {
-			res.render('view-test', {
-				title : 'Telemetry individual results',
-				results: docs,
-				average_id :id
-			});
-		});
-
-	});
-
-});
-
 	app.post('/remove', function (req, res) {
 
 		var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
@@ -174,7 +147,7 @@ app.post('/compare', function (req, res) {
 			res.end('Error');
 		} else {
 			res.render('compare', {
-				title : 'Compare results',
+				title : 'Topcoat Server',
 				results: docs
 			});
 

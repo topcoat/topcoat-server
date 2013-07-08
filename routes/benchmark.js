@@ -130,7 +130,7 @@ var benchmark = function (db) {
 				console.log(err);
 			else {
 				res.render('view-results.jade', {
-					title : 'Average telemetry results',
+					title : 'Topcoat Server',
 					results: docs
 				});
 			}

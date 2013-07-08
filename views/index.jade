@@ -1,19 +1,8 @@
 extends landing-layout
 
 block content
-	.container
-		header
-			.max-width
-				hgroup
-					h1.title= title
-					h4 Results and benchmarks for Topcoat
-				nav
-					ul
-						li: a(href='http://topcoat.io/topcoat') Usage Guidelines
-						li: a(href='http://bench.topcoat.io') Benchmarks
-						li: a(href='http://topcoat.io/blog') Blog
-						li: a.topcoat-button--large--cta(href='http://github.com/topcoat/topcoat/archive/0.5.0.zip') Download v0.5
 
+	include includes/navigation
 
 	.test-navigation
 		.container.max-width

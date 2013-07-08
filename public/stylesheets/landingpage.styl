@@ -10,10 +10,6 @@ h1, h2, h3, h4, h5, h6
 	font-weight: normal
 	color fontColor--dark
 
-p
-	margin-top: -20px
-	margin-bottom: 0.5em
-
 a
 	color fontColor
 	text-decoration: none
@@ -54,6 +50,8 @@ header h4
 	letter-spacing -0.065em
 	line-height 1.1em
 	font-weight 600
+	a
+		color darkBg
 
 .copy
 	width: 100%
@@ -103,7 +101,6 @@ header h4
 			top 30px
 			width 100%
 			border 1px solid #58595A
-
 		h2
 			position relative
 			display inline-block
@@ -222,13 +219,15 @@ a.button:active
 #placeholder
 	height: 300px
 
-nav
+.nav--subheading
 	position: absolute
 	right: 0
 	top: 20px
 	font-size 1.5rem
 	a
 		color fontColor--dark
+	.topcoat-button--large--cta
+		color white
 
 .max-width
 	max-width: 1180px

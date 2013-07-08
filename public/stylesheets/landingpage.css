@@ -11,10 +11,6 @@ h6 {
   font-weight: normal;
   color: #373435;
 }
-p {
-  margin-top: -20px;
-  margin-bottom: 0.5em;
-}
 a {
   color: #f0f1f1;
   text-decoration: none;
@@ -56,6 +52,9 @@ header h4 {
   letter-spacing: -0.065em;
   line-height: 1.1em;
   font-weight: 600;
+}
+.title a {
+  color: #3b3e3e;
 }
 .copy {
   width: 100%;
@@ -228,14 +227,17 @@ a.button:active {
 #placeholder {
   height: 300px;
 }
-nav {
+.nav--subheading {
   position: absolute;
   right: 0;
   top: 20px;
   font-size: 1.5rem;
 }
-nav a {
+.nav--subheading a {
   color: #373435;
+}
+.nav--subheading .topcoat-button--large--cta {
+  color: #fff;
 }
 .max-width {
   max-width: 1180px;
