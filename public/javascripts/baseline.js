@@ -15,8 +15,8 @@
  * limitations under the License.
  *
  */
-
-	var filter = [
+	
+  var filter = [
 			'mean_frame_time (ms)',
 			'load_time (ms)',
 			'Layout (ms)'
@@ -25,10 +25,10 @@
 	;
 
 var parse = function (data) {
-
 	data = JSON.parse(data);
 	var results = data.map(filterResults);
-	plot();
+  console.log(data);
+	plot(plotData);
 
 };
 
@@ -39,15 +39,15 @@ var parse = function (data) {
 */
 var filterResults = function (d) {
 	filter.forEach(function baseOrStandard (f) {
-		if (d.result[f] || d.result[f + ' base']) {
+		if (d.result[f]) {
 			if (plotData[f]) {
 				if (d.test.match(/base/g))
-					plotData[f][0] = d.result[f + ' base'];
+					plotData[f][0] = d.result[f];
 				else
 					plotData[f].push(d.result[f]);
 			} else {
 				if (d.test.match(/base/g))
-					plotData[f] = [d.result[f + ' base']];
+					plotData[f] = [d.result[f]];
 				else
 					plotData[f] = ['', d.result[f]];
 			}

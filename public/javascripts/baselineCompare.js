@@ -16,7 +16,7 @@
  *
  */
 
-function plot () {
+function plot (plotData) {
 	var barW = 45,
 		h = 600,
 		textColor = 'rgba(0,0,0,.3)',
