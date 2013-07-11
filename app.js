@@ -77,7 +77,7 @@ app.get('/dashboard', function (req, res) {
 	var query = parser.query(url.parse(req.url).query);
 
 	res.render('dashboard.jade', {
-		'title'  : 'Topcoat Dashboard',
+		'title'  : 'Topcoat Server',
 		'test'   : query.test,
 		'device' : unescape(query.device)
 	});

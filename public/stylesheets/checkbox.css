@@ -1,31 +1,55 @@
-/**
- *
- * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-p input[type="checkbox"] {
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ Checkbox
+ --------
+ 
+Base styles for checkboxes. The `<label>` needs to be placed after the `<input>` element in the HTML. If you are using `.topcoat-checkbox-label--right`, make sure to set the width, so all the labels are the same width and the controls line up vertically.
+
+- `:focus` Focus state
+- `.is-focused` Simulates an focus state on mobile devices
+- `:disabled` Disabled state
+- `.is-disabled` Simulates a disabled state on mobile devices
+- `.topcoat-checkbox`
+- `.topcoat-checkbox-label`
+- `.topcoat-checkbox-label--left` Position the control to the left of the label
+- `.topcoat-checkbox-label--right` Position the control to the right of the label
+
+    
+    <input type="checkbox" id="example-checkbox-checked" class="topcoat-checkbox" checked="checked">
+    <label for="example-checkbox-checked" class="topcoat-checkbox-label topcoat-checkbox-label--left">Extremely Long Label</label>
+    
+    <input type="checkbox" id="example-checkbox-unchecked" class="topcoat-checkbox">
+    <label for="example-checkbox-unchecked" class="topcoat-checkbox-label topcoat-checkbox-label--left">Extremely Long Label</label>
+    
+    <input type="checkbox" id="example-checkbox-disabled" class="topcoat-checkbox is-disabled" disabled>
+    <label for="example-checkbox-disabled" class="topcoat-checkbox-label topcoat-checkbox-label--left">Extremely Long Label</label>
+    
+
+*/
+input[type="checkbox"] {
   display: none;
 }
 .topcoat-checkbox-label--left:before,
 .topcoat-checkbox-label--right:after {
-  background-position: left -37px;
+  background-position: left -19px;
 }
 input[type="checkbox"]:checked + .topcoat-checkbox-label--left:before,
 input[type="checkbox"]:checked + .topcoat-checkbox-label--right:after {
-  background-position: left -2px;
+  background-position: left 0;
 }
 input[type="checkbox"]:disabled + label {
   opacity: 0.3;
@@ -36,18 +60,18 @@ input[type="checkbox"]:disabled + label {
 .topcoat-checkbox-label--right:after {
   content: "";
   display: inline-block;
-  width: 37px;
-  height: 31px;
+  width: 20px;
+  height: 18px;
   background-image: url("../img/light-sprites2x.png");
   background-repeat: no-repeat;
-  background-size: 37px;
+  background-size: 20px;
   cursor: pointer;
 }
 .topcoat-checkbox-label--left:before {
-  margin-right: 15px;
+  margin-right: 5px;
 }
 .topcoat-checkbox-label--right:after {
-  margin-left: 15px;
+  margin-left: 5px;
 }
 .topcoat-checkbox-label--left,
 .topcoat-checkbox-label--right {
@@ -55,9 +79,8 @@ input[type="checkbox"]:disabled + label {
   padding: 0 1.25rem;
   margin: 5px;
   outline: none;
-  font: 1em "Source Sans", helvetica, arial, sans-serif;
   font-weight: 200;
-  line-height: 30px;
+  line-height: 18px;
   vertical-align: top;
   user-select: none;
   -webkit-touch-callout: none;

@@ -50,7 +50,8 @@ var filterResults = function (d) {
 		if (plotData.hasOwnProperty(row)) {
 			toolTipInfo[row].push({
 				date: d.date,
-				commit: d.commit
+				commit: d.commit,
+				test: d.test
 			});
 			plotData[row].push([count[row]++, parseFloat(d.result[row])]);
 		}

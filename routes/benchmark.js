@@ -7,6 +7,7 @@ var benchmark = function (db) {
 	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
 	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg)
 	,	sanitize = require('validator').sanitize
+	,	parser = require('../lib/parser')
 	;
 
 	var add = function (req, res) {
@@ -95,16 +96,7 @@ var benchmark = function (db) {
 
 	var get = function (req, res) {
 
-			var search = {};
-			if (typeof req.body.test == 'object') {
-				search.test = {
-					$in : req.body.test
-				};
-			} else {
-				search.test = req.body.test;
-			}
-
-			search.device = unescape(req.body.device);
+			var search = parser.urlQuery(req.body);
 
 			var	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
 			TelemetryAvg.find(search).sort('+date').execFind(function (err, docs) {

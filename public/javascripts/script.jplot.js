@@ -57,11 +57,14 @@ function plot () {
 }
 
 function placeCheckboxes () {
+	var $header = $('<header>')
+		.html('<h2>Enable/Disable axes</h2>');
+	$('.toggle').append($header);
 	for (var i in plotData) {
 		$("<input type='checkbox' name='" + i +"' checked='checked' id='"+i+"'><label class='topcoat-checkbox-label topcoat-checkbox-label--left' for='"+i+"'>"
 			+ i + "</label>")
 			.on('click', plot)
-			.appendTo('p');
+			.appendTo('.toggle');
 	}
 }
 
@@ -73,6 +76,7 @@ function showTooltip(x, y, contents) {
 		left: x - 50,
 		border: "1px solid #fdd",
 		padding: "5px",
+		'font-size': '12px',
 		"background-color": "#fee",
 	}).appendTo("body").fadeIn(200);
 }
@@ -111,7 +115,10 @@ function deltaValue (key, x) {
 		content += '<br> delta ' + (delta.toString()).slice(0,8) + ' ms';
 		content += (delta < 0 ? ' (better)' : ' (worse)');
 	}
-	content += '<br> commit: ' + toolTipInfo[key][x].commit.substring(0,8);
-	content += '<br> date: ' + (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15);
+	/*toolTipInfo defined in baseline.jplot.js */
+	console.log(toolTipInfo[key][x]);
+	content += '<br> commit = ' + toolTipInfo[key][x].commit.substring(0,8);
+	content += '<br> date = ' + (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15);
+	content += '<br> test = ' + toolTipInfo[key][x].test;
 	return content;
 }

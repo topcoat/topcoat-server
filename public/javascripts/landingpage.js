@@ -20,6 +20,7 @@ var dashboard = document.querySelector('#dashboard-link');
 var testNav = document.querySelector('.test-navigation');
 var lis = document.querySelectorAll('#components li');
 var spinner = document.querySelector('.spinner');
+var placeholder = document.querySelector('#placeholder');
 var t;
 var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 
@@ -51,6 +52,7 @@ var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 function displayPlot () {
 
 	spinner.style.display = 'block';
+	placeholder.style.display = 'none';
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
 	var l = params.length;
 	var formdata = new FormData();
@@ -62,6 +64,7 @@ function displayPlot () {
 		if(--l === 0) {
 			submit(formdata, function (data) {
 				spinner.style.display = 'none';
+				placeholder.style.display = 'block';
 				plotData = {
 					'mean_frame_time (ms)' : [],
 					'load_time (ms)' : [],

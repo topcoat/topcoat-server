@@ -33,7 +33,9 @@ block content
 								td(colspan=6)
 							- results.forEach(function (el, idx) {
 								tr
-									td: input(type='checkbox', name='average_' + el._id, value=el._id, data-test=el.test, data-device=el.device)
+									td
+										input(type='checkbox', class='topcoat-checkbox', id='average_' + el._id,name='average_' + el._id, value=el._id, data-test=el.test, data-device=el.device)
+										label.topcoat-checkbox-label--left(for='average_' + el._id) 
 									td= el.test
 										a(title='Add as a filter', class='add-filter', data-value=el.test, data-filter='test') +
 									td= el.device
