@@ -27,9 +27,7 @@
 var parse = function (data) {
 	data = JSON.parse(data);
 	var results = data.map(filterResults);
-  console.log(data);
 	plot(plotData);
-
 };
 
 

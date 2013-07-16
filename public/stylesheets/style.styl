@@ -38,27 +38,36 @@ body
 a
 	color #0083e8
 
-.tooltip
-	position absolute
-	top 1200px
-	left -200px
-	background #ddd
-	padding .5em
-	-webkit-transition-duration .2s
-	-moz-transition-duration .2s
-	transition-duration .2s
-	border-radius 6px
-	&:after
-		content ''
-		position absolute
-		top -8px
-		left 30%
-		width 16px
-		height 16px
-		background #ddd
-		-webkit-transform rotate(45deg)
-	p
-		margin 2px
+// .tooltip
+// 	position absolute
+// 	top 1200px
+// 	left -200px
+// 	background #ddd
+// 	padding .5em
+// 	-webkit-transition-duration .2s
+// 	-moz-transition-duration .2s
+// 	transition-duration .2s
+// 	border-radius 6px
+// 	&:after
+// 		content ''
+// 		position absolute
+// 		top -8px
+// 		left 30%
+// 		width 16px
+// 		height 16px
+// 		background #ddd
+// 		-webkit-transform rotate(45deg)
+// 	p
+// 		margin 2px
+
+.plot__tooltip
+	display: none
+	position: absolute
+	border: 1px solid #fdd
+	padding: 5px
+	font-size: 12px
+	background-color: #fee
+
 table
 	margin 2em 0
 	width 100%

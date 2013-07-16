@@ -34,29 +34,13 @@ body {
 a {
   color: #0083e8;
 }
-.tooltip {
+.plot__tooltip {
+  display: none;
   position: absolute;
-  top: 1200px;
-  left: -200px;
-  background: #ddd;
-  padding: 0.5em;
-  -webkit-transition-duration: 0.2s;
-  -moz-transition-duration: 0.2s;
-  transition-duration: 0.2s;
-  border-radius: 6px;
-}
-.tooltip:after {
-  content: '';
-  position: absolute;
-  top: -8px;
-  left: 30%;
-  width: 16px;
-  height: 16px;
-  background: #ddd;
-  -webkit-transform: rotate(45deg);
-}
-.tooltip p {
-  margin: 2px;
+  border: 1px solid #fdd;
+  padding: 5px;
+  font-size: 12px;
+  background-color: #fee;
 }
 table {
   margin: 2em 0;

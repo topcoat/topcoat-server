@@ -35,8 +35,9 @@ var formdata = new FormData(),
 
 var parse = function (data) {
 	data = JSON.parse(data);
-	data.forEach(filterResults);
 	placeCheckboxes();
+	data.forEach(filterResults);
+	plot = generatePlot(plotData, data);
 	plot();
 };
 
