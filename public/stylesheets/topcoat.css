@@ -1,1085 +1,1095 @@
-/**
- *
- * Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+@font-face {
+  font-family: "Source Sans";
+  src: url("../font/SourceSansPro/SourceSansPro-Regular.otf");
+}
+@font-face {
+  font-family: "Source Sans";
+  src: url("../font/SourceSansPro-Light.otf");
+  font-weight: 200;
+}
+@font-face {
+  font-family: "Source Sans";
+  src: url("../font/SourceSansPro/SourceSansPro-Semibold.otf");
+  font-weight: 600;
+}
 
-@font-face {
-  font-family: "Source Sans Pro";
-  src: url('../font/SourceSansPro-Regular.otf');
-}
-@font-face {
-  font-family: "source";
-  src: url('../font/SourceSansPro-Regular.otf');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: "source-l";
-  src: url('../font/SourceSansPro-Light.otf');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: "source-sb";
-  src: url('../font/SourceSansPro-Semibold.otf');
-  font-weight: normal;
-  font-style: normal;
-}
-.standard-structure {
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 3px;
-  display: inline-block;
-  font-size: 12px;
-  height: 21px;
-  line-height: 21px;
-  min-width: 15px;
-  margin: 0 5px 5px 0;
-  max-width: 150px;
-  overflow: hidden;
-  padding: 0 8px;
-  position: relative;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  vertical-align: top;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-}
-.icon-structure {
-  background-repeat: no-repeat;
-  display: inline-block;
-  vertical-align: top;
-}
-.light-focus-style {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-.quiet-style {
-  background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0)));
-  border: 1px solid rgba(0, 0, 0, 0.21);
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0);
-  color: #454545;
-  text-shadow: none;
-}
-.quiet-hover-style {
-  background-image: linear-gradient(top, #f9f9f9, #f9f9f9);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#f9f9f9));
-}
-.quiet-down-style {
-  background: #d3d7d7;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-}
-.quiet-focus-style {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px 0 rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-.dark-focus-style {
-  border: 1px solid #000000;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.69);
-  outline: none;
-}
-.dark-quiet-style {
-  background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0)));
-  border: 1px solid rgba(255, 255, 255, 0.21);
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0);
-  color: #eff1f1;
-  text-shadow: none;
-}
-.dark-quiet-hover-style {
-  background-image: linear-gradient(top, #555555, #555555);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#555555), to(#555555));
-}
-.dark-quiet-down-style {
-  background: #2b2d2d;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-}
-.dark-quiet-focus-style {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px 0 rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-.cta-style {
-  background-image: linear-gradient(top, #4fa3e1, #237fcb);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#4fa3e1), to(#237fcb));
-  border: 1px solid #014994;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.27);
-  color: #ffffff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.36);
-}
-.cta-hover-style {
-  background-image: linear-gradient(top, #5dafed, #3892de);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#5dafed), to(#3892de));
-}
-.cta-down-style {
-  background: #4290d1;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.12);
-  text-decoration: none;
-}
-.cta-focus-style {
-  border: 1px solid #0940fd;
-  box-shadow: 0 0 4px 0 rgba(0, 136, 255, 0.69);
-  outline: none;
-}
 body {
-  color: #454545;
-  font: 14px "source", helvetica, arial, sans-serif;
   margin: 0;
   padding: 0;
-  -webkit-font-smoothing: subpixel-antialiased !important;
+  color: #000;
+  font: 16px "Source Sans", helvetica, arial, sans-serif;
+  font-weight: 200;
   text-rendering: optimizeLegibility;
 }
-.disabled {
+
+.topcoat-icon--menu-stack {
+  background: url("../img/hamburger_light.svg") no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+
+.quarter {
+  width: 25%;
+  box-sizing: border-box;
+}
+.half {
+  width: 50%;
+}
+.three-quarters {
+  width: 75%;
+  box-sizing: border-box;
+}
+.third {
+  width: 33.333%;
+}
+.two-thirds {
+  width: 66.666%;
+}
+.full {
+  width: 100%;
+}
+
+.left {
+  text-align: left;
+}
+.center {
+  text-align: center;
+}
+.right {
+  text-align: right;
+}
+
+.reset-ui {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
   cursor: default;
-  opacity: 0.6;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ Button
+ ------
+
+ :active - Active state
+
+ .is-active - Simulates an active state on mobile devices
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates a disabled state on mobile devices
+
+    <a class="topcoat-button">Button</a>
+    <a class="topcoat-button is-active">Button</a>
+    <a class="topcoat-button is-disabled">Button</a>
+*/
+.topcoat-button,
+.topcoat-button--quiet,
+.topcoat-button--large,
+.topcoat-button--large--quiet,
+.topcoat-button--cta,
+.topcoat-button--large--cta {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 1.16rem;
+  font-size: 12px;
+  line-height: 2rem;
+  letter-spacing: 1px;
+  color: #c6c8c8;
+  text-shadow: 0 -1px rgba(0,0,0,0.69);
+  vertical-align: top;
+  background-color: #595b5b;
+  -webkit-box-shadow: inset 0 1px rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px rgba(255,255,255,0.12);
+  border: 1px solid rgba(0,0,0,0.36);
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+.topcoat-button:active,
+.topcoat-button.is-active,
+.topcoat-button--large:active,
+.topcoat-button--large.is-active {
+  background-color: #404141;
+  -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px rgba(0,0,0,0.18);
+}
+.topcoat-button:disabled,
+.topcoat-button.is-disabled {
+  opacity: 0.3;
+  cursor: default;
   pointer-events: none;
 }
-.bg-white {
-  background: #fff;
-  font-size: 12px;
-  padding: 20px;
+/*
+ Quiet Button
+ ------------
+
+ :active - Quiet button active state
+
+ .is-active - Simulates active state for a quiet button on touch interfaces
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates disabled state
+
+    <a class="topcoat-button--quiet">Button</a>
+    <a class="topcoat-button--quiet is-active">Button</a>
+    <a class="topcoat-button--quiet is-disabled">Button</a>
+*/
+.topcoat-button--quiet {
+  background: transparent;
+  border: 1px solid transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
-.bg-lightgray {
-  background: #dfe2e2;
-  font-size: 12px;
-  padding: 20px;
+.topcoat-button--quiet:active,
+.topcoat-button--quiet.is-active,
+.topcoat-button--large--quiet:active,
+.topcoat-button--large--quiet.is-active {
+  color: #c6c8c8;
+  text-shadow: 0 -1px rgba(0,0,0,0.69);
+  background-color: #404141;
+  border: 1px solid rgba(0,0,0,0.36);
+  -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px rgba(0,0,0,0.18);
 }
-.bg-slategray {
-  background: #3a3f42 url("../img/bg_dark.png") repeat-x;
-  color: #c7c7c7;
-  font-size: 12px;
-  padding:7px 5px 5px;
+.topcoat-button--quiet:disabled,
+.topcoat-button--quiet.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
 }
-.bg-white .title {
-  color: #000;
-  font-size: 18px;
-  font-weight: 300;
+/*
+ Large Button
+ ------------
+
+ :active - Active state
+
+ .is-active - Simulates active state touch interfaces
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates disabled state
+
+    <a class="topcoat-button--large" >Button</a>
+    <a class="topcoat-button--large is-active" >Button</a>
+    <a class="topcoat-button--large is-disabled" >Button</a>
+*/
+.topcoat-button--large,
+.topcoat-button--large--quiet {
+  font-size: 1.167rem;
+  line-height: 2.6rem;
 }
-.bg-lightgray .title {
-  font-size: 18px;
-  font-weight: 300;
-  text-shadow: 0 1px 0 #fff;
+.topcoat-button--large:disabled,
+.topcoat-button--large.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
 }
-.bg-slategray .title {
+/*
+ Large Quiet Button
+ ------------------
+
+ :active - Active state
+
+ .is-pressed - Simulates active state on touch interfaces
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates disabled state
+
+
+    <a class="topcoat-button--large--quiet" >Button</a>
+    <a class="topcoat-button--large--quiet is-active" >Button</a>
+    <a class="topcoat-button--large--quiet is-disabled" >Button</a>
+*/
+.topcoat-button--large--quiet {
+  background: transparent;
+  border: 1px solid transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.topcoat-button--large--quiet:disabled,
+.topcoat-button--large--quiet.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+/*
+ Call To Action Button
+ ---------------------
+
+ :active - Active state
+
+ .is-pressed - Simulates active state on touch interfaces
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates disabled state
+
+
+    <a class="topcoat-button--cta" >Button</a>
+    <a class="topcoat-button--cta is-active" >Button</a>
+    <a class="topcoat-button--cta is-disabled" >Button</a>
+
+*/
+.topcoat-button--cta,
+.topcoat-button--large--cta {
+  border: 1px solid #143250;
+  background-color: #288edf;
+  -webkit-box-shadow: inset 0 1px rgba(255,255,255,0.36);
+  box-shadow: inset 0 1px rgba(255,255,255,0.36);
   color: #fff;
-  font-size: 18px;
-  text-shadow: 0 -1px 0 #000000;
+  font-weight: 500;
+  text-shadow: 0 -1px rgba(0,0,0,0.36);
 }
-.bg-slategray .group-label {
-  color: #a4b4b7;
-  font-size: 14px;
-  text-shadow: 0 -1px 0 #000000;
+.topcoat-button--cta:active,
+.topcoat-button--cta.is-active,
+.topcoat-button--large--cta:active,
+.topcoat-button--large--cta.is-active {
+  background-color: #1976c3;
+  -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.12);
+  box-shadow: inset 0 1px rgba(0,0,0,0.12);
 }
-.large {
-  font-family: source-sb !important;
-  font-size: 14px !important;
-  line-height: 27px !important;
+.topcoat-button--cta:disabled,
+.topcoat-button--cta.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
 }
-.button.large {
-  height: 27px !important;
-  margin: 0 10px 10px 0 !important;
-  padding: 0 15px !important;
+/*
+ Large Call To Action Button
+ ---------------------------
+
+ :active - Active state
+
+ .is-active - Simulates active state touch interfaces
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates disabled state
+
+    <a class="topcoat-button--large--cta" >Button</a>
+    <a class="topcoat-button--large--cta is-active" >Button</a>
+    <a class="topcoat-button--large--cta is-disabled" >Button</a>
+*/
+.topcoat-button--large--cta {
+  font-size: 1.167rem;
+  line-height: 2.6rem;
 }
-.button.large.no-label {
-  padding: 0 !important;
+.topcoat-button--large-cta:disabled,
+.topcoat-button--large--cta.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
 }
-.button.large.no-label i {
-  margin-left: 6px;
-}
-.text,
-.inline-block {
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 3px;
-  display: inline-block;
-  font-size: 12px;
-  height: 21px;
-  line-height: 21px;
-  min-width: 15px;
-  margin: 0 5px 5px 0;
-  max-width: 150px;
-  overflow: hidden;
-  padding: 0 8px;
+
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ Icon Button
+ -----------
+
+ :active - Active state
+
+ .is-active - Simulates an active state on mobile devices
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates a disabled state on mobile devices
+
+    <a class="topcoat-icon-button">
+        <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+    </a>
+
+    <a class="topcoat-icon-button is-active">
+      <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+    </a>
+
+    <a class="topcoat-icon-button is-disabled">
+      <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+    </a>
+*/
+.topcoat-icon-button,
+.topcoat-icon-button--quiet,
+.topcoat-icon-button--large,
+.topcoat-icon-button--large--quiet {
   position: relative;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  vertical-align: top;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  min-width: auto;
-  max-width: auto;
-  padding-left: 0;
-  padding-right: 0;
-}
-a {
-  color: #0083e8;
-  text-decoration: none;
-}
-a:active {
-  text-decoration: underline;
-}
-.link {
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 3px;
-  display: inline-block;
-  font-size: 12px;
-  height: 21px;
-  line-height: 21px;
-  min-width: 15px;
-  margin: 0 5px 5px 0;
-  max-width: 150px;
-  overflow: hidden;
-  padding: 0 8px;
-  position: relative;
-  text-overflow: ellipsis;
-  vertical-align: top;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  color: #0083e8;
-  min-width: auto;
-  max-width: auto;
-  padding-left: 0;
-  padding-right: 0;
-  text-decoration: none;
-}
-.link:active {
-  text-decoration: underline;
-}
-.link:focus {
-  color: #0083e8;
-  outline: none;
-  text-shadow: 0 0 4px rgba(0, 136, 255, 0.69);
-}
-.link.dark {
-  color: #6bc3fa;
-}
-.drop-down-triangle {
-  background-image: url(../img/drop-down-triangle.png);
-  background-repeat: no-repeat;
-  display: inline-block;
-  height: 6px;
-  position: absolute;
-  right: 6px;
-  top: 9px;
-  width: 9px;
-}
-.drop-down-triangle.dark {
-  background-image: url(../img/drop-down-triangle-dark.png) !important;
-  top: 8px;
-}
-.large .drop-down-triangle {
-  background-image: url(../img/drop-down-triangle.png);
-  background-repeat: no-repeat;
-  display: inline-block;
-  height: 6px;
-  position: absolute;
-  right: 6px;
-  top: 12px;
-  width: 9px;
-}
-.icon-xs {
-  background-repeat: no-repeat;
   display: inline-block;
   vertical-align: top;
-  background: #aaa;
-  height: 13px;
-  width: 13px;
-  margin: 4px 4px 0 -3px;
-}
-.icon-sm {
-  background-repeat: no-repeat;
-  display: inline-block;
-  vertical-align: top;
-  background: #aaa;
-  height: 16px;
-  width: 16px;
-  margin: 5px 6px 0 -9px;
-}
-.button,
-.button.disabled:hover,
-.button.disabled:active {
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 3px;
-  display: inline-block;
-  font-size: 12px;
-  height: 21px;
-  line-height: 21px;
-  min-width: 15px;
-  margin: 0 5px 5px 0;
-  max-width: 150px;
-  overflow: hidden;
-  padding: 0 8px;
-  position: relative;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  vertical-align: top;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  background-image: none, linear-gradient(top, #f5f8fa, #e3e5e5);
-  background-image: none, -webkit-gradient(linear, left top, left bottom, from(#f5f8fa), to(#e3e5e5));
-  background-position: center;
-  background-repeat: none;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 1px 0 #ffffff;
-  color: #454545;
-  text-shadow: 0 1px 0 #ffffff;
-}
-.button:hover {
-  background-image: none, linear-gradient(top, #f8fafb, #edefef);
-  background-image: none, -webkit-gradient(linear, left top, left bottom, from(#f8fafb), to(#edefef));
-  background-position: center;
-  background-repeat: none;
-}
-.button:active {
-  background-color: #d3d7d7;
-  background-image: none;
-  background-position: center;
-  background-repeat: none;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-}
-.button:focus {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-.button.quiet,
-.button.quiet.disabled:hover,
-.button.quiet.disabled:active {
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 3px;
-  display: inline-block;
-  font-size: 12px;
-  height: 21px;
-  line-height: 21px;
-  min-width: 15px;
-  margin: 0 5px 5px 0;
-  max-width: 150px;
-  overflow: hidden;
-  padding: 0 8px;
-  position: relative;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  vertical-align: top;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0)));
-  border: 1px solid rgba(0, 0, 0, 0.21);
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0);
-  color: #454545;
-  text-shadow: none;
-}
-.button.quiet:hover {
-  background-image: linear-gradient(top, #f9f9f9, #f9f9f9);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f9f9f9), to(#f9f9f9));
-}
-.button.quiet:active {
-  background: #d3d7d7;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-}
-.button.quiet:focus {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px 0 rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-.button.dark,
-.button.dark.disabled:hover,
-.button.dark.disabled:active {
-  background-image: none, linear-gradient(top, #7a7c7c, #5f6060);
-  background-image: none, -webkit-gradient(linear, left top, left bottom, from(#7a7c7c), to(#5f6060));
-  background-position: center;
-  background-repeat: none;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  color: #eff1f1;
-  text-shadow: 0 -1px 0 #000000;
-}
-.button.dark:hover {
-  background-image: none, linear-gradient(top, #828585, #6a6b6b);
-  background-image: none, -webkit-gradient(linear, left top, left bottom, from(#828585), to(#6a6b6b));
-  background-position: center;
-  background-repeat: none;
-}
-.button.dark:active {
-  background-color: #2b2d2d;
-  background-image: none;
-  background-position: center;
-  background-repeat: none;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-}
-.button.dark:focus {
-  border: 1px solid #000000;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.69);
-  outline: none;
-}
-.button.quiet.dark,
-.button.quiet.dark.disabled:hover,
-.button.quiet.dark.disabled:active {
-  background-image: linear-gradient(top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0));
-  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0)), to(rgba(0, 0, 0, 0)));
-  border: 1px solid rgba(255, 255, 255, 0.21);
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0);
-  color: #eff1f1;
-  text-shadow: none;
-}
-.button.quiet.dark:hover {
-  background-image: linear-gradient(top, #555555, #555555);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#555555), to(#555555));
-}
-.button.quiet.dark:active {
-  background: #2b2d2d;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-}
-.button.quiet.dark:focus {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px 0 rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-.button.no-label {
-  padding: 0 0 0 8px;
-}
-.button.drop-down {
-  min-width: 70px;
-  overflow: visible;
-  padding: 0 30px 0 5px !important;
-  position: relative;
-}
-.menu {
-  background: #ffffff;
-  border-top: none !important;
-  border-radius: 3px;
-  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.3);
-  left: 0px;
-  margin: 0;
-  overflow: hidden;
-  padding: 3px 0;
-  position: absolute;
-  top: 22px;
-  min-width: 100%;
-  z-index: 1000;
-}
-.menu li {
-  list-style: none;
-}
-.menu li:last-child {
-  border-radius: 3px;
-}
-.menu a {
-  color: #454545;
-  display: block;
-  outline: none;
-  padding: 0 0 0 10px;
-  text-shadow: none;
-}
-.menu a:hover,
-.menu a:focus {
-  background-color: #e0f0fa;
-}
-.menu a:active {
-  text-decoration: none;
-}
-.dark .menu {
-  border-top: none !important;
-}
-.large .menu {
-  border-top: none !important;
-  top: 28px !important;
-}
-.large.dark .menu {
-  border-top: none !important;
-  top: 28px !important;
-}
-.button.drop-down.large {
-  min-width: 100px;
-  padding: 0 30px 0 10px !important;
-}
-.button.drop-down.large .menu {
-  top: 28px;
-}
-.button-group {
-  display: inline-block;
-  vertical-align: top;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  overflow: visible;
-  position: relative;
-}
-.button-group .menu {
-  left: 1px;
-  top: 23px;
-}
-.button.inside {
-  border-left: 1px solid rgba(0, 0, 0, 0);
-  border-right: 1px solid rgba(187, 187, 187, 0.8);
-  border-radius: 0;
-  margin: 0 0 0 -3px !important;
-}
-.button.start {
-  border-right: 1px solid rgba(187, 187, 187, 0.8);
-  border-radius: 3px 0 0 3px !important;
-  margin: 0;
-}
-.button.end {
-  border-left: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 0 3px 3px 0 !important;
-  margin: 0 5px 5px -3px;
-}
-.button.more {
-  border-left: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 0 3px 3px 0 !important;
-  margin: 0 5px 5px -3px;
-  padding: 0;
-  width: 20px;
-}
-.button.inside.dark {
-  border-left: 1px solid rgba(0, 0, 0, 0);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 3px 0 0 3px !important;
-  margin: 0;
-}
-.button.start.dark {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 3px 0 0 3px !important;
-  margin: 0;
-}
-.button-group.large {
-  margin: 0 10px 10px 0 !important;
-}
-.button-group.large .menu {
-  top: 29px !important;
-}
-.button.inside.large {
-  margin: 0 0 0 -4px !important;
-}
-.button.start.large {
-  margin: 0 !important;
-}
-.button.end.large {
-  margin: 0 5px 5px -4px !important;
-}
-.button.more.large {
-  margin: 0 5px 5px -4px !important;
-  padding: 0 !important;
-}
-select.button {
-  background-image: url(../img/pop-up-triangle.png), linear-gradient(top, #f5f8fa, #e3e5e5);
-  background-image: url(../img/pop-up-triangle.png), -webkit-gradient(linear, left top, left bottom, from(#f5f8fa), to(#e3e5e5));
-  background-position: right;
-  background-repeat: no-repeat;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 1px 0 #ffffff;
-  color: #454545;
-  text-shadow: 0 1px 0 #ffffff;
-  height: 23px;
-  min-width: 70px;
-  padding: 0 30px 0 5px;
-  -webkit-appearance: none !important;
-}
-select.button:hover {
-  background-image: url(../img/pop-up-triangle.png), linear-gradient(top, #f8fafb, #edefef);
-  background-image: url(../img/pop-up-triangle.png), -webkit-gradient(linear, left top, left bottom, from(#f8fafb), to(#edefef));
-  background-position: right;
-  background-repeat: no-repeat;
-}
-select.button:active {
-  background-color: #d3d7d7;
-  background-image: url(../img/pop-up-triangle.png);
-  background-position: right;
-  background-repeat: no-repeat;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-}
-select.button:focus {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-select.button.dark {
-  background-image: url(../img/pop-up-triangle-dark.png), linear-gradient(top, #7a7c7c, #5f6060);
-  background-image: url(../img/pop-up-triangle-dark.png), -webkit-gradient(linear, left top, left bottom, from(#7a7c7c), to(#5f6060));
-  background-position: right;
-  background-repeat: no-repeat;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  color: #eff1f1;
-  text-shadow: 0 -1px 0 #000000;
-  height: 23px;
-  min-width: 70px;
-  padding: 0 30px 0 5px;
-  -webkit-appearance: none !important;
-}
-select.button.dark:hover {
-  background-image: url(../img/pop-up-triangle-dark.png), linear-gradient(top, #828585, #6a6b6b);
-  background-image: url(../img/pop-up-triangle-dark.png), -webkit-gradient(linear, left top, left bottom, from(#828585), to(#6a6b6b));
-  background-position: right;
-  background-repeat: no-repeat;
-}
-select.button.dark:active {
-  background-color: #2b2d2d;
-  background-image: url(../img/pop-up-triangle-dark.png);
-  background-position: right;
-  background-repeat: no-repeat;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  text-decoration: none;
-}
-select.button.dark:focus {
-  border: 1px solid #000000;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.69);
-  outline: none;
-}
-select.button.large {
-  height: 29px !important;
-  min-width: 70px;
-  padding: 0 30px 0 10px !important;
-}
-.button.cta,
-.button.cta.disabled:hover,
-.button.cta.disabled:active {
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 3px;
-  display: inline-block;
-  font-size: 12px;
-  height: 21px;
-  line-height: 21px;
-  min-width: 15px;
-  margin: 0 5px 5px 0;
-  max-width: 150px;
-  overflow: hidden;
-  padding: 0 8px;
-  position: relative;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  vertical-align: top;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  background-image: linear-gradient(top, #4fa3e1, #237fcb);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#4fa3e1), to(#237fcb));
-  border: 1px solid #014994;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.27);
-  color: #ffffff;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.36);
-}
-.button.cta:hover {
-  background-image: linear-gradient(top, #5dafed, #3892de);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#5dafed), to(#3892de));
-}
-.button.cta:active {
-  background: #4290d1;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.12);
-  text-decoration: none;
-}
-.button.cta:focus {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-/* Approx. Slider */
-.approx-slider {
-  background: #d4d7d7;
-  border: 1px solid #babdbd;
-  border-radius: 3px;
-  display: inline-block;
-  height: 3px;
-  outline: none;
-  width: 100px;
-  -webkit-appearance: none !important;
-}
-.approx-slider::-webkit-slider-thumb {
-  background-image: none, linear-gradient(top, #f5f8fa, #e3e5e5);
-  background-image: none, -webkit-gradient(linear, left top, left bottom, from(#f5f8fa), to(#e3e5e5));
-  background-position: center;
-  background-repeat: none;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 1px 0 #ffffff;
-  color: #454545;
-  text-shadow: 0 1px 0 #ffffff;
-  border-radius: 3px;
-  cursor: pointer;
-  height: 11px;
-  width: 9px;
-  -webkit-appearance: none !important;
-}
-.approx-slider:focus::-webkit-slider-thumb {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-.approx-slider.large {
-  height: 5px;
-  width: 140px !important;
-}
-.approx-slider.large::-webkit-slider-thumb {
-  height: 15px;
-  width: 13px;
-}
-.approx-slider.dark {
-  background: #1f1f1f;
-  border: 1px solid #000000;
-}
-.approx-slider.dark::-webkit-slider-thumb {
-  background-image: none, linear-gradient(top, #7a7c7c, #5f6060);
-  background-image: none, -webkit-gradient(linear, left top, left bottom, from(#7a7c7c), to(#5f6060));
-  background-position: center;
-  background-repeat: none;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  color: #eff1f1;
-  text-shadow: 0 -1px 0 #000000;
-}
-.approx-slider.dark:focus::-webkit-slider-thumb {
-  border: 1px solid #000000;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.69);
-  outline: none;
-}
-/* Slide Switch */
-.slide-switch {
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0);
-  border-radius: 3px;
-  display: inline-block;
-  font-size: 12px;
-  height: 21px;
-  line-height: 21px;
-  min-width: 15px;
-  margin: 0 5px 5px 0;
-  max-width: 150px;
-  overflow: hidden;
-  padding: 0 8px;
-  text-decoration: none;
-  text-overflow: ellipsis;
-  vertical-align: top;
-  white-space: nowrap;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  background-color: #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  font-family: source-sb;
-  cursor: pointer;
-  padding: 0;
-  position: relative;
-  width: 54px;
-}
-.slide-switch input {
-  display: none;
-}
-.slide-switch input:checked + .wrapper {
-  left: -38px;
-}
-.slide-switch::focus {
-  border: 1px solid rgba(9, 64, 253, 0.84);
-  box-shadow: 0 0 4px rgba(0, 136, 255, 0.69);
-  outline: none;
-}
-.wrapper {
-  display: block;
-  height: 21px;
-  position: relative;
-  top: 0px;
-  -moz-transition: left 0.2s ease-out;
-  -webkit-transition: left 0.2s ease-out;
-  transition: left 0.2s ease-out;
-  width: 90px;
-  z-index: 1;
-}
-.switch,
-.on,
-.off {
-  display: block;
-  height: 21px;
-  font-size: 12px;
-  line-height: 21px;
-  position: absolute;
-  text-align: center;
-  text-shadow: 0 1px 0 #ffffff;
-  top: 0;
-}
-.switch {
-  background-image: linear-gradient(top, #f5f8fa, #e3e5e5);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f8fa), to(#e3e5e5));
-  border-left: 1px solid rgba(0, 0, 0, 0.3);
-  border-right: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 3px;
-  box-shadow: inset 0 1px 0 #ffffff;
-  left: 37px;
-  width: 16px;
-}
-.on {
-  background: #e0f0fa;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  color: #0083e8;
-  width: 37px;
-}
-.off {
-  background: #d3d7d7;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  left: 55px;
-  width: 37px;
-}
-.slide-switch.dark {
-  background-color: #2b2d2d;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-}
-.dark .switch,
-.dark .on,
-.dark .off {
-  text-shadow: 0 -1px 0 #000000;
-}
-.dark .switch {
-  background-image: linear-gradient(top, #7a7c7c, #5f6060);
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#7a7c7c), to(#5f6060));
-  border-left: 1px solid rgba(0, 0, 0, 0.8);
-  border-right: 1px solid rgba(0, 0, 0, 0.8);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-.dark .on {
-  background: #2b2d2d;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  color: #56badf;
-}
-.dark .off {
-  background: #2b2d2d;
-  box-shadow: inset 0 1px 0px rgba(0, 0, 0, 0.06);
-  color: #999;
-}
-.slide-switch.large {
-  height: 27px;
-  width: 69px;
-}
-.slide-switch.large .wrapper {
-  display: block;
-  height: 27px;
-  position: relative;
-  top: 0px;
-  -moz-transition: left 0.2s ease-out;
-  -webkit-transition: left 0.2s ease-out;
-  transition: left 0.2s ease-out;
-  z-index: 1;
-}
-.slide-switch.large .switch,
-.slide-switch.large .on,
-.slide-switch.large .off {
-  height: 27px;
-  font-size: 14px;
-  line-height: 28px;
-}
-.slide-switch.large .switch {
-  left: 47px;
-  width: 21px;
-}
-.slide-switch.large .on {
-  width: 48px;
-}
-.slide-switch.large .off {
-  left: 70px;
-  width: 48px;
-}
-.slide-switch.large input:checked + .wrapper {
-  left: -48px;
-}
-/* Checkbox */
-input[type=checkbox] + label {
-  background: url("../img/checkbox_unchecked.png") no-repeat 0 50%;
-  display: inline-block;
-  font-weight: 400;
-  padding: 0 0 0 20px;
-}
-input[type=checkbox]:checked + label {
-  background: url("../img/checkbox_checked.png") no-repeat 0 50%;
-  display: inline-block;
-  padding: 0 0 0 20px;
-}
-input.dark[type=checkbox] + label {
-  background: url("../img/checkbox_unchecked_dark.png") no-repeat 0 50%;
-  display: inline-block;
-  padding: 0 0 0 20px;
-}
-input.dark[type=checkbox]:checked + label {
-  background: url("../img/checkbox_checked_dark.png") no-repeat 0 50%;
-  display: inline-block;
-  padding: 0 0 0 20px;
-}
-/* Spinner */
-.spinner {
-  -webkit-transition-property: -webkit-transform;
-  -webkit-transition-duration: .75s;
-  -moz-transition-property: -moz-transform;
-  -moz-transition-duration: .75s;
-  -webkit-animation-name: rotate;
-  -webkit-animation-duration: .75s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: linear;
-  -moz-animation-name: rotate;
-  -moz-animation-duration: .75s;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-timing-function: linear;
-}
-.spinner {
-  display: inline-block;
-  margin: 0 5px 5px 0;
-  width: 16px;
-  height: 16px;
-  background: url(../img/spinner-sml.png) 50% no-repeat;
-  background-size: 100%;
-}
-.spinner.large {
-  width: 36px;
-  height: 36px;
-  background: url(../img/spinner-lrg.png) 50% no-repeat;
-  background-size: 100%;
-}
-@-webkit-keyframes rotate {
-  from {
-    -webkit-transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-  }
-}
-@-moz-keyframes rotate {
-  from {
-    -moz-transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(360deg);
-  }
-}
-/* Swatch */
-.swatch.large {
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
-  height: 27px;
-  width: 27px;
-}
-/* End Swatch */
-/* Text Field */
-.text-field {
-  border: 1px solid #a5a8a8;
-  box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1);
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
-  color: #000;
-  font-family: "Source Sans Pro", "source", helvetica, arial, sans-serif;
-  -webkit-border-radius: 4px;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 0 0.5rem;
+  line-height: 2rem;
+  letter-spacing: 1px;
+  color: #c6c8c8;
+  text-shadow: 0 -1px rgba(0,0,0,0.69);
+  vertical-align: baseline;
+  background-color: #595b5b;
+  -webkit-box-shadow: inset 0 1px rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px rgba(255,255,255,0.12);
+  border: 1px solid rgba(0,0,0,0.36);
+  -webkit-border-radius: 3px;
   border-radius: 3px;
-  font-size: 12px;
+}
+.topcoat-icon-button:active,
+.topcoat-icon-button.is-active {
+  background-color: #404141;
+  -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px rgba(0,0,0,0.18);
+}
+.topcoat-icon-button:disabled,
+.topcoat-icon-button.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+/*
+ Quiet Icon Button
+ -----------------
+
+ :active - Button active state
+
+ .is-active - Simulates active state for a button on touch interfaces
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates disabled state
+
+    <a class="topcoat-icon-button--quiet">
+        <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+    </a>
+
+    <a class="topcoat-icon-button--quiet is-active">
+      <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+    </a>
+
+    <a class="topcoat-icon-button--quiet is-disabled">
+      <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+    </a>
+*/
+.topcoat-icon-button--quiet {
+  background: transparent;
+  border: 1px solid transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.topcoat-icon-button--quiet:active,
+.topcoat-icon-button--quiet.is-active,
+.topcoat-icon-button--large--quiet:active,
+.topcoat-icon-button--large--quiet.is-active {
+  color: #c6c8c8;
+  text-shadow: 0 -1px rgba(0,0,0,0.69);
+  background-color: #404141;
+  border: 1px solid rgba(0,0,0,0.36);
+  -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px rgba(0,0,0,0.18);
+}
+.topcoat-icon-button--quiet:disabled,
+.topcoat-icon-button--quiet.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+/*
+ Large Icon Button
+ -----------------
+
+ :active - Active state
+
+ .is-active - Simulates an active state on mobile devices
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates a disabled state on mobile devices
+
+    <a class="topcoat-icon-button--large">
+        <span class="topcoat-icon--large topcoat-icon--menu-stack"></span>
+    </a>
+
+    <a class="topcoat-icon-button--large is-active">
+      <span class="topcoat-icon--large topcoat-icon--menu-stack"></span>
+    </a>
+
+    <a class="topcoat-icon-button--large is-disabled">
+      <span class="topcoat-icon--large topcoat-icon--menu-stack"></span>
+    </a>
+*/
+.topcoat-icon-button--large,
+.topcoat-icon-button--large--quiet {
+  width: 2.6rem;
+  height: 2.6rem;
+  line-height: 2.6rem;
+}
+.topcoat-icon-button--large:active,
+.topcoat-icon-button--large.is-active {
+  background-color: #404141;
+  -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px rgba(0,0,0,0.18);
+}
+.topcoat-icon-button--large:disabled,
+.topcoat-icon-button--large.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+/*
+ Large Quiet Icon Button
+ -----------------------
+
+ :active - Active state
+
+ .is-active - Simulates an active state on mobile devices
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates a disabled state on mobile devices
+
+    <a class="topcoat-icon-button--large--quiet">
+        <span class="topcoat-icon--large topcoat-icon--menu-stack"></span>
+    </a>
+
+    <a class="topcoat-icon-button--large--quiet is-active">
+      <span class="topcoat-icon--large topcoat-icon--menu-stack"></span>
+    </a>
+
+    <a class="topcoat-icon-button--large--quiet is-disabled">
+      <span class="topcoat-icon--large topcoat-icon--menu-stack"></span>
+    </a>
+*/
+.topcoat-icon-button--large--quiet {
+  background: transparent;
+  border: 1px solid transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.topcoat-icon-button--large--quiet:disabled,
+.topcoat-icon-button--large--quiet.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+.topcoat-icon,
+.topcoat-icon--large {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  width: 1rem;
+  height: 1rem;
+  vertical-align: middle;
+}
+.topcoat-icon--large {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ List
+ ------------
+
+    <div class="topcoat-list__container">
+      <h3 class="topcoat-list__header">Category</h3>
+      <ul class="topcoat-list">
+        <li class="topcoat-list__item">
+          Item
+        </li>
+        <li class="topcoat-list__item">
+          Item
+        </li>
+        <li class="topcoat-list__item">
+          Item
+        </li>
+      </ul>
+    </div>
+
+*/
+.topcoat-list__container {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  border-top: 1px solid #2f3234;
+  border-bottom: 1px solid #eff1f1;
+  background-color: #444849;
+}
+.topcoat-list__header {
+  margin: 0;
+  padding: 0.3rem 1.6rem;
+  font-size: 0.9em;
   font-weight: 400;
-  height: 21px;
-  margin: 0 3px 3px 0;
-  padding: 1px 3px 0 3px;
-  min-width: 150px;
+  background-color: #3b3e40;
+  color: #868888;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
+  border-top: solid 1px rgba(255,255,255,0.1);
+  border-bottom: solid 1px rgba(255,255,255,0.05);
 }
-.text-field.large {
-  font-size: 14px;
-  padding: 1px 4px 0 4px;
-  height: 27px;
+.topcoat-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  border-top: 1px solid #2f3234;
+  color: #c6c8c8;
 }
-.text-field.dark {
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(0, 0, 0, 0.7);
-  color: #fff;
-}
-/* Error state before Focus state on purpose */
-.text-field.error {
-  border: 1px solid #ea015e;
-  -webkit-box-shadow: 0 0 4px #ff0078;
-  box-shadow: 0 0 4px #ff0078, inset 0px 1px 0px rgba(0, 0, 0, 0.15);
-}
-.text-field.dark.error {
-  border: 1px solid #ea015e;
-  -webkit-box-shadow: 0 0 4px #ff0078;
-  box-shadow: 0 0 4px #ff0078, inset 0px 1px 0px rgba(0, 0, 0, 0.15);
-}
-.text-field:focus {
-  border: 1px solid #0940fd;
-  -webkit-box-shadow: 0 0 4px #0088ff;
-  box-shadow: 0 0 4px #0088ff;
-  outline: none;
-}
-.text-field.dark:focus {
-  border: 1px solid #000;
-  -webkit-box-shadow: 0 0 4px #222;
-  box-shadow: 0 0 4px #222;
-  outline: none;
-}
-.text-field[disabled=disabled] {
-  opacity: 0.6;
-}
-/* End Text Field */
-/* Breadcrumbs */
-.breadcrumbs {
-  list-style: none;
+.topcoat-list__item {
   margin: 0;
   padding: 0;
+  padding: 1.16rem;
+  border-top: 1px solid #5e6061;
+  border-bottom: 1px solid #2f3234;
 }
-.breadcrumbs li {
-  background: url("../img/breadcrumb.png") no-repeat right 3px;
-  color: #000;
+.topcoat-list__item:first-child {
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+Navigation Bar
+--------------
+
+    <div class="topcoat-navigation-bar">
+        <div class="topcoat-navigation-bar__item left quarter">
+            <a class="topcoat-icon-button--quiet">
+              <span class="topcoat-icon topcoat-icon--menu-stack"></span>
+            </a>
+        </div>
+        <div class="topcoat-navigation-bar__item center half">
+            <h1 class="topcoat-navigation-bar__title">Header</h1>
+        </div>
+        <div class="topcoat-navigation-bar__item right quarter">
+            <a class="topcoat-icon-button--quiet">
+              <span class="topcoat-icon topcoat-icon--edit"></span>
+            </a>
+        </div>
+    </div>
+*/
+.topcoat-navigation-bar {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  white-space: nowrap;
+  overflow: hidden;
+  word-spacing: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  height: 2.6rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: #595b5b;
+  color: #fff;
+  -webkit-box-shadow: inset 0 -1px #333434, 0 1px rgba(0,0,0,0.15);
+  box-shadow: inset 0 -1px #333434, 0 1px rgba(0,0,0,0.15);
+}
+.topcoat-navigation-bar__item {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-background-clip: padding;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  position: relative;
   display: inline-block;
-  font-size: 12px;
+  vertical-align: top;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  margin: var-margin;
+  line-height: 2.6rem;
+  vertical-align: top;
+}
+.topcoat-navigation-bar__title {
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 1.167rem;
   font-weight: 400;
-  line-height: 18px;
-  margin: 0 3px 0 0;
-  padding: 0 11px 0 0;
-}
-.breadcrumbs li:last-child {
-  background: none;
-}
-.bg-slategray .breadcrumbs li {
   color: #fff;
 }
-.breadcrumbs a {
-  color: #888;
-  text-decoration: none;
+
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+
+
+Use this class to create a dialog element. Make sure to apply ".topcoat-overlay-bg" an empty div on the page as well,
+so that the dialog is resting on a dark, transparent background
+
+  <div class="topcoat-overlay-bg"></div>
+  <aside class="topcoat-overlay">
+    <h1>Are eagles nice ?</h1>
+    <div class="topcoat-overlay-buttons">
+      <button role="button" class="topcoat-button">No</button>
+      <button role="button" class="topcoat-button--cta">Yes</button>
+    </div>
+  </aside>
+
+*/
+.topcoat-overlay {
+  width: 50%;
+  height: auto;
+  overflow: hidden;
+  position: absolute;
+  z-index: 10;
+  margin: 20%;
+  padding: var-overlay-padding;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  background-color: var-bg-color;
+  border: 1px solid rgba(0,0,0,0.36);
+  text-align: center;
 }
-.bg-slategray .breadcrumbs a {
-  color: #bbb;
+.topcoat-overlay h1 {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #d3d7d7;
 }
-/* End Breadcrumbs */
-.charts {
-  width: 90%;
-  margin: 0 auto;
+.topcoat-overlay-bg {
+  position: absolute;
+  z-index: 5;
+  background-color: var-overlay-bg-color;
+  width: 100%;
+  height: 100%;
+  -webkit-box-shadow: var-bg-box-shadow;
+  box-shadow: var-bg-box-shadow;
+}
+.topcoat-overlay-buttons {
+  margin-top: 20px;
+}
+.topcoat-overlay-buttons .topcoat-button,
+.topcoat-overlay-buttons .topcoat-button--cta {
+  margin: 5px;
+}
+
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ Search Input
+ ------------
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates a disabled state
+
+    <input type="search" value="" placeholder="search" class="topcoat-search-input">
+    <input type="search is-disabled" value="" placeholder="search" class="topcoat-search-input">
+
+ */
+.topcoat-search-input,
+.topcoat-search-input--large {
+  vertical-align: top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 1.25rem;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  margin: 5px;
+  height: 3rem;
+  font: inherit;
+  font-weight: 200;
+  outline: none;
+  border: 1px solid rgba(0,0,0,0.36);
+  background-color: #595b5b;
+  -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  color: #c6c8c8;
+  -webkit-appearance: none;
+  padding: 0 0 0 2.7em;
+  -webkit-border-radius: 15px;
+  border-radius: 15px;
+  background-image: url("../img/search_light.svg");
+  background-position: 1em center;
+  background-repeat: no-repeat;
+  -webkit-background-size: 12px;
+  -moz-background-size: 12px;
+  background-size: 12px;
+}
+.topcoat-search-input:focus,
+.topcoat-search-input--large:focus {
+  background-color: #fff;
+  color: var-color-focus;
+}
+.topcoat-search-input::-webkit-search-cancel-button,
+.topcoat-search-input::-webkit-search-decoration {
+  margin-right: 5px;
+}
+.topcoat-search-input:focus::-webkit-input-placeholder,
+.topcoat-search-input:focus::-webkit-input-placeholder {
+  color: #c6c8c8;
+}
+.topcoat-search-input:disabled,
+.topcoat-search-input.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+/*
+ Large Search Input
+ ------------------
+
+ :disabled - Disabled state
+
+ .is-disabled - Simulates a disabled state
+
+    <input type="search"  value="" placeholder="search" class="topcoat-search-input--large">
+    <input type="search"  value="" placeholder="search" class="topcoat-search-input--large .is-disabled">
+
+*/
+.topcoat-search-input--large {
+  height: 2.6rem;
+  font-size: 1.167rem;
+  font-weight: 200;
+  padding-left: 2.8em;
+  -webkit-border-radius: 25px;
+  border-radius: 25px;
+  background-position: 1.2em center;
+  -webkit-background-size: 1.167rem;
+  -moz-background-size: 1.167rem;
+  background-size: 1.167rem;
+}
+.topcoat-search-input--large:disabled,
+.topcoat-search-input--large.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ Text Input
+ ----------
+
+:disabled - Disabled state
+.is-disabled - Simulates a disabled state on mobile devices
+
+    <input type="text" class="topcoat-text-input" value="" placeholder="text">
+    <input type="text" class="topcoat-text-input is-disabled" value="" placeholder="text">
+
+*/
+.topcoat-text-input,
+.topcoat-text-input--large {
+  vertical-align: top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 1.25rem;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  margin: 5px;
+  height: 3rem;
+  font: inherit;
+  font-weight: 200;
+  outline: none;
+  border: 1px solid rgba(0,0,0,0.36);
+  background-color: #595b5b;
+  -webkit-box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  box-shadow: inset 0 1px rgba(0,0,0,0.18);
+  color: #c6c8c8;
+}
+.topcoat-text-input:focus {
+  background-color: #fff;
+  color: #000;
+}
+.topcoat-text-input:disabled,
+.topcoat-text-input.is-disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+/*
+ Large Text Input
+ ----------------
+
+:disabled - Disabled state
+.is-disabled - Simulates a disabled state on mobile devices
+
+    <input type="text" class="topcoat-text-input--large" value="" placeholder="text">
+    <input type="text" class="topcoat-text-input--large is-disabled" value="" placeholder="text">
+*/
+.topcoat-text-input--large {
+  height: 2.6rem;
+  font-size: 1.167rem;
+}
+.topcoat-text-input--large:focus {
+  background-color: #fff;
+  color: #000;
+}
+.topcoat-text-input--large.is-disabled,
+.topcoat-text-input--large:disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/*
+Copyright 2012 Adobe Systems Inc.;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+/*
+ TopCoat Textarea
+ ------------------------
+
+    <textarea class="topcoat-textarea" rows="6" cols="36" placeholder="Textarea"></textarea>
+
+ */
+.topcoat-textarea,
+.topcoat-textarea--large {
+  vertical-align: top;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0 1.16rem;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  margin: var-margin;
+  font: var-font;
+  font-weight: 200;
+  line-height: 2rem;
+  resize: none;
+  outline: none;
+  border: 1px solid rgba(0,0,0,0.36);
+  background-color: #595b5b;
+  -webkit-box-shadow: inset 0 1px rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px rgba(255,255,255,0.12);
+  color: #c6c8c8;
+}
+.topcoat-textarea:focus,
+.topcoat-textarea--large:focus {
+  background-color: var-background--focus;
+  color: #000;
+}
+/*
+Topcoat Large Textarea
+ ------------------------
+
+  <textarea class="topcoat-textarea--large" rows="6" cols="36" placeholder="Textarea"></textarea>
+
+*/
+.topcoat-textarea--large {
+  font: var-font--large;
+  font-weight: 200;
+  line-height: 2.6rem;
+}
+
+/*
+Topcoat Progress bar
+-------------------------
+*/
+
+.topcoat-progress-bar {
+  overflow: hidden;
+  height: 1.25rem;
+  margin: 2px;
+  border-radius: 12px;
+  background-color: #d3d7d7;
+  box-shadow: 0 1px rgba(255,255,255,0.25), inset 0 1px rgba(0,0,0,0.12);
+}
+.topcoat-progress-bar > .progress {
+  display: block;
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+  background-color: #e0f0fa;
+  box-shadow: inset 0 1px rgba(0,0,0,0.12);
+  line-height: 1.25rem;
+}
+.progress--complete {
+  width: 100%;
 }

@@ -39,10 +39,10 @@ if(process.env.PORT) { // switch between local and production env
 var benchmark = require('./routes/benchmark')(db);
 
 app.configure(function () {
+  app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
-  app.use(express.favicon());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
@@ -77,7 +77,7 @@ app.get('/dashboard', function (req, res) {
 	var query = parser.query(url.parse(req.url).query);
 
 	res.render('dashboard.jade', {
-		'title'  : 'Topcoat Dashboard',
+		'title'  : 'Topcoat Server',
 		'test'   : query.test,
 		'device' : unescape(query.device)
 	});
@@ -88,33 +88,6 @@ app.get('/dashboard', function (req, res) {
 
 
 app.get('/view/results', benchmark.viewResults);
-
-app.get('/view/test/:id', function (req, res) {
-
-	var id = req.params.id;
-	var	TelemetryTest = db.model('TelemetryTest', schemes.telemetry_test)
-	,	TelemetryAvg  = db.model('TelemetryAvg', schemes.telemetry_avg);
-
-	TelemetryAvg.findOne({_id: id}, function (err, doc) {
-		var find = {
-			test   : doc.test,
-			commit : doc.commit,
-			device : doc.device
-		};
-
-		if (find.device == 'device?') delete find.device; // don't match the default value
-
-		TelemetryTest.find(find, function (err, docs) {
-			res.render('view-test', {
-				title : 'Telemetry individual results',
-				results: docs,
-				average_id :id
-			});
-		});
-
-	});
-
-});
 
 	app.post('/remove', function (req, res) {
 
@@ -174,7 +147,7 @@ app.post('/compare', function (req, res) {
 			res.end('Error');
 		} else {
 			res.render('compare', {
-				title : 'Compare results',
+				title : 'Topcoat Server',
 				results: docs
 			});
 

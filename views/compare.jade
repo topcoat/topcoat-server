@@ -4,63 +4,71 @@ block content
 
 	include includes/navigation
 
-	- var tests = []
-	- results.forEach(function (r) {
-		- each val, key in r.result
-			- if (tests.indexOf(key) == -1)
-				- tests.push(key)
-	- })
-	- var colors = ['#8AC8C3', '#D3EBC7', '#AABFAA', '#BF9692', '#FC0284']
+	.test-navigation
+		.max-width
+			header
+				h2 Comparing results
+			- var tests = []
+			- results.forEach(function (r) {
+				- each val, key in r.result
+					- if (tests.indexOf(key) == -1)
+						- tests.push(key)
+			- })
+			- var colors = ['#EFC751', '#BDDFF9', '#D05B5B', '#5DAF5D', '#B681EF']
 
-	- results.forEach(function (r, i) {
-		.progress(style="width:500px;background:"+colors[i])
-			p= 'Commit version '
-				a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit.substring(0,6)
-				- var date = " " + r.date.toString().substring(0,21)
-				strong= date
-			p= r.platform + ' on ' + r.device
-			p= 'Test name ' + r.test
-			p= 'Numer of tests ' + r.count
-	- })
-	table
-		tbody
-				- tests.forEach(function (test, i) {
-					- var className = (i%2) ? 'odd' : 'even';
-					- var max = 0;
-					- var ratio;
-					- results.forEach(function(r, idx) {
-						- if(!isNaN(r.result[test]))
-							- if (parseInt(r.result[test],10) > max)
-								- max = r.result[test]
-					- })
-					- ratio = 100/max
-					- if (ratio > 1)
-						- ratio = 1
-					- results.forEach(function(r, idx) {
-								if (!isNaN(r.result[test]) && results.length < 35)
-									- if (idx == 0)
-										tr(class=className + ' group' + i)
-											td(rowspan=results.length, width='200px')= test
-											td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
-									- else
-										tr(class=className)
-											td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
-								else
-									- if (isNaN(r.result[test]))
-										- if (idx === 0)
-											tr(class=className + ' group' + i)
-												td(rowspan=results.length, width='200px')= test
-												td//: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
-										- else
-											tr(class=className)
-												td//: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
-									- else
-										- if (idx == 0)
+			- results.forEach(function (r, i) {
+				.info-box.bordered(style="width:500px;background:"+colors[i])
+					p= 'Commit version '
+						a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit.substring(0,6)
+						- var date = " " + r.date.toString().substring(0,21)
+						strong= date
+					p= r.platform + ' on ' + r.device
+					p= 'Test name ' + r.test
+					p= 'Numer of tests ' + r.count
+			- })
+			table
+				tbody
+						- tests.forEach(function (test, i) {
+							- var className = (i%2) ? 'odd' : 'even';
+							- var max = 0;
+							- var ratio;
+							- results.forEach(function(r, idx) {
+								- if(!isNaN(r.result[test]))
+									- if (parseInt(r.result[test],10) > max)
+										- max = r.result[test]
+							- })
+							- ratio = 100/max
+							- if (ratio > 1)
+								- ratio = 1
+							- results.forEach(function(r, idx) {
+										if (!isNaN(r.result[test]) && results.length < 35)
+											- if (idx == 0)
 												tr(class=className + ' group' + i)
 													td(rowspan=results.length, width='200px')= test
-													td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+													td
+														.topcoat-progress-bar: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
 											- else
 												tr(class=className)
-													td: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
-					- })
-				- })
+													td
+														.topcoat-progress-bar: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+										else
+											- if (isNaN(r.result[test]))
+												- if (idx === 0)
+													tr(class=className + ' group' + i)
+														td(rowspan=results.length, width='200px')= test
+														td//: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+												- else
+													tr(class=className)
+														td//: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+											- else
+												- if (idx == 0)
+														tr(class=className + ' group' + i)
+															td(rowspan=results.length, width='200px')= test
+															td
+																.topcoat-progress-bar: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+													- else
+														tr(class=className)
+															td
+																.topcoat-progress-bar: .progress(style="width: " + r.result[test] * ratio + "%; background:" + colors[idx])= r.result[test]
+							- })
+						- })

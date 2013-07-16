@@ -2,33 +2,31 @@ extends layout
 
 block content
 	include includes/navigation
-	h1 Individual results
-	h3= results[0].test + ' on ' + results[0].device + ' ' + results[0].commit + ' ' + results[0].date.toString().substring(3,21)
+	.test-navigation
+		.max-width
+			header
+				h2 Individual results
+			h3= results[0].test + ' on ' + results[0].device + ' ' + results[0].commit + ' ' + results[0].date.toString().substring(3,21)
 
-	form(action='/remove/test', method='POST')
-		table
-			thead
-				tr
-					//th: button(type='submit') Delete
-					- var counter = 0;
-					- for (var i in results[0].result)
-						- if (!isNaN(parseFloat(results[0].result[i])))
-							th= i
-							- counter++;
-			tbody
-				tr
-					- results.forEach(function (el, idx) {
-						- var sha = '#' + el.commit.substring(0,7);
-						- if (sha[1] == 's') sha = 'snapshot';
+			form(action='/remove/test', method='POST')
+				table
+					thead
 						tr
-							//- td
-							//- 	input(type='checkbox', name='average_' + el._id, value=el._id)
-							//- 	input(type='hidden', name='test_' + el.id, value=el.id)
-							- for (var i in el.result)
-								- if (!isNaN(parseFloat(el.result[i])))
-									td= el.result[i]
-					- })
-					tr
-						//td: button(type='submit') Delete
-						input(type='hidden', name='average_id', value=average_id)
-						td(colspan=counter)
+							- var counter = 0;
+							- for (var i in results[0].result)
+								- if (!isNaN(parseFloat(results[0].result[i])))
+									th= i
+									- counter++;
+					tbody
+						tr
+							- results.forEach(function (el, idx) {
+								- var sha = '#' + el.commit.substring(0,7);
+								- if (sha[1] == 's') sha = 'snapshot';
+								tr
+									- for (var i in el.result)
+										- if (!isNaN(parseFloat(el.result[i])))
+											td= el.result[i]
+							- })
+							tr
+								input(type='hidden', name='average_id', value=average_id)
+								td(colspan=counter)

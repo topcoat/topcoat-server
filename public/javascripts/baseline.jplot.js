@@ -16,30 +16,28 @@
  *
  */
 
-var params   = window.location.href.match(/\?.{0,}/g),
-	formdata = new FormData(),
+var formdata = new FormData(),
 	plotData = {
 		'mean_frame_time (ms)' : [],
 		'load_time (ms)' : [],
 		'Layout (ms)' : []
-	};
+	},
 	toolTipInfo = {
 		'mean_frame_time (ms)' : [],
 		'load_time (ms)' : [],
 		'Layout (ms)' : []
-	}
+	},
 	count = {
 		'mean_frame_time (ms)' : 0,
 		'load_time (ms)' : 0,
 		'Layout (ms)' : 0
 	};
 
-params = (params) ? params[0].slice(1).split('&') : null;
-
 var parse = function (data) {
 	data = JSON.parse(data);
-	data.forEach(filterResults);
 	placeCheckboxes();
+	data.forEach(filterResults);
+	plot = generatePlot(plotData, data);
 	plot();
 };
 
@@ -53,7 +51,8 @@ var filterResults = function (d) {
 		if (plotData.hasOwnProperty(row)) {
 			toolTipInfo[row].push({
 				date: d.date,
-				commit: d.commit
+				commit: d.commit,
+				test: d.test
 			});
 			plotData[row].push([count[row]++, parseFloat(d.result[row])]);
 		}
@@ -65,6 +64,7 @@ var filterResults = function (d) {
 */
 var submit = function (formData, cb) {
 
+	if (!formData) return;
 	var xhr = new XMLHttpRequest();
 	xhr.open('POST', '/dashboard/get', true);
 	xhr.onload = function xhrLoaded (e) {
@@ -76,8 +76,9 @@ var submit = function (formData, cb) {
 
 };
 
-function resultsFilter () {
+function resultsFilter (params) {
 
+	if (!params.length) return;
 	var formdata = new FormData();
 
 	params.forEach(function urlParams (p) {
@@ -91,7 +92,7 @@ function resultsFilter () {
 (function plot () {
 
 	var params   = window.location.href.match(/\?.{0,}/g);
-	params = (params) ? params[0].slice(1).split('&') : null;
+	params = (params) ? params[0].slice(1).split('&') : [];
 
 	submit(resultsFilter(params), parse);
 })();

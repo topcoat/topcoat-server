@@ -16,64 +16,89 @@
  *
  */
 
-var maxValue = 0; // used to scale the plot
+var plot; // a closure with the data points
 
-function plot () {
-	var points = [];
-	maxValue = 0;
-	for (var i in plotData) {
-		if ($('input[name="' + i + '"]:checked').length || !$('input[name="' + i + '"]').length) {
-			points.push({
-				data: plotData[i], label: i
-			});
-			plotData[i].forEach(function (arr) {
-				if (arr[1] > maxValue)
-					maxValue = arr[1];
-			})
-		}
-	}
+function generatePlot (plotData) {
 
-	$.plot("#placeholder", points, {
-		series: {
-			lines: {
-				show: true
-			},
-		points: {
-				show: true
+	return function () {
+		var points = [];
+		for (var i in plotData) {
+			var selected = $('input[name="' + i + '"]:checked').length || !$('input[name="' + i + '"]').length;
+			if (selected) {
+				points.push({
+					data: plotData[i], label: i
+				});
 			}
-		},
-		grid: {
-			hoverable: true,
-			clickable: true
-		},
-		yaxis: {
-			min: -1.2,
-			max: maxValue + 20
-		},
-		xaxis: {
-			show: false
 		}
+
+		$.plot("#placeholder", points, {
+				series: {
+					lines: {
+						show: true
+					},
+					points: {
+						show: true
+					}
+				},
+				grid: {
+					hoverable: true,
+					clickable: true
+				},
+				yaxis: {
+					min: -1.2,
+					max: maxValue(plotData) + 20
+				},
+				xaxis: {
+					ticks: xLabels(plotData)
+				}
+		});
+	}
+}
+
+function maxValue (plotData) {
+	var maxValue = 0; // used to scale the plot
+	_.map(plotData, function (val, k){
+		val.forEach(function (arr) {
+			if (arr[1] > maxValue)
+				maxValue = arr[1];
+		});
+	})
+
+	return maxValue;
+}
+
+function xLabels (plotData) {
+	var ticks = [];
+	_.map(plotData, function (v, k) {
+		_.map(toolTipInfo[k], function (val, key) {
+			ticks[key] = [key, val.commit.substring(0,7) + '<br>' + val.date.substring(0,10)];
+		})
 	});
+	return ticks;
 }
 
 function placeCheckboxes () {
+	var $header = $('<header>')
+		.html('<h2>Enable/Disable axes</h2>');
+	$('.toggle').append($header);
 	for (var i in plotData) {
-		$("<input type='checkbox' name='" + i +"' checked='checked' id='"+i+"'><label class='topcoat-checkbox-label topcoat-checkbox-label--left' for='"+i+"'>"
-			+ i + "</label>")
-			.on('click', plot)
-			.appendTo('p');
+		var checkbox = createCheckbox(i);
+		checkbox.on('click', function () {
+			plot();
+		}).appendTo('.toggle');
 	}
 }
 
+function createCheckbox (name) {
+	var label = "<label class='topcoat-checkbox-label topcoat-checkbox-label--left' for='"+name+"'>"+ name + "</label>";
+	var input = "<input type='checkbox' name='" + name +"' checked='checked' id='"+name+"'>";
+	return $(input + label);
+}
+
 function showTooltip(x, y, contents) {
-	$("<div id='tooltip'>" + contents + "</div>").css({
-		position: "absolute",
-		display: "none",
+	$("<div id='tooltip' class='plot__tooltip'>" + contents + "</div>").css({
 		top: y + 15,
-		left: x - 50,
-		border: "1px solid #fdd",
-		padding: "5px",
-		"background-color": "#fee",
+		left: x - 50
 	}).appendTo("body").fadeIn(200);
 }
 
@@ -95,8 +120,7 @@ $("#placeholder").bind("plothover", function (event, pos, item) {
 			y = item.datapoint[1].toFixed(2);
 			var content = item.series.label + " = " + y;
 			content += deltaValue(item.series.label, parseInt(x, 10));
-			showTooltip(item.pageX, item.pageY,
-			    content);
+			showTooltip(item.pageX, item.pageY, content);
 		}
 	} else {
 		$("#tooltip").remove();
@@ -111,7 +135,10 @@ function deltaValue (key, x) {
 		content += '<br> delta ' + (delta.toString()).slice(0,8) + ' ms';
 		content += (delta < 0 ? ' (better)' : ' (worse)');
 	}
-	content += '<br> commit: ' + toolTipInfo[key][x].commit.substring(0,8);
-	content += '<br> date: ' + (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15);
+	/*toolTipInfo defined in baseline.jplot.js */
+
+	content += '<br> commit = ' + toolTipInfo[key][x].commit.substring(0,8);
+	content += '<br> date = ' + (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15);
+	content += '<br> test = ' + toolTipInfo[key][x].test;
 	return content;
 }

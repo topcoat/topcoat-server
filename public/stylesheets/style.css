@@ -16,7 +16,6 @@
  *
  */
 @import "checkbox.css";
-@import "topcoat-button.min.css";
 @font-face {
   font-family: "source-l";
   src: url("../font/SourceSansPro/SourceSansPro-Light.otf");
@@ -30,39 +29,25 @@
   font-style: normal;
 }
 body {
-  font: 14px source-l, sans-serif;
-  color: #454545;
+  font: 16px source-l, sans-serif;
 }
 a {
   color: #0083e8;
 }
-.tooltip {
+.plot__tooltip {
+  display: none;
   position: absolute;
-  top: 1200px;
-  left: -200px;
-  background: #ddd;
-  padding: 0.5em;
-  -webkit-transition-duration: 0.2s;
-  -moz-transition-duration: 0.2s;
-  transition-duration: 0.2s;
-  border-radius: 6px;
-}
-.tooltip:after {
-  content: '';
-  position: absolute;
-  top: -8px;
-  left: 30%;
-  width: 16px;
-  height: 16px;
-  background: #ddd;
-  -webkit-transform: rotate(45deg);
-}
-.tooltip p {
-  margin: 2px;
+  border: 1px solid #fdd;
+  padding: 5px;
+  font-size: 12px;
+  background-color: #fee;
 }
 table {
   margin: 2em 0;
   width: 100%;
+}
+table a {
+  color: #444;
 }
 td {
   font-size: 12px;
@@ -78,35 +63,38 @@ td:hover .add-filter {
 thead tr {
   background: #dfe2e2;
   cursor: default;
+  border-bottom: 1px solid #f05;
 }
 thead tr:hover {
   background: #dfe2e2;
 }
 thead tr th {
   padding: 1rem;
-  text-align: left !important;
-  text-shadow: 0 1px 0 #fff;
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+thead tr th:first-child {
+  border-top-left-radius: 5px;
+}
+thead tr th:last-child {
+  border-top-right-radius: 5px;
+}
+tbody tr:first-child td {
+  border-top: 1px solid #aaa;
 }
 tr {
   -webkit-transition-duration: 0.1s;
   cursor: pointer;
 }
-tr:hover {
-  background: #f4f4f4;
-}
-.odd {
+tr:hover td {
   background: #e5e9e9;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
 }
-.odd:hover {
-  background: #edf1f1;
-}
-.even:hover {
-  background: none;
-}
-.odd td,
-.even td {
-  border: none;
-  padding: 0.5em 0.5em 0.5em 1em;
+.odd td {
+  background: #dddfdf;
 }
 .hide {
   display: none;
@@ -114,29 +102,12 @@ tr:hover {
 [class*=" group"] {
   border-top: 1px solid #dddfdf;
 }
-.commit + a img {
-  width: 16px;
-  margin: 0 0.5em -2px;
-  opacity: 0;
-}
 tr:hover img {
   opacity: 1;
   transition-duration: 0.5s;
 }
 .stress-selectors {
   border-top: 1px solid #ddd;
-}
-.progress {
-  color: #333;
-  font-size: 0.8em;
-  padding: 0.5em;
-  border-radius: 2px;
-}
-.progress .hidden {
-  display: none;
-}
-.progress:hover .hidden {
-  display: block;
 }
 .add-filter,
 .close {
@@ -202,6 +173,9 @@ nav {
   width: 80%;
   height: 450px;
 }
+canvas {
+  color: #fff;
+}
 .fade {
   opacity: 0.5;
 }
@@ -218,4 +192,16 @@ nav {
 .legend {
   position: absolute;
   right: -140px;
+}
+.info-box {
+  padding-left: 0.5rem;
+  display: inline-block;
+}
+.bordered {
+  border-radius: 5px;
+  border: 5px solid rgba(0,0,0,0.1);
+  box-shadow: 0 0 2px #000;
+}
+.white {
+  color: #fff;
 }

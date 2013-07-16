@@ -1,54 +1,56 @@
 extends layout
 
 block content
-	include includes/navigation
-	h1 Average telemetry results
-	h4 Filters (<a> + </a> adds a filter) (<a> &times; </a> removes it)
-	ul(id='filters')
 
-	form(action='/compare', method='POST')
-		table
-			thead
-				tr
-					th
-						input(type='checkbox', id='selectall')
-						label.topcoat-checkbox-labeltopcoat-checkbox-label--left All
-					th Test
-					th Device
-					th Platform
-					th Commit
-					th
-						select
-							option(data-value='7') Last 7 days
-							option(data-value='14') Last 14 days
-							option(data-value='30') Last Month
-							option(data-value='365') Last Year
-					th Count
-					th Details
-			tbody
-				tr
-						td: button(type='submit', class='topcoat-button') Compare
-						td: button(class='topcoat-button js-handler--plot', disabled) Plot
-						td(colspan=7)
-					- results.forEach(function (el, idx) {
+	include includes/navigation
+	.test-navigation
+		.max-width
+			header
+				h2 Average telemetry results
+			h4 Filters (<a> + </a> adds a filter) (<a> &times; </a> removes it)
+			ul(id='filters')
+
+			form(action='/compare', method='POST')
+				table
+					thead
 						tr
-							td: input(type='checkbox', name='average_' + el._id, value=el._id, data-test=el.test, data-device=el.device)
-							td= el.test
-								a(title='Add as a filter', class='add-filter', data-value=el.test, data-filter='test') +
-							td= el.device
-								a(title='Add as a filter', class='add-filter', data-value=el.device, data-filter='device') +
-							td= el.platform
-								a(title='Add as a filter', class='add-filter', data-value=el.platform, data-filter='platform') +
-							td= el.commit
-								a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') +
-							td(class='date')= (el.date.toString()).slice(0,15)
-							td= el.count
-							td: a(href='/view/test/' + el._id, class='average-details') details
-					- })
-					tr
-						td: button(type='submit', class='topcoat-button') Compare
-						td: button(class='js-handler--plot topcoat-button', disabled) Plot
-						td(colspan=7)
+							th
+							th Test
+							th Device
+							th Platform
+							th Commit
+							th
+								select.docNav
+									option(data-value='7') Last 7 days
+									option(data-value='14') Last 14 days
+									option(data-value='30') Last Month
+									option(data-value='365') Last Year
+							th Count
+					tbody
+						tr
+								td: button(type='submit', class='topcoat-button') Compare
+								td: button(class='topcoat-button js-handler--plot', disabled) Plot
+								td(colspan=6)
+							- results.forEach(function (el, idx) {
+								tr
+									td
+										input(type='checkbox', class='topcoat-checkbox', id='average_' + el._id,name='average_' + el._id, value=el._id, data-test=el.test, data-device=el.device)
+										label.topcoat-checkbox-label--left(for='average_' + el._id) 
+									td= el.test
+										a(title='Add as a filter', class='add-filter', data-value=el.test, data-filter='test') +
+									td= el.device
+										a(title='Add as a filter', class='add-filter', data-value=el.device, data-filter='device') +
+									td= el.platform
+										a(title='Add as a filter', class='add-filter', data-value=el.platform, data-filter='platform') +
+									td= el.commit
+										a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') +
+									td(class='date')= (el.date.toString()).slice(0,15)
+									td= el.count
+							- })
+							tr
+								td: button(type='submit', class='topcoat-button') Compare
+								td: button(class='js-handler--plot topcoat-button', disabled) Plot
+								td(colspan=6)
 
 	script(src='/javascripts/libraries/jquery.min.js')
 	script(src='/javascripts/telemetry-sort.js')

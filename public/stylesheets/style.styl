@@ -17,7 +17,6 @@
  */
 
 @import "checkbox.css"
-@import "topcoat-button.min.css"
 
 @font-face {
     font-family: "source-l";
@@ -34,36 +33,46 @@
 }
 
 body
-	font 14px source-l, sans-serif
-	color #454545
+	font 16px source-l, sans-serif
 
 a
 	color #0083e8
 
-.tooltip
-	position absolute
-	top 1200px
-	left -200px
-	background #ddd
-	padding .5em
-	-webkit-transition-duration .2s
-	-moz-transition-duration .2s
-	transition-duration .2s
-	border-radius 6px
-	&:after
-		content ''
-		position absolute
-		top -8px
-		left 30%
-		width 16px
-		height 16px
-		background #ddd
-		-webkit-transform rotate(45deg)
-	p
-		margin 2px
+// .tooltip
+// 	position absolute
+// 	top 1200px
+// 	left -200px
+// 	background #ddd
+// 	padding .5em
+// 	-webkit-transition-duration .2s
+// 	-moz-transition-duration .2s
+// 	transition-duration .2s
+// 	border-radius 6px
+// 	&:after
+// 		content ''
+// 		position absolute
+// 		top -8px
+// 		left 30%
+// 		width 16px
+// 		height 16px
+// 		background #ddd
+// 		-webkit-transform rotate(45deg)
+// 	p
+// 		margin 2px
+
+.plot__tooltip
+	display: none
+	position: absolute
+	border: 1px solid #fdd
+	padding: 5px
+	font-size: 12px
+	background-color: #fee
+
 table
 	margin 2em 0
 	width 100%
+	a
+		color #444
 
 td
 	font-size 12px
@@ -78,30 +87,35 @@ td
 thead tr
 	background #DFE2E2
 	cursor default
+	border-bottom 1px solid #f05
 	&:hover
 		background #DFE2E2
 	th
 		padding 1rem
-		text-align left !important
-		text-shadow 0 1px 0 #fff
+		text-align left
+		font-weight bold
+		font-size 1.1rem
+
+thead tr
+	th:first-child
+		border-top-left-radius 5px
+	th:last-child
+		border-top-right-radius 5px
+
+tbody tr:first-child td
+	border-top 1px solid #aaa
 
 tr
 	-webkit-transition-duration .1s
 	cursor pointer
-	&:hover
-		background #f4f4f4
+	&:hover td
+		background #e5e9e9
+		-webkit-transition-duration .2s
+		-moz-transition-duration .2s
+		transition-duration .2s
 
-.odd
-	background #e5e9e9
-	&:hover
-		background #edf1f1
-
-.even:hover
-	background none
-
-.odd td, .even td
-	border none
-	padding 0.5em 0.5em 0.5em 1em
+.odd td
+	background #DDDFDF
 
 .hide
 	display none
@@ -109,28 +123,12 @@ tr
 [class*=" group"]
 	border-top 1px solid #DDDFDF
 
-.commit + a img
-	width 16px
-	margin 0 .5em -2px
-	opacity 0
-
 tr:hover img
 	opacity 1
 	transition-duration .5s
 
 .stress-selectors
 	border-top 1px solid #ddd
-
-.progress
-	color #333
-	font-size .8em
-	padding: .5em;
-	border-radius: 2px;
-	.hidden
-		display none
-	&:hover
-		.hidden
-			display block
 
 .add-filter, .close
 	margin 0 0 0 0.5em
@@ -192,6 +190,9 @@ nav
 	width 80%
 	height 450px
 
+canvas
+	color #fff
+
 .fade
 	opacity .5
 
@@ -208,3 +209,15 @@ nav
 .legend
 	position absolute
 	right -140px
+
+.info-box
+	padding-left .5rem
+	display inline-block
+
+.bordered
+	border-radius 5px
+	border 5px solid rgba(0,0,0,.1)
+	box-shadow 0 0 2px black
+
+.white
+	color #fff

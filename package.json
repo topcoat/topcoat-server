@@ -17,6 +17,9 @@
     "stylus": "*",
     "mongoose": "*",
     "ua-parser": "latest",
-    "validator": "~0.4.28"
+    "validator": "~0.4.28",
+    "underscore.string": "~2.2.0",
+    "grunt": "~0.4.1",
+    "prompt": "~0.2.11"
   }
 }

@@ -20,6 +20,7 @@ var dashboard = document.querySelector('#dashboard-link');
 var testNav = document.querySelector('.test-navigation');
 var lis = document.querySelectorAll('#components li');
 var spinner = document.querySelector('.spinner');
+var placeholder = document.querySelector('#placeholder');
 var t;
 var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 
@@ -33,8 +34,10 @@ var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 			activeComponent.classList.remove('active');
 
 		var activeCategory = document.querySelector('ul.active');
-		if(activeCategory)
+		if(activeCategory) {
 			activeCategory.classList.remove('active');
+			activeCategory.classList.add('not-active');
+		}
 
 		this.classList.add('active');
 		var category = document.querySelector('.' + this.id);
@@ -48,14 +51,12 @@ var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
 
 function displayPlot () {
 
-	document.querySelector('.plot li').innerHTML = document.querySelector('li.active').innerHTML + ' plot';
-
 	spinner.style.display = 'block';
+	placeholder.style.display = 'none';
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
 	var l = params.length;
 	var formdata = new FormData();
 
-	console.log(params);
 	params.forEach(function (p) {
 		p = p.split('=');
 
@@ -63,6 +64,7 @@ function displayPlot () {
 		if(--l === 0) {
 			submit(formdata, function (data) {
 				spinner.style.display = 'none';
+				placeholder.style.display = 'block';
 				plotData = {
 					'mean_frame_time (ms)' : [],
 					'load_time (ms)' : [],
@@ -84,3 +86,9 @@ function displayPlot () {
 	});
 
 }
+
+document.querySelector('select.docNav').addEventListener('change', function () {
+	location.href = this.value;
+})
+
+displayPlot.call(document.querySelector('.button a'));
