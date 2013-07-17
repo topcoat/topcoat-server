@@ -166,8 +166,9 @@ function calculateDelta (key, x) {
 	}
 	/*toolTipInfo defined in baseline.jplot.js */
 	var commit = document.createElement('a');
+	var repo = document.querySelector('.active h2').dataset.github;
 	commit.innerHTML = toolTipInfo[key][x].commit.substring(0,8);
-	commit.href = 'https://github.com/topcoat/topcoat/commit/' + toolTipInfo[key][x].commit;
+	commit.href = 'https://github.com/topcoat/' + repo + '/commit/' + toolTipInfo[key][x].commit;
 	content.appendChild(createRow('Commit', commit));
 	content.appendChild(createRow('Date', (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15)));
 	content.appendChild(createRow('Component', toolTipInfo[key][x].test));
