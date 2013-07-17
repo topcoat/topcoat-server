@@ -36,9 +36,7 @@ function generatePlot (plotData) {
 					lines: {
 						show: true
 					},
-					points: {
-						show: true
-					}
+					points: {show:true, fill:true, radius:6}
 				},
 				grid: {
 					hoverable: true,
@@ -53,6 +51,10 @@ function generatePlot (plotData) {
 				}
 		});
 	}
+}
+
+function circle(ctx, x, y, radius, shadow) {
+	ctx.arc(x, y, radius + 2, 0, shadow ? Math.PI : Math.PI * 2, false);
 }
 
 function maxValue (plotData) {
@@ -78,9 +80,9 @@ function xLabels (plotData) {
 }
 
 function placeCheckboxes () {
-	var $header = $('<header>')
-		.html('<h2>Enable/Disable axes</h2>');
-	$('.toggle').append($header);
+	// var $header = $('<header>')
+	// 	.html('<h2>Enable/Disable axes</h2>');
+	// $('.toggle').append($header);
 	for (var i in plotData) {
 		var checkbox = createCheckbox(i);
 		checkbox.on('click', function () {
@@ -96,10 +98,11 @@ function createCheckbox (name) {
 }
 
 function showTooltip(x, y, contents) {
-	$("<div id='tooltip' class='plot__tooltip'>" + contents + "</div>").css({
+	$("<div id='tooltip' class='plot__tooltip'></div>").css({
 		top: y + 15,
-		left: x - 50
-	}).appendTo("body").fadeIn(200);
+		left: x - 130
+	}).html(contents).appendTo("body").fadeIn(200);
+	console.log($('#tooltip'));
 }
 
 var previousPoint = null;
@@ -118,27 +121,52 @@ $("#placeholder").bind("plothover", function (event, pos, item) {
 			$("#tooltip").remove();
 			var x = item.datapoint[0].toFixed(2),
 			y = item.datapoint[1].toFixed(2);
-			var content = item.series.label + " = " + y;
-			content += deltaValue(item.series.label, parseInt(x, 10));
+
+			var content = document.createElement('table');
+			content.appendChild(createRow('Total time', y + ' ms'));
+			content.appendChild(createRow('Metric', item.series.label));
+			content.appendChild(calculateDelta(item.series.label, parseInt(x, 10)));
 			showTooltip(item.pageX, item.pageY, content);
+			console.log(content);
 		}
 	} else {
-		$("#tooltip").remove();
+		// $("#tooltip").remove();
 		previousPoint = null;
 	}
 });
 
-function deltaValue (key, x) {
-	var content = '';
+// pass as many arguments
+// will create a tr with every argument wrapped in a <td>
+function createRow () {
+	var tr = document.createElement('tr');
+	_.map(_.toArray(arguments), function (v, k) {
+		var td = document.createElement('td');
+		if (typeof v == 'object')
+			td.appendChild(v)
+		else
+			td.innerHTML = v;
+		tr.appendChild(td);
+	});
+	return tr;
+}
+
+// part of the tooltip info
+function calculateDelta (key, x) {
+	var content = document.createDocumentFragment();
 	if (x) {
 		var delta = plotData[key][x][1] - plotData[key][x-1][1];
-		content += '<br> delta ' + (delta.toString()).slice(0,8) + ' ms';
-		content += (delta < 0 ? ' (better)' : ' (worse)');
+		var betterWorse = delta < 0 ? 'better' : 'worse';
+		var row = createRow('Delta', (delta.toString()).slice(0,8) + ' ms ' + betterWorse);
+		row.classList.add(betterWorse);
+		content.appendChild(row);
 	}
 	/*toolTipInfo defined in baseline.jplot.js */
-
-	content += '<br> commit = ' + toolTipInfo[key][x].commit.substring(0,8);
-	content += '<br> date = ' + (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15);
-	content += '<br> test = ' + toolTipInfo[key][x].test;
+	var commit = document.createElement('a');
+	commit.innerHTML = toolTipInfo[key][x].commit.substring(0,8);
+	commit.href = 'https://github.com/topcoat/topcoat/commit/' + toolTipInfo[key][x].commit;
+	content.appendChild(createRow('Commit', commit));
+	content.appendChild(createRow('Date', (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15)));
+	content.appendChild(createRow('Component', toolTipInfo[key][x].test));
+	console.log(content);
 	return content;
 }

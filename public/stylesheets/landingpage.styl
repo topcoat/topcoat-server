@@ -2,6 +2,8 @@ fontColor = #F0F1F1
 darkBg = #3B3E3E
 fontColor--dark = #373435
 
+@import "checkbox.css"
+
 body
 	font-size 16px
 	-webkit-font-smoothing: antialiased;
@@ -169,18 +171,6 @@ ul
 ul.active
 	display: block
 
-#holder:after, #holder:before
-	content: ''
-	display: block
-	height: 1px
-	clear: both
-
-#holder
-	float: left
-	height: 350px
-	padding: 16px
-	width: 100%
-
 .spinner
 	-webkit-animation: 0.75s rotate infinite linear
 	-moz-animation: 0.75s rotate infinite linear
@@ -220,7 +210,8 @@ a.button:active
 	text-decoration: none
 
 #placeholder
-	height: 300px
+	height: 400px
+	width 900px
 
 .nav--subheading
 	position: absolute
@@ -260,3 +251,29 @@ a.button:active
 	text-shadow: 0 -1px 0 #000;
 	padding: 3px 20px 4px 8px;
 	-webkit-appearance: none;
+
+.plot__tooltip
+	position: absolute
+	border-radius 5px
+	padding: 5px
+	font-size: 14px
+	background rgba(0,0,0,.7)
+	color white
+	table td
+		padding .2rem
+		&:first-child
+			text-align right
+	a
+		border-bottom 1px solid white
+
+.worse
+	color red
+
+.better
+	color green
+
+.pull-right
+	float right
+
+.toggle
+	color #fff
