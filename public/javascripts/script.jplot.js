@@ -80,15 +80,15 @@ function xLabels (plotData) {
 }
 
 function placeCheckboxes () {
-	// var $header = $('<header>')
-	// 	.html('<h2>Enable/Disable axes</h2>');
-	// $('.toggle').append($header);
+	var html = $('<div></div>');
 	for (var i in plotData) {
 		var checkbox = createCheckbox(i);
 		checkbox.on('click', function () {
 			plot();
-		}).appendTo('.toggle');
+		});
+		html.append(checkbox);
 	}
+	html.appendTo('.toggle:empty');
 }
 
 function createCheckbox (name) {
@@ -98,11 +98,13 @@ function createCheckbox (name) {
 }
 
 function showTooltip(x, y, contents) {
-	$("<div id='tooltip' class='plot__tooltip'></div>").css({
+	var $t = $("<div id='tooltip' class='plot__tooltip'></div>").css({
 		top: y + 15,
 		left: x - 130
 	}).html(contents).appendTo("body").fadeIn(200);
-	console.log($('#tooltip'));
+	setTimeout(function () {
+		$t.remove();
+	}, 2000);
 }
 
 var previousPoint = null;
@@ -134,6 +136,8 @@ $("#placeholder").bind("plothover", function (event, pos, item) {
 		previousPoint = null;
 	}
 });
+
+$('#placeholder').bind('hover', alert);
 
 // pass as many arguments
 // will create a tr with every argument wrapped in a <td>
