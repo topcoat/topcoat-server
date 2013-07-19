@@ -60,7 +60,7 @@ function resultsFilter (params) {
 
 function fetchBaseline () {
 
-	var spinner = document.querySelector('.spinner');
+	var spinner = document.querySelector('#back-spinner');
 	spinner.style.display = 'block';
 	plotDataBaseline = {};
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');

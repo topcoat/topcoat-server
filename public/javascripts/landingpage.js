@@ -50,7 +50,7 @@ _.map(document.querySelectorAll('.baseline'), function (a) {
 
 function displayPlot () {
 	var placeholder = document.querySelector('#placeholder');
-	var spinner = document.querySelector('.spinner');
+	var spinner = document.querySelector('#front-spinner');
 	spinner.style.display = 'block';
 	placeholder.style.display = 'none';
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
