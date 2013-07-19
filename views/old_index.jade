@@ -1,0 +1,109 @@
+extends landing-layout
+
+block content
+
+	include includes/navigation
+
+	.test-navigation
+		.container.max-width
+			.quarter
+				select.docNav
+					option(value='/') Dashboard
+					option(value='/view/results') Aggregated results
+			ul#components.quarter
+				li#button.active Button
+				li#button_no_theme Button base
+				li#text_input Text Input
+				li#search_input Search input
+				li#radio_input Radio input
+				li#range_input Range input
+				li#input_base Input Base
+				li#textarea Textarea
+				li#textarea_base Textarea Base
+				li#navigation_bar Navigation bar
+				li#navigation_bar_base Navigation bar base
+			ul.button.active.three-quarters
+				header
+					h2(data-github='button') Button
+				li
+					a(href='/dashboard?test=smoothness_benchmark_topcoat_button&test=loading_benchmark_topcoat_button&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=smoothness_benchmark_topcoat_button&test=loading_benchmark_topcoat_button&device=Nexus4') details
+					a.topcoat-button(href='/baseline?test=smoothness_benchmark_topcoat_button&test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button&test=loading_benchmark_topcoat_button-base&device=Nexus4') baseline
+			ul.button_no_theme.not-active.three-quarters
+				header
+					h2(data-github='button-base') Button base
+				li
+					a(href='/dashboard?test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button-base&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button-base&device=Nexus4') details
+			ul.text_input.not-active.three-quarters
+				header
+					h2(data-github='text-input') Text input
+				li
+					a(href='/dashboard?test=loading_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_text-input&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_text-input&device=Nexus4') details
+					a.topcoat-button(href='/baseline?test=loading_benchmark_topcoat_text-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
+			ul.input_base.not-active.three-quarters
+				header
+					h2(data-github='input-base') Input base
+				li
+					a(href='/dashboard?test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') details
+			ul.textarea.not-active.three-quarters
+				header
+					h2(data-github='textarea') Textarea
+				li
+					a(href='/dashboard?test=loading_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea&device=Nexus4') details
+					a.topcoat-button(href='/baseline?test=loading_benchmark_topcoat_textarea&test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') details
+			ul.textarea_base.not-active.three-quarters
+				header
+					h2(data-github='textarea-base') Textarea base
+				li
+					a(href='/dashboard?test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') details
+			ul.search_input.not-active.three-quarters
+				header
+					h2(data-github='search-input') Search input
+				li
+					a(href='/dashboard?test=loading_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_search-input&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_search-input&device=Nexus4') details
+					a.topcoat-button(href='/baseline?test=loading_benchmark_topcoat_search-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
+			ul.radio_input.not-active.three-quarters
+				header
+					h2(data-github='radio-input') Radio input
+				li
+					a(href='/dashboard?&test=smoothness_benchmark_topcoat_radio-input&device=Nexus4&test=loading_benchmark_topcoat_radio-input') Nexus 4 
+					a.topcoat-button(href='/dashboard?&test=smoothness_benchmark_topcoat_radio-input&device=Nexus4&test=loading_benchmark_topcoat_radio-input') details
+					a.topcoat-button(href='/baseline?test=smoothness_benchmark_topcoat_radio-input&test=loading_benchmark_topcoat_radio-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
+			ul.range_input.not-active.three-quarters
+				header
+					h2(data-github='range-input') Range input
+				li
+					a(href='/dashboard?&test=smoothness_benchmark_topcoat_range-input&device=Nexus4&test=loading_benchmark_topcoat_range-input') Nexus 4 
+					a.topcoat-button(href='/dashboard?&test=smoothness_benchmark_topcoat_range-input&device=Nexus4&test=loading_benchmark_topcoat_range-input') details
+					a.topcoat-button(href='/baseline?test=smoothness_benchmark_topcoat_range-input&test=loading_benchmark_topcoat_range-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
+			ul.navigation_bar.not-active.three-quarters
+				header
+					h2(data-github='navigation-bar') Navigation bar
+				li
+					a(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar&device=Nexus4') details
+					a.topcoat-button(href='/baseline?test=loading_benchmark_topcoat_navigation-bar&test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') baseline
+			ul.navigation_bar_base.not-active.three-quarters
+				header
+					h2(data-github='navigation-bar-base') Navigation bar base
+				li
+					a(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') Nexus 4 
+					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') details
+			ul.plot
+				#holder
+					.spinner
+					#placeholder
+			.pull-right.toggle
+
+	script(src='/javascripts/libraries/jquery.min.js')
+	script(src='/javascripts/libraries/jquery.flot.min.js')
+	script(src='/javascripts/libraries/underscore-min.js')
+	script(src='/javascripts/baseline.jplot.js')
+	script(src='/javascripts/landingpage.js')
+	script(src='/javascripts/script.jplot.js')

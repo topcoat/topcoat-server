@@ -16,79 +16,76 @@
  *
  */
 
-var dashboard = document.querySelector('#dashboard-link');
-var testNav = document.querySelector('.test-navigation');
-var lis = document.querySelectorAll('#components li');
-var spinner = document.querySelector('.spinner');
-var placeholder = document.querySelector('#placeholder');
-var t;
-var filter 	 = ['mean_frame_time (ms)', 'load_time (ms)', 'Layout (ms)'];
-
-[].forEach.call(lis, function (li) {
+_.map(document.querySelectorAll('#components li'), function (li) {
 
 	li.addEventListener('click', function () {
 
-		var activeComponent = document.querySelector('li.active');
+		_.map(document.querySelectorAll('.active'), function (v,k) {
+			v.classList.remove('active');
+			v.classList.add('not-active');
+		});
 
-		if(activeComponent)
-			activeComponent.classList.remove('active');
-
-		var activeCategory = document.querySelector('ul.active');
-		if(activeCategory) {
-			activeCategory.classList.remove('active');
-			activeCategory.classList.add('not-active');
-		}
-
-		this.classList.add('active');
-		var category = document.querySelector('.' + this.id);
-		category.classList.add('active');
+		var className = '.' + this.id;
+		document.querySelector(className).classList.remove('not-active');
+		document.querySelector(className).classList.add('active');
 
 		displayPlot.call(document.querySelector('.' + this.id + ' a'));
-
+		var flip = document.querySelector('.flip-container.hover');
+		if (flip) {
+			$('.charts').empty();
+			flip.classList.toggle('hover');
+		}
 	});
 
 });
 
-function displayPlot () {
+_.map(document.querySelectorAll('.baseline'), function (a) {
+	a.addEventListener('click', function (e) {
+		e.preventDefault();
+		if (!$('.flip-container svg').length)
+			fetchBaseline.call(a);
+		$('.flip-container').toggleClass('hover');
+	}, false);
+});
 
+function displayPlot () {
+	var placeholder = document.querySelector('#placeholder');
+	var spinner = document.querySelector('.spinner');
 	spinner.style.display = 'block';
 	placeholder.style.display = 'none';
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
-	var l = params.length;
 	var formdata = new FormData();
 
 	params.forEach(function (p) {
 		p = p.split('=');
-
 		formdata.append(p[0],p[1]);
-		if(--l === 0) {
-			submit(formdata, function (data) {
-				spinner.style.display = 'none';
-				placeholder.style.display = 'block';
-				plotData = {
-					'mean_frame_time (ms)' : [],
-					'load_time (ms)' : [],
-					'Layout (ms)' : []
-				};
-				toolTipInfo = {
-					'mean_frame_time (ms)' : [],
-					'load_time (ms)' : [],
-					'Layout (ms)' : []
-				};
-				count = {
-					'mean_frame_time (ms)' : 0,
-					'load_time (ms)' : 0,
-					'Layout (ms)' : 0
-				};
-				parse(data);
-			});
-		}
+	});
+
+	submit(formdata, function (data) {
+		spinner.style.display = 'none';
+		placeholder.style.display = 'block';
+		plotData = {
+			'mean_frame_time (ms)' : [],
+			'load_time (ms)' : [],
+			'Layout (ms)' : []
+		};
+		toolTipInfo = {
+			'mean_frame_time (ms)' : [],
+			'load_time (ms)' : [],
+			'Layout (ms)' : []
+		};
+		count = {
+			'mean_frame_time (ms)' : 0,
+			'load_time (ms)' : 0,
+			'Layout (ms)' : 0
+		};
+		parse(data);
 	});
 
 }
 
-document.querySelector('select.docNav').addEventListener('change', function () {
+$('select.docNav').on('change', function () {
 	location.href = this.value;
-})
+});
 
 displayPlot.call(document.querySelector('.button a'));

@@ -1,109 +1,53 @@
-extends landing-layout
-
-block content
-
-	include includes/navigation
-
-	.test-navigation
-		.container.max-width
-			.quarter
-				select.docNav
-					option(value='/') Dashboard
-					option(value='/view/results') Aggregated results
-			ul#components.quarter
-				li#button.active Button
-				li#button_no_theme Button base
-				li#text_input Text Input
-				li#search_input Search input
-				li#radio_input Radio input
-				li#range_input Range input
-				li#input_base Input Base
-				li#textarea Textarea
-				li#textarea_base Textarea Base
-				li#navigation_bar Navigation bar
-				li#navigation_bar_base Navigation bar base
-			ul.button.active.three-quarters
-				header
-					h2(data-github='button') Button
-				li
-					a(href='/dashboard?test=smoothness_benchmark_topcoat_button&test=loading_benchmark_topcoat_button&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=smoothness_benchmark_topcoat_button&test=loading_benchmark_topcoat_button&device=Nexus4') details
-					a.topcoat-button(href='/baseline?test=smoothness_benchmark_topcoat_button&test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button&test=loading_benchmark_topcoat_button-base&device=Nexus4') baseline
-			ul.button_no_theme.not-active.three-quarters
-				header
-					h2(data-github='button-base') Button base
-				li
-					a(href='/dashboard?test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button-base&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=smoothness_benchmark_topcoat_button-base&test=loading_benchmark_topcoat_button-base&device=Nexus4') details
-			ul.text_input.not-active.three-quarters
-				header
-					h2(data-github='text-input') Text input
-				li
-					a(href='/dashboard?test=loading_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_text-input&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_text-input&device=Nexus4') details
-					a.topcoat-button(href='/baseline?test=loading_benchmark_topcoat_text-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_text-input&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
-			ul.input_base.not-active.three-quarters
-				header
-					h2(data-github='input-base') Input base
-				li
-					a(href='/dashboard?test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') details
-			ul.textarea.not-active.three-quarters
-				header
-					h2(data-github='textarea') Textarea
-				li
-					a(href='/dashboard?test=loading_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea&device=Nexus4') details
-					a.topcoat-button(href='/baseline?test=loading_benchmark_topcoat_textarea&test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') details
-			ul.textarea_base.not-active.three-quarters
-				header
-					h2(data-github='textarea-base') Textarea base
-				li
-					a(href='/dashboard?test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_textarea-base&test=smoothness_benchmark_topcoat_textarea-base&device=Nexus4') details
-			ul.search_input.not-active.three-quarters
-				header
-					h2(data-github='search-input') Search input
-				li
-					a(href='/dashboard?test=loading_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_search-input&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_search-input&device=Nexus4') details
-					a.topcoat-button(href='/baseline?test=loading_benchmark_topcoat_search-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_search-input&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
-			ul.radio_input.not-active.three-quarters
-				header
-					h2(data-github='radio-input') Radio input
-				li
-					a(href='/dashboard?&test=smoothness_benchmark_topcoat_radio-input&device=Nexus4&test=loading_benchmark_topcoat_radio-input') Nexus 4 
-					a.topcoat-button(href='/dashboard?&test=smoothness_benchmark_topcoat_radio-input&device=Nexus4&test=loading_benchmark_topcoat_radio-input') details
-					a.topcoat-button(href='/baseline?test=smoothness_benchmark_topcoat_radio-input&test=loading_benchmark_topcoat_radio-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
-			ul.range_input.not-active.three-quarters
-				header
-					h2(data-github='range-input') Range input
-				li
-					a(href='/dashboard?&test=smoothness_benchmark_topcoat_range-input&device=Nexus4&test=loading_benchmark_topcoat_range-input') Nexus 4 
-					a.topcoat-button(href='/dashboard?&test=smoothness_benchmark_topcoat_range-input&device=Nexus4&test=loading_benchmark_topcoat_range-input') details
-					a.topcoat-button(href='/baseline?test=smoothness_benchmark_topcoat_range-input&test=loading_benchmark_topcoat_range-input&test=loading_benchmark_topcoat_input-base&test=smoothness_benchmark_topcoat_input-base&device=Nexus4') baseline
-			ul.navigation_bar.not-active.three-quarters
-				header
-					h2(data-github='navigation-bar') Navigation bar
-				li
-					a(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar&device=Nexus4') details
-					a.topcoat-button(href='/baseline?test=loading_benchmark_topcoat_navigation-bar&test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') baseline
-			ul.navigation_bar_base.not-active.three-quarters
-				header
-					h2(data-github='navigation-bar-base') Navigation bar base
-				li
-					a(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') Nexus 4 
-					a.topcoat-button(href='/dashboard?test=loading_benchmark_topcoat_navigation-bar-base&test=smoothness_benchmark_topcoat_navigation-bar-base&device=Nexus4') details
-			ul.plot
-				#holder
-					.spinner
-					#placeholder
-			.pull-right.toggle
+!!! 5
+html
+	head
+		meta(charset = 'utf-8')
+		meta('http-equiv' = 'X-UA-Compatible', content = 'IE=edge,chrome=1')
+		title Topcoat Server
+		meta(name="viewport", content="user-scalable=no,initial-scale = 1.0,maximum-scale = 1.0")
+		link(rel = 'stylesheet', type = 'text/css', href = )
+		link(rel = 'stylesheet', type = 'text/css', href = 'stylesheets/main.css')
+		//if lt IE 9
+			script(src = '//html5shiv.googlecode.com/svn/trunk/html5.js')
+	body.light
+		#wrapper
+			.max-width
+				#sideNav
+					nav.site: ul
+						li: a(href='http://topcoat.io') Home
+						li: a(href='http://topcoat.io/topcoat') Usage Guidelines
+						li.selected: a(href='#') Benchmarks
+						li: a(href='http://topcoat.io/blog') Blog
+						li: a#download-btn(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download version 0.5.1
+					div.combo
+						select.docNav
+							option(value='#', selected="selected") Dashboard
+							option(value='http://localhost:3000/view/results') Aggregated results
+					#pageNav: ul#components
+						include includes/components
+			#site
+				header#main-header
+					.max-width
+						hgroup
+							h1 Topcoat Server
+							p Results and benchmarks for Topcoat
+						nav
+							ul
+								li: a(href='http://topcoat.io/topcoat') Usage Guidelines
+								li.selected: a(href='#') Benchmarks
+								li: a(href='http://topcoat.io/blog') Blog
+								li: a#download-btn(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download version 0.5.1
+						a#slide-menu-button.topcoat-icon-button--large--quiet
+							span.topcoat-icon--large.topcoat-icon--menu-stack
+				#content.max-width
+					include includes/components-links
+				footer
 
 	script(src='/javascripts/libraries/jquery.min.js')
 	script(src='/javascripts/libraries/jquery.flot.min.js')
 	script(src='/javascripts/libraries/underscore-min.js')
-	script(src='/javascripts/baseline.jplot.js')
-	script(src='/javascripts/landingpage.js')
 	script(src='/javascripts/script.jplot.js')
+	script(src='/javascripts/landingpage.js')
+	script(src="/javascripts/libraries/d3.v3.min.js")
+	script(src="/javascripts/baseline.js")
+	script(src="/javascripts/main.js")

@@ -16,11 +16,73 @@
  *
  */
 
-var plot; // a closure with the data points
+var plot;
+var toolTipInfo = {
+	'mean_frame_time (ms)' : [],
+	'load_time (ms)' : [],
+	'Layout (ms)' : []
+};
+var plotData = {
+	'mean_frame_time (ms)' : [],
+	'load_time (ms)' : [],
+	'Layout (ms)' : []
+}
+
+var parse = function (data) {
+	data = JSON.parse(data);
+	placeCheckboxes();
+	plot = generatePlot(createPlotData(data));
+	plot();
+};
+
+/*
+	filters through the results
+	separates the base results from the rest
+*/
+function createPlotData (data) {
+	var count = {
+		'mean_frame_time (ms)' : 0,
+		'load_time (ms)' : 0,
+		'Layout (ms)' : 0
+	};
+	data.forEach(function (d) {
+		for (var row in d.result) {
+			if (plotData.hasOwnProperty(row)) {
+				toolTipInfo[row].push({
+					date: d.date,
+					commit: d.commit,
+					test: d.test
+				});
+				plotData[row].push([count[row]++, parseFloat(d.result[row])]);
+			}
+		}
+	});
+
+	return plotData;
+}
+
+/*
+	Get the data
+*/
+function submit (formData, cb) {
+
+	if (!formData) return;
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', '/dashboard/get', true);
+	xhr.onload = function xhrLoaded (e) {
+		if (this.status == 200) {
+			cb(this.response);
+		}
+	};
+	xhr.send(formData);
+
+};
 
 function generatePlot (plotData) {
 
 	return function () {
+		// if any of the checboxes are unchecked
+		// remove the coresponding data
 		var points = [];
 		for (var i in plotData) {
 			var selected = $('input[name="' + i + '"]:checked').length || !$('input[name="' + i + '"]').length;
@@ -31,12 +93,17 @@ function generatePlot (plotData) {
 			}
 		}
 
+		// call the plot
 		$.plot("#placeholder", points, {
 				series: {
 					lines: {
 						show: true
 					},
-					points: {show:true, fill:true, radius:6}
+					points: {
+						show: true,
+						fill: true,
+						radius: 6
+					}
 				},
 				grid: {
 					hoverable: true,
@@ -51,10 +118,6 @@ function generatePlot (plotData) {
 				}
 		});
 	}
-}
-
-function circle(ctx, x, y, radius, shadow) {
-	ctx.arc(x, y, radius + 2, 0, shadow ? Math.PI : Math.PI * 2, false);
 }
 
 function maxValue (plotData) {
@@ -98,22 +161,28 @@ function createCheckbox (name) {
 }
 
 function showTooltip(x, y, contents) {
-	var $t = $("<div id='tooltip' class='plot__tooltip'></div>").css({
-		top: y + 15,
-		left: x - 130
-	}).html(contents).appendTo("body").fadeIn(200);
+
+	var totalW = $('body').width();
+
+	var coords = {
+		top: y + 20,
+		left: (totalW < 500) ? (totalW - 300)/2 : x - 150
+	}
+
+	var $t = $("<div id='tooltip' class='plot__tooltip arrow--top'></div>")
+		.css(coords).html(contents).appendTo('body').fadeIn(200);
+
 	setTimeout(function () {
 		$t.remove();
 	}, 2000);
 }
 
 var previousPoint = null;
-$("#placeholder").bind("plothover", function (event, pos, item) {
 
-	if ($("#enablePosition:checked").length > 0) {
-		var str = "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")";
-		$("#hoverdata").text(str);
-	}
+$("#placeholder").bind("plotclick", createTooltip);
+$("#placeholder").bind("plothover", createTooltip);
+
+function createTooltip (event, pos, item) {
 
 	if (item) {
 		if (previousPoint != item.dataIndex) {
@@ -129,15 +198,12 @@ $("#placeholder").bind("plothover", function (event, pos, item) {
 			content.appendChild(createRow('Metric', item.series.label));
 			content.appendChild(calculateDelta(item.series.label, parseInt(x, 10)));
 			showTooltip(item.pageX, item.pageY, content);
-			console.log(content);
 		}
 	} else {
 		// $("#tooltip").remove();
 		previousPoint = null;
 	}
-});
-
-$('#placeholder').bind('hover', alert);
+}
 
 // pass as many arguments
 // will create a tr with every argument wrapped in a <td>
@@ -172,6 +238,5 @@ function calculateDelta (key, x) {
 	content.appendChild(createRow('Commit', commit));
 	content.appendChild(createRow('Date', (new Date(toolTipInfo[key][x].date)).toString().substring(0, 15)));
 	content.appendChild(createRow('Component', toolTipInfo[key][x].test));
-	console.log(content);
 	return content;
 }
