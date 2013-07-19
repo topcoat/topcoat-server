@@ -60,6 +60,8 @@ function resultsFilter (params) {
 
 function fetchBaseline () {
 
+	var spinner = document.querySelector('.spinner');
+	spinner.style.display = 'block';
 	plotDataBaseline = {};
 	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
 	var formdata = new FormData();
@@ -72,6 +74,7 @@ function fetchBaseline () {
 
 	if (params.length) {
 		submit(resultsFilter(params), function (data) {
+			spinner.style.display = 'none';
 			data = JSON.parse(data);
 			var results = data.map(filterBaselineResults);
 			plotBaseline(plotDataBaseline);
