@@ -4,7 +4,9 @@ tr
 	td(colspan=6)
 - results.forEach(function (el, idx) {
 	tr
-		td: input(type='checkbox', name='average_' + idx, value=el._id, data-test=el.test, data-device=el.device)
+		td
+			input(type='checkbox', name='average_' + idx, id='average_' + idx, value=el._id, data-test=el.test, data-device=el.device)
+			label.topcoat-checkbox-label--left(for='average_' + idx)
 		td= el.test
 			a(title='Add as a filter', href='#', class='add-filter', data-value=el.test, data-filter='test') +
 		td= el.device

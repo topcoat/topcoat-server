@@ -172,9 +172,9 @@ function showTooltip(x, y, contents) {
 	var $t = $("<div id='tooltip' class='plot__tooltip arrow--top'></div>")
 		.css(coords).html(contents).appendTo('body').fadeIn(200);
 
-	setTimeout(function () {
-		$t.remove();
-	}, 2000);
+	// setTimeout(function () {
+	// 	$t.remove();
+	// }, 2000);
 }
 
 var previousPoint = null;
@@ -232,7 +232,8 @@ function calculateDelta (key, x) {
 	}
 	/*toolTipInfo defined in baseline.jplot.js */
 	var commit = document.createElement('a');
-	var repo = document.querySelector('.active h2').dataset.github;
+	if (document.querySelector('.active h2'))
+		var repo = document.querySelector('.active h2').dataset.github;
 	commit.innerHTML = toolTipInfo[key][x].commit.substring(0,8);
 	commit.href = 'https://github.com/topcoat/' + repo + '/commit/' + toolTipInfo[key][x].commit;
 	content.appendChild(createRow('Commit', commit));
@@ -240,3 +241,37 @@ function calculateDelta (key, x) {
 	content.appendChild(createRow('Component', toolTipInfo[key][x].test));
 	return content;
 }
+
+function displayPlot () {
+
+	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
+	var formdata = new FormData();
+
+	params.forEach(function (p) {
+		p = p.split('=');
+		formdata.append(p[0],p[1]);
+	});
+
+	submit(formdata, function (data) {
+
+		plotData = {
+			'mean_frame_time (ms)' : [],
+			'load_time (ms)' : [],
+			'Layout (ms)' : []
+		};
+		toolTipInfo = {
+			'mean_frame_time (ms)' : [],
+			'load_time (ms)' : [],
+			'Layout (ms)' : []
+		};
+		count = {
+			'mean_frame_time (ms)' : 0,
+			'load_time (ms)' : 0,
+			'Layout (ms)' : 0
+		};
+		parse(data);
+	});
+
+}
+
+displayPlot.call(location);

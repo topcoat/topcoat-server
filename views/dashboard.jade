@@ -1,19 +1,50 @@
-extends layout
-block content
-
-	include includes/navigation
-
-	.test-navigation
-		.max-width
-			header
-				h2 Plot
-			.info-box.white= test.join(', ') + ' on ' + device
-			.demo-container
-				#placeholder.demo-placeholder
-			p.toggle.white
+!!! 5
+html
+	head
+		meta(charset = 'utf-8')
+		meta('http-equiv' = 'X-UA-Compatible', content = 'IE=edge,chrome=1')
+		title Topcoat Server
+		meta(name="viewport", content="user-scalable=no,initial-scale = 1.0,maximum-scale = 1.0")
+		link(rel = 'stylesheet', type = 'text/css', href = '/stylesheets/main.css')
+		//if lt IE 9
+			script(src = '//html5shiv.googlecode.com/svn/trunk/html5.js')
+	body.light
+		#wrapper
+			.max-width
+				#sideNav
+					nav.site: ul
+						li: a(href='http://topcoat.io') Home
+						li: a(href='http://topcoat.io/topcoat') Usage Guidelines
+						li.selected: a(href='#') Benchmarks
+						li: a(href='http://topcoat.io/blog') Blog
+						li: a#download-btn(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download version 0.5.1
+					//- div.combo
+					//- 	select.docNav
+					//- 		option(value='#', selected="selected") Dashboard
+					//- 		option(value='/view/results') Aggregated results
+			#site
+				header#main-header
+					.max-width
+						hgroup
+							h1 Topcoat Server
+							p Results and benchmarks for Topcoat
+						nav
+							ul
+								li: a(href='http://topcoat.io/topcoat') Usage Guidelines
+								li.selected: a(href='#') Benchmarks
+								li: a(href='http://topcoat.io/blog') Blog
+								li: a#download-btn(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download version 0.5.1
+						a#slide-menu-button.topcoat-icon-button--large--quiet
+							span.topcoat-icon--large.topcoat-icon--menu-stack
+				#content.full-width
+					header
+						h2 Plot
+					.info-box.white= test.join(', ') + ' on ' + device
+					.demo-container
+						#placeholder.demo-placeholder
+					p.toggle.white
 
 	script(src='/javascripts/libraries/jquery.min.js')
 	script(src='/javascripts/libraries/jquery.flot.min.js')
 	script(src='/javascripts/libraries/underscore-min.js')
 	script(src='/javascripts/script.jplot.js')
-	script(src='/javascripts/baseline.jplot.js')

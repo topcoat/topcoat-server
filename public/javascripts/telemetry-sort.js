@@ -135,14 +135,6 @@ function appendFilters (filters) {
 	});
 }
 
-$('#selectall').on('change', function () {
-
-	[].forEach.call(document.querySelectorAll('input[name*=average]'), function (input) {
-		(input.checked) ? input.checked = false : input.checked = true;
-	});
-
-}, false);
-
 // add a new filter to the view
 // the function also handles previous filters
 var addFilter = function (e) {
@@ -165,7 +157,7 @@ var addFilter = function (e) {
 	updateResults();
 };
 
-document.querySelector('select').addEventListener('change', function (e) {
+document.querySelector('.js-handler--date').addEventListener('change', function (e) {
 
 	var date = location.href.match(/date=[0-9]{1,3}/);
 	var stringURL = '';
