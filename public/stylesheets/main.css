@@ -820,3 +820,32 @@ input[type="checkbox"]:disabled + label {
   color: #454545;
   text-shadow: 0 1px 0 #fff;
 }
+
+.info-icon {
+  position:absolute;
+  right:0;
+  background:rgba(0,0,0,.2);
+  width:22px;
+  height:22px;
+  text-align:center;
+  line-height:24px;
+  border-radius:50%;
+  font-weight:bold;
+  border:1px solid #777;
+}
+
+.info-icon:hover {
+  box-shadow:0 0 5px #aaa;
+}
+
+.info-icon:hover .plot__tooltip {
+  display: block;
+}
+
+.info-icon .plot__tooltip {
+  position:absolute;
+  display:none;
+  left:-90px;
+  top:25px;
+  width:200px;
+}

@@ -121,7 +121,7 @@ var benchmark = function (db) {
 			if(err)
 				console.log(err);
 			else {
-				res.render('view-results.jade', {
+				res.render('view-results-new.jade', {
 					title : 'Topcoat Server',
 					results: docs
 				});

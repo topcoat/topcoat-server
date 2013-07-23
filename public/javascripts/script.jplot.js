@@ -172,9 +172,9 @@ function showTooltip(x, y, contents) {
 	var $t = $("<div id='tooltip' class='plot__tooltip arrow--top'></div>")
 		.css(coords).html(contents).appendTo('body').fadeIn(200);
 
-	// setTimeout(function () {
-	// 	$t.remove();
-	// }, 2000);
+	setTimeout(function () {
+		$t.remove();
+	}, 2000);
 }
 
 var previousPoint = null;
