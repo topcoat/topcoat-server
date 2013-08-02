@@ -1,0 +1,25 @@
+// index.jade
+
+extend layout
+
+block components
+	#pageNav: ul#components
+		include includes/effeckt-components
+
+block content
+	#content.max-width
+		.info-icon ?
+			.plot__tooltip.arrow--top
+				p Lower is better
+		include includes/effeckt-components-links
+	footer
+
+block scripts
+	script(src='/javascripts/libraries/jquery.min.js')
+	script(src='/javascripts/libraries/jquery.flot.min.js')
+	script(src='/javascripts/libraries/underscore-min.js')
+	script(src='/javascripts/script.jplot.js')
+	script(src='/javascripts/landingpage.js')
+	script(src="/javascripts/libraries/d3.v3.min.js")
+	script(src="/javascripts/baseline.js")
+	script(src="/javascripts/main.js")

@@ -60,6 +60,14 @@ app.get('/', function(req, res){
 
 });
 
+app.get('/view/effeckt', function(req, res){
+
+	res.render('index-effeckt', {
+		title : 'Topcoat Server'
+	});
+
+});
+
 app.get('/baseline', function(req, res){
 	console.log('baseline');
 	res.render('baseline', {
