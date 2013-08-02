@@ -1,86 +1,53 @@
-!!! 5
-html
-	head
-		meta(charset = 'utf-8')
-		meta('http-equiv' = 'X-UA-Compatible', content = 'IE=edge,chrome=1')
-		title Topcoat Server
-		meta(name="viewport", content="user-scalable=no,initial-scale = 1.0,maximum-scale = 1.0")
-		link(rel = 'stylesheet', type = 'text/css', href = '/stylesheets/main.css')
-		//if lt IE 9
-			script(src = '//html5shiv.googlecode.com/svn/trunk/html5.js')
-	body.light
-		#wrapper
-			.max-width
-				#sideNav
-					nav.site: ul
-						li: a(href='http://topcoat.io') Home
-						li: a(href='http://topcoat.io/topcoat') Usage Guidelines
-						li.selected: a(href='#') Benchmarks
-						li: a(href='http://topcoat.io/blog') Blog
-						li: a#download-btn(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download version 0.5.1
-					//- div.combo
-					//- 	select.docNav
-					//- 		option(value='#', selected="selected") Dashboard
-					//- 		option(value='/view/results') Aggregated results
-			#site
-				header#main-header
-					.max-width
-						hgroup
-							h1 Topcoat Server
-							p Results and benchmarks for Topcoat
-						nav
-							ul
-								li: a(href='http://topcoat.io/topcoat') Usage Guidelines
-								li.selected: a(href='#') Benchmarks
-								li: a(href='http://topcoat.io/blog') Blog
-								li: a#download-btn(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download version 0.5.1
-						a#slide-menu-button.topcoat-icon-button--large--quiet
-							span.topcoat-icon--large.topcoat-icon--menu-stack
-				#content.full-width
-					ul(id='filters')
+// view-result.jade
 
-					form(action='/compare', method='POST')
-						table.full-width.aggregated-results
-							thead
-								tr
-									th
-									th Test
-									th Device
-									th Platform
-									th Commit
-									th
-										select.docNav.js-handler--date
-											option(data-value='7') Last 7 days
-											option(data-value='14') Last 14 days
-											option(data-value='30') Last Month
-											option(data-value='365') Last Year
-									th Count
-							tbody
-								tr
-										td: button(type='submit', class='topcoat-button') Compare
-										td: button(class='topcoat-button js-handler--plot', disabled) Plot
-										td(colspan=6)
-									- results.forEach(function (el, idx) {
-										tr
-											td
-												input(type='checkbox', class='topcoat-checkbox', id='average_' + el._id,name='average_' + el._id, value=el._id, data-test=el.test, data-device=el.device)
-												label.topcoat-checkbox-label--left(for='average_' + el._id) 
-											td= el.test
-												a(title='Add as a filter', class='add-filter', data-value=el.test, data-filter='test') +
-											td= el.device
-												a(title='Add as a filter', class='add-filter', data-value=el.device, data-filter='device') +
-											td= el.platform
-												a(title='Add as a filter', class='add-filter', data-value=el.platform, data-filter='platform') +
-											td= el.commit
-												a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') +
-											td(class='date')= (el.date.toString()).slice(0,15)
-											td= el.count
-									- })
-									tr
-										td: button(type='submit', class='topcoat-button') Compare
-										td: button(class='js-handler--plot topcoat-button', disabled) Plot
-										td(colspan=6)
-				footer
+extend layout
 
-	script(src='/javascripts/libraries/jquery.min.js')
-	script(src='/javascripts/telemetry-sort.js')
+block content
+	#content.full-width.max-width.margin-top
+		ul(id='filters')
+
+		form(action='/compare', method='POST')
+			table.full-width.aggregated-results
+				thead
+					tr
+						th
+						th Test
+						th Device
+						th Platform
+						th Commit
+						th
+							select.docNav.js-handler--date
+								option(data-value='7') Last 7 days
+								option(data-value='14') Last 14 days
+								option(data-value='30') Last Month
+								option(data-value='365') Last Year
+						th Count
+				tbody
+					tr
+							td: button(type='submit', class='topcoat-button') Compare
+							td: button(class='topcoat-button js-handler--plot', disabled) Plot
+							td(colspan=6)
+						- results.forEach(function (el, idx) {
+							tr
+								td
+									input(type='checkbox', class='topcoat-checkbox', id='average_' + el._id,name='average_' + el._id, value=el._id, data-test=el.test, data-device=el.device)
+									label.topcoat-checkbox-label--left(for='average_' + el._id) 
+								td= el.test
+									a(title='Add as a filter', class='add-filter', data-value=el.test, data-filter='test') +
+								td= el.device
+									a(title='Add as a filter', class='add-filter', data-value=el.device, data-filter='device') +
+								td= el.platform
+									a(title='Add as a filter', class='add-filter', data-value=el.platform, data-filter='platform') +
+								td= el.commit
+									a(title='Add as a filter', class='add-filter', data-value=el.commit, data-filter='commit') +
+								td(class='date')= (el.date.toString()).slice(0,15)
+								td= el.count
+						- })
+						tr
+							td: button(type='submit', class='topcoat-button') Compare
+							td: button(class='js-handler--plot topcoat-button', disabled) Plot
+							td(colspan=6)
+
+	block scripts
+		script(src='/javascripts/libraries/jquery.min.js')
+		script(src='/javascripts/telemetry-sort.js')

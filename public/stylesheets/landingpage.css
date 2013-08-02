@@ -295,3 +295,88 @@ a.button:active {
 .toggle {
   color: #fff;
 }
+.info-box {
+  padding-left: 0.5rem;
+  display: inline-block;
+}
+.bordered {
+  border-radius: 5px;
+  border: 5px solid rgba(0,0,0,0.1);
+  box-shadow: 0 0 2px #000;
+}
+.white {
+  color: #fff;
+}
+.topcoat-progress-bar {
+  overflow: hidden;
+  height: 1.25rem;
+  margin: 2px;
+  border-radius: 12px;
+  background-color: #d3d7d7;
+  box-shadow: 0 1px rgba(255,255,255,0.25), inset 0 1px rgba(0,0,0,0.12);
+}
+.topcoat-progress-bar > .progress {
+  display: block;
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+  background-color: #e0f0fa;
+  box-shadow: inset 0 1px rgba(0,0,0,0.12);
+  line-height: 1.25rem;
+}
+.progress--complete {
+  width: 100%;
+}
+table {
+  margin: 2em 0;
+  width: 100%;
+}
+table a {
+  color: #444;
+}
+td {
+  font-size: 12px;
+  text-align: left;
+  padding: 1em 0.5em 1em 1em;
+  background: #edf1f1;
+  border-top: 1px solid #dddfdf;
+  border-bottom: 1px solid #dddfdf;
+}
+td:hover .add-filter {
+  visibility: visible;
+}
+thead tr {
+  background: #dfe2e2;
+  cursor: default;
+  border-bottom: 1px solid #f05;
+}
+thead tr:hover {
+  background: #dfe2e2;
+}
+thead tr th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+thead tr th:first-child {
+  border-top-left-radius: 5px;
+}
+thead tr th:last-child {
+  border-top-right-radius: 5px;
+}
+tbody tr:first-child td {
+  border-top: 1px solid #aaa;
+}
+tr {
+  -webkit-transition-duration: 0.1s;
+  cursor: pointer;
+}
+tr:hover td {
+  background: #e5e9e9;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+}
+.odd td {
+  background: #dddfdf;
+}

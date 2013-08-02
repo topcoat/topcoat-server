@@ -1,12 +1,27 @@
-.container
-	header
-		.max-width
-			hgroup
-				h1.title: a(href='/')= title
-				h4 Results and benchmarks for Topcoat
-			nav.nav--subheading
-				ul
-					li: a(href='http://topcoat.io/topcoat') Usage Guidelines
-					li: a(href='http://bench.topcoat.io') Benchmarks
-					li: a(href='http://topcoat.io/blog') Blog
-					li: a.topcoat-button--large--cta(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download v0.5.1
+#wrapper
+	.max-width
+		#sideNav
+			nav.site: ul
+				li: a(href='http://topcoat.io') Home
+				li: a(href='http://topcoat.io/topcoat') Usage Guidelines
+				li.selected: a(href='#') Benchmarks
+				li: a(href='http://topcoat.io/blog') Blog
+				li: a#download-btn(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download version 0.5.1
+			div.combo
+				select.docNav
+					option(value='#', selected="selected") Dashboard
+					option(value='/view/results') Aggregated results
+	#site
+		header#main-header
+			.max-width
+				hgroup
+					h1 Topcoat Server
+					p Results and benchmarks for Topcoat
+				nav
+					ul
+						li: a(href='http://topcoat.io/topcoat') Usage Guidelines
+						li.selected: a(href='#') Benchmarks
+						li: a(href='http://topcoat.io/blog') Blog
+						li: a#download-btn(href='https://github.com/topcoat/topcoat/archive/0.5.1.zip') Download version 0.5.1
+				a#slide-menu-button.topcoat-icon-button--large--quiet
+					span.topcoat-icon--large.topcoat-icon--menu-stack

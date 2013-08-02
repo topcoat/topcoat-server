@@ -1,11 +1,9 @@
-extends layout
+// compare.jade
+
+extend layout
 
 block content
-
-	include includes/navigation
-
-	.test-navigation
-		.max-width
+	#content.max-width.full-width.margin-top
 			header
 				h2 Comparing results
 			- var tests = []
@@ -19,14 +17,17 @@ block content
 			- results.forEach(function (r, i) {
 				.info-box.bordered(style="width:500px;background:"+colors[i])
 					p= 'Commit version '
-						a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit.substring(0,6)
+						- if (r.commit[0] != 's')
+							a(href='https://github.com/topcoat/topcoat/commit/' + r.commit)= r.commit.substring(0,6)
+						- else
+							= r.commit
 						- var date = " " + r.date.toString().substring(0,21)
 						strong= date
 					p= r.platform + ' on ' + r.device
 					p= 'Test name ' + r.test
 					p= 'Numer of tests ' + r.count
 			- })
-			table
+			table.full-width
 				tbody
 						- tests.forEach(function (test, i) {
 							- var className = (i%2) ? 'odd' : 'even';
