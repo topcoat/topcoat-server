@@ -61,23 +61,6 @@ function createPlotData (data) {
 	return plotData;
 }
 
-/*
-	Get the data
-*/
-function submit (formData, cb) {
-
-	if (!formData) return;
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', '/dashboard/get', true);
-	xhr.onload = function xhrLoaded (e) {
-		if (this.status == 200) {
-			cb(this.response);
-		}
-	};
-	xhr.send(formData);
-
-};
-
 function generatePlot (plotData) {
 
 	return function () {
@@ -172,9 +155,20 @@ function showTooltip(x, y, contents) {
 	var $t = $("<div id='tooltip' class='plot__tooltip arrow--top'></div>")
 		.css(coords).html(contents).appendTo('body').fadeIn(200);
 
-	setTimeout(function () {
+	var timeoutId = setTimeout(removeTooltip($t), 2000);
+	$t.on('hover', removeTimeout(timeoutId));
+}
+
+function removeTimeout (id) {
+	return function () {
+		window.clearTimeout(id);
+	}
+}
+
+function removeTooltip ($t) {
+	return function () {
 		$t.remove();
-	}, 2000);
+	}
 }
 
 var previousPoint = null;
@@ -241,37 +235,3 @@ function calculateDelta (key, x) {
 	content.appendChild(createRow('Component', toolTipInfo[key][x].test));
 	return content;
 }
-
-function displayPlot () {
-
-	var params   = this.href.match(/\?.{0,}/g)[0].slice(1).split('&');
-	var formdata = new FormData();
-
-	params.forEach(function (p) {
-		p = p.split('=');
-		formdata.append(p[0],p[1]);
-	});
-
-	submit(formdata, function (data) {
-
-		plotData = {
-			'mean_frame_time (ms)' : [],
-			'load_time (ms)' : [],
-			'Layout (ms)' : []
-		};
-		toolTipInfo = {
-			'mean_frame_time (ms)' : [],
-			'load_time (ms)' : [],
-			'Layout (ms)' : []
-		};
-		count = {
-			'mean_frame_time (ms)' : 0,
-			'load_time (ms)' : 0,
-			'Layout (ms)' : 0
-		};
-		parse(data);
-	});
-
-}
-
-displayPlot.call(location);

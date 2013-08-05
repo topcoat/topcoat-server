@@ -928,7 +928,7 @@ tr {
   -webkit-transition-duration: 0.1s;
   cursor: pointer;
 }
-tr:hover td {
+.aggregated-results tr:hover td {
   background: #e5e9e9;
   -webkit-transition-duration: 0.2s;
   -moz-transition-duration: 0.2s;

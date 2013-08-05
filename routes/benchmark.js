@@ -104,6 +104,8 @@ var benchmark = function (db) {
 					console.log(err);
 					res.json(err);
 				} else {
+					if (!docs.length)
+						console.log('nothing found');
 					res.json(docs);
 				}
 

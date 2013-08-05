@@ -48,7 +48,25 @@ _.map(document.querySelectorAll('.baseline'), function (a) {
 	}, false);
 });
 
+/*
+	Get the data
+*/
+function submit (formData, cb) {
+
+	if (!formData) return;
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', '/dashboard/get', true);
+	xhr.onload = function xhrLoaded (e) {
+		if (this.status == 200) {
+			cb(this.response);
+		}
+	};
+	xhr.send(formData);
+
+};
+
 function displayPlot () {
+	console.log('called');
 	var placeholder = document.querySelector('#placeholder');
 	var spinner = document.querySelector('#front-spinner');
 	spinner.style.display = 'block';
@@ -58,10 +76,12 @@ function displayPlot () {
 
 	params.forEach(function (p) {
 		p = p.split('=');
+		console.log(p);
 		formdata.append(p[0],p[1]);
 	});
 
 	submit(formdata, function (data) {
+		console.log(data);
 		spinner.style.display = 'none';
 		placeholder.style.display = 'block';
 		plotData = {
