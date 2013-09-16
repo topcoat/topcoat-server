@@ -934,3 +934,7 @@ tr {
   -moz-transition-duration: 0.2s;
   transition-duration: 0.2s;
 }
+
+.tickLabel {
+  font-size:11px;
+}

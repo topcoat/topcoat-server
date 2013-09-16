@@ -117,11 +117,33 @@ function maxValue (plotData) {
 
 function xLabels (plotData) {
 	var ticks = [];
-	_.map(plotData, function (v, k) {
-		_.map(toolTipInfo[k], function (val, key) {
-			ticks[key] = [key, val.commit.substring(0,7) + '<br>' + val.date.substring(0,10)];
+	var tagged = [];
+	//_.map(plotData, function (v, k) {
+		_.map(toolTipInfo['mean_frame_time (ms)'], function (val, key) {
+			//ticks[key] = [key, val.commit.substring(0,7) + '<br>' + val.date.substring(0,10)];
+			ticks[key] = [key, getTagVersion(val.date, tags.slice(0), tagged)];
 		})
-	});
+	//});
+	
+	function getTagVersion (d, tags, tagged) {
+		var date = new Date(d);
+		tags = tags.filter(function (tag) {
+			if (Math.abs(date - tag.date) < 86400 * 1000 * 10) {
+				return 1;
+			} else {
+				return 0;
+			}
+		});
+		
+		var version = tags.length ? tags[0].tag : '';
+		if (version && !~tagged.indexOf(version)) {
+			tagged.push(version);
+		} else {
+			version = '';
+		}
+		return version;
+	}
+	
 	return ticks;
 }
 

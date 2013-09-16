@@ -15,6 +15,39 @@
  * limitations under the License.
  *
  */
+ 
+var _api_entry_point = "https://api.github.com/repos/topcoat/topcoat/tags";
+var tags = [];
+$.getJSON(_api_entry_point, getTagReleaseDate);
+
+function getTagReleaseDate (json) {
+	var l = json.length;
+	json.forEach(getTagDate);
+	
+	function getTagDate (tagJSON) {
+		$.getJSON(tagJSON.commit.url)
+			.success(function (json) {
+				tags.push({
+					tag: tagJSON.name,
+					date: new Date(json.commit.author.date)
+				});
+			})
+			.done(function () {
+				if (--l == 0) {
+					console.log('sorting');
+					tags.sort(sortByDateAsc);
+				}
+			});
+	}
+	
+	function sortByDateAsc (a, b) {
+		if (a.date < b.date)
+			return -1;
+		if (a.date > b.date)
+			return 1;
+		return 0;
+	}
+}
 
 _.map(document.querySelectorAll('#components li'), function (li) {
 
