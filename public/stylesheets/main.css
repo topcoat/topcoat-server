@@ -688,6 +688,10 @@ input[type="checkbox"]:disabled + label {
   transform: rotateY(180deg);
 }
 
+.flip-container.hover .front {
+  display:none;
+}
+
 .topcoat-button,
 .topcoat-button--quiet,
 .topcoat-button--large,
