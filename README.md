@@ -19,7 +19,7 @@ Running tests locally
 
 There is a screencast available: [http://www.youtube.com/watch?v=Mhw4Sf1WWwQ](http://www.youtube.com/watch?v=Mhw4Sf1WWwQ)
 
-1. You need telemetry, more info here https://github.com/topcoat/topcoat/tree/master/test/perf/telemetry
+1. You need telemetry, more info here https://github.com/topcoat/topcoat/wiki/Topcoat-performance-testing
 2. You need to start the topcoat-server
 3. $ cd topcoat (not the topcoat-server)
 4. Run
